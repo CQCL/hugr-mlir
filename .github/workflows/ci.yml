@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
@@ -22,6 +23,7 @@ jobs:
   # this --impure is a bit dodgy, it's a consequence of using devenv to produce
   # our shell.
       - run: nix flake check --impure --print-build-logs
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -32,11 +34,17 @@ jobs:
         uses: actions/checkout@v3
       - name: Lint nix
         run: nix run --impure --print-build-logs .#lint-nixfmt -- --check
+      - name: Lint c++
+        run: nix run --impure --print-build-logs .#lint-clang-format
+
   build:
     # Ensure nix cache is populated
     needs: check
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v3
       - name: Install nix
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
@@ -48,6 +56,32 @@ jobs:
         run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: nix develop --impure ./src#checked-mlir --command ninja -C build
-      # TODO nothing to install right now
-      # - name: Install
-      #   run: nix develop --impure ./src#checked-mlir --command ninja -C build install
+      - name: Test
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build check
+      - name: Install
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build install
+      - name: Install Test
+        run: HUGR_MLIR_TOOLS_DIR=$(pwd)/install/bin HUGR_MLIR_PYTHONPATH_OVERRIDE=$(pwd)/install/python_packages nix develop --impure ./src#checked-mlir --command ninja -C build check
+        # TODO: Once we've set up installing libraries + headers build a test
+        # project against both the build and install trees
+      - name: Package Docs
+        uses: actions/upload-pages-artifact@main
+        with:
+          path: install/share/doc/hugr-mlir
+
+  # TODO Commented out for now. Before we can enable this we need to work out
+  # which branch to deploy docs from. In a perfect world we could somehow deploy
+  # from multiple branches, to confirm docs before merging to main.
+  # deploy-docs:
+  #   needs: build
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v2

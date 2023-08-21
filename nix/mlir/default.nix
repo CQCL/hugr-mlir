@@ -17,7 +17,7 @@ let
   # TODO: Add a parameter `mkPythonPackages ? pythonPackages: []` allowing the
   #       caller to add packages to the python3 that is used to build
   python3 = python3Packages.python.withPackages
-    (ps: [ ps.numpy ps.pybind11 ps.psutil ps.pyyaml ]);
+    (ps: [ ps.numpy ps.pybind11 ps.psutil ps.pyyaml ps.lit ]);
 
   llvmPackages = llvmPackages_git.override (old: {
     inherit monorepoSrc python3;
@@ -127,6 +127,8 @@ let
         "-DLLVM_TARGETS_TO_BUILD=host"
         "-DLLVM_INCLUDE_EXAMPLES=Off"
         "-DLLVM_BUILD_EXAMPLES=Off"
+        "-DLLVM_ENABLE_ZLIB=Off"
+        "-DLLVM_ENABLE_TERMINFO=Off"
         "-DLLVM_ENABLE_ASSERTIONS=${boolToString enableAssertions}"
         "-DLLVM_INCLUDE_TESTS=${boolToString doCheck}"
         "-DMLIR_ENABLE_BINDINGS_PYTHON=On"
