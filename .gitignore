@@ -1,0 +1,9 @@
+/[_]build*/
+/_b/
+/_b_*
+/_i/
+/_i_*/
+.envrc
+/.direnv/
+/.devenv/
+compile_commands.json

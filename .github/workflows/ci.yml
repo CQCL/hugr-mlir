@@ -1,0 +1,53 @@
+name: Continuous integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  merge_group:
+    types: [checks_requested]
+  workflow_dispatch: {}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Checkout
+        uses: actions/checkout@v3
+  # this --impure is a bit dodgy, it's a consequence of using devenv to produce
+  # our shell.
+      - run: nix flake check --impure --print-build-logs
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Lint nix
+        run: nix run --impure --print-build-logs .#lint-nixfmt -- --check
+  build:
+    # Ensure nix cache is populated
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install nix
+        uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: src
+      - name: Configure
+        run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build
+      # TODO nothing to install right now
+      # - name: Install
+      #   run: nix develop --impure ./src#checked-mlir --command ninja -C build install
