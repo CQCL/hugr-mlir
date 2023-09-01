@@ -6,7 +6,6 @@ add_compile_definitions("MLIR_PYTHON_PACKAGE_PREFIX=hugr_mlir.")
 # Sources
 ################################################################################
 
-
 # There does not seem to be a better way to add include directories to these targets
 get_target_property(_extra_includes hugr-mlir-headers-interface INTERFACE_INCLUDE_DIRECTORIES)
 get_target_property(_extra_includes_mlir mlir-headers-interface INTERFACE_INCLUDE_DIRECTORIES)
@@ -65,5 +64,3 @@ add_mlir_python_modules(HugrMLIRPythonModules
   COMMON_CAPI_LINK_LIBS
     HugrMLIRPythonCAPI
 )
-
-

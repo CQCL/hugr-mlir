@@ -4,6 +4,7 @@
 // clang-format off
 #include "mlir/IR/BuiltinTypes.h"
 #include "mlir/IR/BuiltinAttributes.h"
+
 #include "hugr-mlir/IR/HugrEnums.h.inc"
 // clang-format on
 
