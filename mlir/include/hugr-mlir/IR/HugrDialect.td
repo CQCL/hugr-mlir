@@ -61,6 +61,7 @@ def Hugr_Dialect : Dialect {
     let useDefaultAttributePrinterParser = 1;
 
     let dependentDialects = [
+        "mlir::cf::ControlFlowDialect"
     ];
 }
 
@@ -87,5 +88,9 @@ class Hugr_EnumAttr<EnumAttrInfo enum, string mnemonic, list<Trait> traits = []>
 class Hugr_TypeInterface<string name> : TypeInterface<name> {
   let cppNamespace = Hugr_Dialect.cppNamespace;
 }
+
+/////// Hugr_ExtensionAttr, Hugr_ExtensionSetAttr
+// We include these here to allow it to be used in the definitions of types, which otherwise cannot de
+//
 
 #endif

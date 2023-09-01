@@ -19,7 +19,11 @@ MlirAttribute mlirHugrTypeConstraintAttrGet(
   return {nullptr};
 }
 
-MlirType mlirHugrTestTypeGet(MlirContext context) {
-  MLIRContext* ctx(unwrap(context));
-  return wrap(::hugr_mlir::TestType::get(ctx));
+MlirType mlirHugrSumTypeGet(
+    MlirContext context, int32_t n, MlirType* components) {
+  llvm::SmallVector<Type> components_unwrapped;
+  std::transform(
+      components, components + n, std::back_inserter(components_unwrapped),
+      [](auto x) { return unwrap(x); });
+  return wrap(hugr_mlir::SumType::get(unwrap(context), components_unwrapped));
 }
