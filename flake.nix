@@ -8,6 +8,10 @@
       url = "github:cachix/devenv";
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     llvm-src = {
       url = "github:llvm/llvm-project";
       flake = false;
@@ -99,6 +103,13 @@
                   packages = mlir-inputs ++ lint-inputs
                     ++ pkgs.lib.optional (shell-mlir != null) shell-mlir
                     ++ [ pkgs.clang-tools ]; # clangd and clang-format
+
+                  languages.rust = {
+                    enable = true;
+                    channel = "stable";
+                    components =
+                      [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
+                  };
 
                   languages.cplusplus = { enable = true; };
 

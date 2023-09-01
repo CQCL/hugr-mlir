@@ -36,6 +36,9 @@ if(MLIR_ENABLE_BINDINGS_PYTHON)
 endif()
 
 add_custom_target(check)
+# We add docs to the ALL target for convenience. This could be controlled by an
+# option
+add_custom_target(doc ALL)
 
 # llvm doesn't provide targets with interface include directories, so we'll use
 # this
@@ -56,3 +59,4 @@ cmake_print_properties(TARGETS mlir-headers-interface PROPERTIES INTERFACE_INCLU
 
 add_subdirectory(docs)
 add_subdirectory(mlir)
+add_subdirectory(hugr-rs-bridge)

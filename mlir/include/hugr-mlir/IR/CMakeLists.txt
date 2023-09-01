@@ -43,8 +43,7 @@ add_mlir_doc(HugrOps HugrDialect Hugr/ -gen-dialect-doc -dialect=hugr EXTRA_INCL
 # The interfaces are not part of the dialect, and aren't included in -gen-dialect-doc
 add_mlir_doc(HugrTypeInterfaces HugrTypeInterfaces Hugr/ --gen-type-interface-docs  -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
 
-add_custom_target(hugr-mlir-doc ALL)
-add_dependencies(hugr-mlir-doc mlir-doc)
+add_dependencies(doc mlir-doc)
 
 install(FILES ${MLIR_BINARY_DIR}/docs/Hugr/HugrDialect.md
   TYPE DOC
