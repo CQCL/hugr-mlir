@@ -36,6 +36,10 @@ jobs:
         run: nix run --impure --print-build-logs .#lint-nixfmt -- --check
       - name: Lint c++
         run: nix run --impure --print-build-logs .#lint-clang-format
+      - name: rust - Check formatting
+        run: nix develop --impure .#no-mlir --command cargo fmt --check
+      - name: rust - Run clippy
+        run: nix develop --impure .#no-mlir --command cargo clippy --all-targets -- -D warnings
 
   build:
     # Ensure nix cache is populated

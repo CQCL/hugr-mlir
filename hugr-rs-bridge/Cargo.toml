@@ -1,0 +1,30 @@
+[package]
+name = "hugr-rs-bridge"
+version = "0.1.0"
+license = "Apache-2.0"
+
+readme = "README.md"
+repository = "https://github.com/CQCL/mlir-hugr"
+
+description = "TODO"
+
+edition = "2021"
+rust-version = "1.70"
+
+[lib]
+name = "hugr_rs_bridge"
+bench = false
+path = "src/lib.rs"
+crate-type = ["staticlib"]
+
+[dependencies]
+quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
+mlir-sys = "^0.2"
+melior = "^0.11"
+melior-macro = "*"
+rmp-serde = "^1.1.2"
+serde_json = "*"
+cxx = "^1.0.107"
+
+[build-dependencies]
+cxx-build = "^1.0.107"
