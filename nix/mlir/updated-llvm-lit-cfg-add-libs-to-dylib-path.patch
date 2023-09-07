@@ -41,33 +41,6 @@ index 7a1e30b49b0c..ec9c724202fd 100644
  
  # Set up OCAMLPATH to include newly built OCaml libraries.
  top_ocaml_lib = os.path.join(config.llvm_lib_dir, "ocaml")
-@@ -59,6 +79,26 @@ llvm_config.with_environment("OCAMLRUNPARAM", "b")
- # Provide the path to asan runtime lib 'libclang_rt.asan_osx_dynamic.dylib' if
- # available. This is darwin specific since it's currently only needed on darwin.
- 
-+# Add the LLVM dynamic libs to the platform-specific loader search path env var:
-+#
-+# TODO: this is copied from `clang`'s `lit.cfg.py`; should unify..
-+def find_shlibpath_var():
-+    if platform.system() in ['Linux', 'FreeBSD', 'NetBSD', 'OpenBSD', 'SunOS']:
-+        yield 'LD_LIBRARY_PATH'
-+    elif platform.system() == 'Darwin':
-+        yield 'DYLD_LIBRARY_PATH'
-+    elif platform.system() == 'Windows':
-+        yield 'PATH'
-+    elif platform.system() == 'AIX':
-+        yield 'LIBPATH'
-+
-+for shlibpath_var in find_shlibpath_var():
-+    shlibpath = config.llvm_shlib_dir
-+    llvm_config.with_environment(shlibpath_var, shlibpath, append_path = True)
-+    break
-+else:
-+    lit_config.warning("unable to inject shared library path on '{}'"
-+                       .format(platform.system()))
- 
- def get_asan_rtlib():
-     if (
 @@ -442,7 +482,7 @@ def have_cxx_shared_library():
  
      try:
