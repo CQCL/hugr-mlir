@@ -1,0 +1,52 @@
+diff --git a/test/Unit/lit.cfg.py b/test/Unit/lit.cfg.py
+index f15c30dbcdb0..a94de8bb145e 100644
+--- a/test/Unit/lit.cfg.py
++++ b/test/Unit/lit.cfg.py
+@@ -3,6 +3,7 @@
+ # Configuration file for the 'lit' test runner.
+ 
+ import os
++import platform
+ import subprocess
+ 
+ import lit.formats
+diff --git a/test/lit.cfg.py b/test/lit.cfg.py
+index 7a1e30b49b0c..ec9c724202fd 100644
+--- a/test/lit.cfg.py
++++ b/test/lit.cfg.py
+@@ -41,6 +41,26 @@ llvm_config.with_environment("PATH", config.llvm_tools_dir, append_path=True)
+ # Propagate some variables from the host environment.
+ llvm_config.with_system_environment(["HOME", "INCLUDE", "LIB", "TMP", "TEMP"])
+ 
++# Add the LLVM dynamic libs to the platform-specific loader search path env var:
++#
++# TODO: this is copied from `clang`'s `lit.cfg.py`; should unify..
++def find_shlibpath_var():
++    if platform.system() in ['Linux', 'FreeBSD', 'NetBSD', 'OpenBSD', 'SunOS']:
++        yield 'LD_LIBRARY_PATH'
++    elif platform.system() == 'Darwin':
++        yield 'DYLD_LIBRARY_PATH'
++    elif platform.system() == 'Windows':
++        yield 'PATH'
++    elif platform.system() == 'AIX':
++        yield 'LIBPATH'
++
++for shlibpath_var in find_shlibpath_var():
++    shlibpath = config.llvm_shlib_dir
++    llvm_config.with_environment(shlibpath_var, shlibpath, append_path = True)
++    break
++else:
++    lit_config.warning("unable to inject shared library path on '{}'"
++                       .format(platform.system()))
+ 
+ # Set up OCAMLPATH to include newly built OCaml libraries.
+ top_ocaml_lib = os.path.join(config.llvm_lib_dir, "ocaml")
+@@ -442,7 +482,7 @@ def have_cxx_shared_library():
+ 
+     try:
+         readobj_cmd = subprocess.Popen(
+-            [readobj_exe, "--needed-libs", readobj_exe], stdout=subprocess.PIPE
++            [readobj_exe, '--needed-libs', readobj_exe], stdout=subprocess.PIPE, env=config.environment
+         )
+     except OSError:
+         print("could not exec llvm-readobj")
