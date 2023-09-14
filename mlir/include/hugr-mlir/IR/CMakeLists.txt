@@ -39,7 +39,7 @@ mlir_tablegen(HugrTypeInterfaces.cpp.inc -gen-type-interface-defs EXTRA_INCLUDES
 add_public_tablegen_target(HugrMLIRIncGen)
 add_dependencies(hugr-mlir-headers-interface HugrMLIRIncGen)
 
-add_mlir_doc(HugrDialect HugrDialect Hugr/ -gen-dialect-doc  -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
+add_mlir_doc(HugrOps HugrDialect Hugr/ -gen-dialect-doc -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
 # The interfaces are not part of the dialect, and aren't included in -gen-dialect-doc
 add_mlir_doc(HugrTypeInterfaces HugrTypeInterfaces Hugr/ --gen-type-interface-docs  -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
 
