@@ -3,7 +3,7 @@
 #include "hugr-mlir/IR/HugrDialect.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/IR/Builders.h"
-#include "mlir/IR/FunctionImplementation.h"
+#include "mlir/Interfaces/FunctionImplementation.h"
 
 #define GET_OP_CLASSES
 #include "hugr-mlir/IR/HugrOps.cpp.inc"
@@ -17,6 +17,10 @@ mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getResultTypes() {
 
 mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getArgumentTypes() {
   return getFunctionType().getArgumentTypes();
+}
+
+mlir::Region* hugr_mlir::FuncOp::getCallableRegion() {
+  return &getBody();
 }
 
 // Adapted from mlir/lib/IR/FunctionImplementation.cpp

@@ -101,8 +101,10 @@
                   };
                 in {
                   packages = mlir-inputs ++ lint-inputs
-                    ++ pkgs.lib.optional (shell-mlir != null) shell-mlir
-                    ++ [ pkgs.clang-tools ]; # clangd and clang-format
+                    ++ pkgs.lib.optional (shell-mlir != null) shell-mlir ++ [
+                      pkgs.clang-tools # clangd and clang-format
+                      pkgs.llvmPackages_latest.bintools # lld
+                    ];
 
 
                   languages.rust = {

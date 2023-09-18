@@ -55,7 +55,8 @@ def Hugr_ModuleOp : Hugr_Op<"module",
 }
 
 def Hugr_FuncOp : Hugr_Op<"func",
-  [ DeclareOpInterfaceMethods<FunctionOpInterface>
+  [ DeclareOpInterfaceMethods<CallableOpInterface>
+  , FunctionOpInterface
   , Symbol, SingleBlock
   , OpAsmOpInterface
   ]> {
