@@ -1,4 +1,12 @@
+pub mod to_mlir;
+
 pub struct Hugr(hugr::Hugr);
+
+#[repr(transparent)]
+pub struct WrappedContext(mlir_sys::MlirContext)
+
+#[repr(transparent)]
+pub struct WrappedOperation(mlir_sys::Operation)
 
 #[cxx::bridge(namespace = "hugr_rs_bridge::detail")]
 pub mod ffi {
@@ -20,17 +28,20 @@ pub mod ffi {
 
     struct OperationResult {
         msg: String,
-        result: * mut Operation
+        result: WrappedOperation
     }
 
     extern "Rust" {
         type Hugr;
+        type WrappedContext;
+        type WrappedOperation;
+
         pub fn get_example_hugr() -> * mut Hugr;
         pub fn parse_hugr_json(buf: &[u8]) -> ParseResult;
         pub fn parse_hugr_rmp(buf: &[u8]) -> ParseResult;
         pub unsafe fn hugr_to_mlir(
             hugr: Box<Hugr>,
-            context: *mut MLIRContext,
+            context: &WrappedContext,
         ) -> OperationResult;
 
         pub fn hugr_to_json(hugr: &Hugr) -> SerializeToStringResult;
@@ -63,10 +74,13 @@ pub fn parse_hugr_rmp(buf: &[u8]) -> ffi::ParseResult {
 }
 
 pub unsafe fn hugr_to_mlir(
-    _hugr: Box<Hugr>,
-    _context: *mut ffi::MLIRContext,
+    hugr: Box<Hugr>,
+    context: &WrappedContext,
 ) -> ffi::OperationResult {
-    panic!("unimplemented")
+    match to_mlir::to_mlir(melior::ContextRef::from_raw(context.0), hugr.0.into()) {
+        Ok(op) => OperationResult { msg: "".into(), result: WrappedOperation(op.into_raw())},
+        Err(msg) => OperationResult { msg }
+    }
 }
 
 pub fn hugr_to_json(h: &Hugr) -> ffi::SerializeToStringResult {
