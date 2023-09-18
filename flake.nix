@@ -116,6 +116,9 @@
                   env = {
                     CMAKE_PREFIX_PATH =
                       pkgs.lib.concatMapStringsSep ":" toString mlir-inputs;
+
+                    # rust bindgen requires this environment variable
+                    LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
                   };
 
                   #  workaround https://github.com/cachix/devenv/issues/760

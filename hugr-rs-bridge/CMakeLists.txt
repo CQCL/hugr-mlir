@@ -16,10 +16,10 @@ endif ()
 set(_libhugr_rs_bridge_a "${_outdir}/libhugr_rs_bridge.a")
 set(_libhugr_rs_bridge_a_d "${_outdir}/libhugr_rs_bridge.d")
 
-if(NOT DEFINED ENV{LIBCLANG_PATH})
-    message(ERROR "The environment variable LIBCLANG_PATH is not set. This is required for bindgen")
-else()
+if(DEFINED ENV{LIBCLANG_PATH})
     message(STATUS "LIBCLANG_PATH: $ENV{LIBCLANG_PATH}")
+else()
+    message(SEND_ERROR "The environment variable LIBCLANG_PATH is not set. This is required for bindgen")
 endif()
 
 set(BINDGEN_EXTRA_CLANG_ARGS)
