@@ -9,10 +9,10 @@ include "hugr-mlir/IR/HugrAttrs.td"
 include "hugr-mlir/IR/HugrEnums.td"
 include "hugr-mlir/IR/HugrTypeInterfaces.td"
 
-include "mlir/IR/FunctionInterfaces.td"
 include "mlir/IR/SymbolInterfaces.td"
 include "mlir/IR/OpAsmInterface.td"
 include "mlir/IR/BuiltinTypes.td"
+include "mlir/Interfaces/FunctionInterfaces.td"
 include "mlir/Interfaces/InferTypeOpInterface.td"
 include "mlir/Interfaces/SideEffectInterfaces.td"
 include "mlir/Interfaces/ControlFlowInterfaces.td"
@@ -55,7 +55,8 @@ def Hugr_ModuleOp : Hugr_Op<"module",
 }
 
 def Hugr_FuncOp : Hugr_Op<"func",
-  [ DeclareOpInterfaceMethods<FunctionOpInterface>
+  [ DeclareOpInterfaceMethods<CallableOpInterface>
+  , FunctionOpInterface
   , Symbol, SingleBlock
   , OpAsmOpInterface
   ]> {
