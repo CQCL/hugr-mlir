@@ -33,6 +33,16 @@ will be cached while `llvm-src` in `flake.lock` and the `mlir` derivation in
 It is not required to use a nix shell to build, cmake will pick up all
 dependencies from it's environment.
 
+### rust
+
+At present we have a single rust crate, `hugr-rs-bridge`. We will be using at
+least `guppy`. We have a cargo workspace in the root of the repo, which we use
+to share a `Cargo.lock` and to patched dependencies.  The cmake build system
+generates a `/.cargo/config.toml` cargo configuration file with values for
+various environment variables. In particular the target directory is configured
+to be `$build/hugr-rs-bridge/target`. This means cargo commands run within the
+workspace pick up these environment variables and work as usual.
+
 ### Configure
 
 From root of repo:
@@ -54,6 +64,10 @@ $ ninja -C build
 An mlir extension. Includes a dialect `hugr`and associated tooling.
 
 Python bindings to hugr.
+
+### hugr-rs-bridge
+
+A rust library allowing C++ to call into the `hugr` crate.
 
 ## mlir <--> hugr mapping
 
