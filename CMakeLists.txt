@@ -24,6 +24,7 @@ list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
 set(LLVM_EXTERNAL_LIT "${CMAKE_CURRENT_SOURCE_DIR}/scripts/lit-wrapped.py")
 set(LLVM_LIT_ARGS "-v" CACHE STRING "")
 
+include(HandleLLVMOptions) # This lets us use LLVM_ENABLE_LLD, LLVM_COMPILE_JOBS etc
 include(AddMLIR)
 include(AddLLVM)
 include(TableGen)
