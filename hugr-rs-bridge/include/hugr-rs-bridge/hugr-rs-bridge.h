@@ -5,6 +5,8 @@
 #include "rust/cxx.h"
 #include "hugr-rs-bridge/src/lib.rs.h"
 
+#include "mlir/IR/OwningOpRef.h"
+
 namespace mlir {
 class Location;
 }
@@ -28,6 +30,8 @@ mlir::FailureOr<hugr_unique_ptr<Hugr>> parse_hugr_rmp(mlir::Location loc, llvm::
 
 mlir::FailureOr<std::string> hugr_to_json(mlir::Location loc, Hugr const&);
 mlir::FailureOr<std::vector<uint8_t>> hugr_to_rmp(mlir::Location loc, Hugr const&);
+
+mlir::FailureOr<mlir::OwningOpRef<mlir::Operation*>> hugr_to_mlir(mlir::MLIRContext*, Hugr const&);
 
 hugr_unique_ptr<Hugr> get_example_hugr();
 

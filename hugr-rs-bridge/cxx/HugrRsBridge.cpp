@@ -1,27 +1,28 @@
 #include "hugr-rs-bridge/hugr-rs-bridge.h"
 
-#include "hugr-mlir/IR/HugrAttrs.h"
 #include "mlir/IR/Diagnostics.h"
 #include "mlir/CAPI/IR.h"
 
 auto hugr_rs_bridge::parse_hugr_json(mlir::Location loc, llvm::StringRef str) -> mlir::FailureOr<hugr_unique_ptr<Hugr>> {
     auto slice = rust::Slice<const std::uint8_t>(str.bytes_begin(), str.size());
     auto r = detail::parse_hugr_json(slice);
-    if(!r.result) {
+    auto raw = r.result.into_raw();
+    if(!raw) {
         return mlir::emitError(loc,"Failed to parse hugr json: ") << r.msg;
     }
     assert(r.msg.length() == 0 && "Successful call means no message");
-    return mlir::success(hugr_unique_ptr<Hugr>(r.result));
+    return mlir::success(hugr_unique_ptr<Hugr>(raw));
 }
 
 auto hugr_rs_bridge::parse_hugr_rmp(mlir::Location loc, llvm::ArrayRef<uint8_t> bytes) -> mlir::FailureOr<hugr_unique_ptr<Hugr>> {
     auto slice = rust::Slice<const std::uint8_t>(&bytes.front(), bytes.size());
     auto r = detail::parse_hugr_rmp(slice);
-    if(!r.result) {
+    auto raw = r.result.into_raw();
+    if(!raw) {
         return mlir::emitError(loc,"Failed to parse hugr messagepack: ") << r.msg;
     }
     assert(r.msg.length() == 0 && "Successful call means no message");
-    return mlir::success(hugr_unique_ptr<Hugr>(r.result));
+    return mlir::success(hugr_unique_ptr<Hugr>(raw));
 }
 
 auto hugr_rs_bridge::hugr_to_json(mlir::Location loc, Hugr const& hugr) -> mlir::FailureOr<std::string> {
@@ -50,3 +51,15 @@ auto hugr_rs_bridge::get_example_hugr() -> hugr_unique_ptr<Hugr> {
     return hugr_unique_ptr<Hugr>(r);
 }
 
+
+mlir::FailureOr<mlir::OwningOpRef<mlir::Operation*>> hugr_rs_bridge::hugr_to_mlir(mlir::MLIRContext* context, Hugr const& hugr) {
+    auto wc = wrap(context);
+    auto r = detail::hugr_to_mlir(reinterpret_cast<detail::WrappedContext const&>(wc), hugr);
+    auto raw = r.result.into_raw();
+    if(!raw) {
+        return mlir::emitError(mlir::UnknownLoc::get(context), "Failed to convert hugr to mlir: ") << r.msg;
+    }
+    auto box = rust::Box<detail::WrappedOperation>::from_raw(raw);
+    auto op = unwrap(reinterpret_cast<MlirOperation&>(*box));
+    return mlir::success(mlir::OwningOpRef<mlir::Operation*>(op));
+}

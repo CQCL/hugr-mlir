@@ -3,16 +3,16 @@ pub mod to_mlir;
 pub struct Hugr(hugr::Hugr);
 
 #[repr(transparent)]
-pub struct WrappedContext(mlir_sys::MlirContext)
+pub struct WrappedContext(mlir_sys::MlirContext);
 
 #[repr(transparent)]
-pub struct WrappedOperation(mlir_sys::Operation)
+pub struct WrappedOperation(mlir_sys::MlirOperation);
 
 #[cxx::bridge(namespace = "hugr_rs_bridge::detail")]
 pub mod ffi {
     struct ParseResult {
         msg: String,
-        result: * mut Hugr
+        result: Box<Hugr>
     }
 
     struct SerializeToStringResult {
@@ -28,7 +28,7 @@ pub mod ffi {
 
     struct OperationResult {
         msg: String,
-        result: WrappedOperation
+        result: Box<WrappedOperation>
     }
 
     extern "Rust" {
@@ -40,8 +40,8 @@ pub mod ffi {
         pub fn parse_hugr_json(buf: &[u8]) -> ParseResult;
         pub fn parse_hugr_rmp(buf: &[u8]) -> ParseResult;
         pub unsafe fn hugr_to_mlir(
-            hugr: Box<Hugr>,
             context: &WrappedContext,
+            hugr: &Hugr,
         ) -> OperationResult;
 
         pub fn hugr_to_json(hugr: &Hugr) -> SerializeToStringResult;
@@ -60,8 +60,8 @@ pub mod ffi {
 
 fn try_deserialize_hugr<'a, E: std::fmt::Display>(buf: &'a [u8], parse: impl FnOnce(&'a [u8]) -> Result<hugr::Hugr,E>) -> ffi::ParseResult {
     match parse(buf) {
-        Err(e) => ffi::ParseResult{msg: e.to_string(), result: std::ptr::null_mut()},
-        Ok(h) => ffi::ParseResult{msg: "".into(), result: Box::into_raw(Box::new(Hugr(h)))}
+        Err(e) => ffi::ParseResult{msg: e.to_string(), result: unsafe {Box::from_raw(std::ptr::null_mut())}},
+        Ok(h) => ffi::ParseResult{msg: "".into(), result: Box::new(Hugr(h))}
     }
 }
 
@@ -74,12 +74,12 @@ pub fn parse_hugr_rmp(buf: &[u8]) -> ffi::ParseResult {
 }
 
 pub unsafe fn hugr_to_mlir(
-    hugr: Box<Hugr>,
     context: &WrappedContext,
+    hugr: &Hugr,
 ) -> ffi::OperationResult {
-    match to_mlir::to_mlir(melior::ContextRef::from_raw(context.0), hugr.0.into()) {
-        Ok(op) => OperationResult { msg: "".into(), result: WrappedOperation(op.into_raw())},
-        Err(msg) => OperationResult { msg }
+    match to_mlir::to_mlir(melior::ContextRef::from_raw(context.0), hugr.0.as_ref()) {
+        Ok(op) => ffi::OperationResult { msg: "".into(), result: Box::new(WrappedOperation(op.to_raw()))},
+        Err(msg) => ffi::OperationResult { msg, result: Box::from_raw(std::ptr::null_mut()) }
     }
 }
 

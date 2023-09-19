@@ -3,5 +3,7 @@ fn main() {
     // Note that we don't build the C++ that we generate, instead that is done by cmake
     let _build = cxx_build::bridge("src/lib.rs");
 
+    println!("cargo:rustc-rerun-if-changed=src/lib.rs")
+
     // TODO there is more to be done to depend on this through rust
 }

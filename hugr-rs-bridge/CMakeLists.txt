@@ -42,13 +42,14 @@ file(GENERATE OUTPUT "${_cargo_config}"
   INPUT "${CMAKE_CURRENT_BINARY_DIR}/config.toml.in"
 )
 
+# add_custom_command(
+#     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/cargo/bin/cxxbridge-cmd"
+#     COMMAND cargo install cxxbridge-cmd --root "${CMAKE_CURRENT_BINARY_DIR}/cargo"
+# )
+
 add_custom_command(
     COMMENT "Compiling hugr_rs_bridge rust crate"
-    OUTPUT
-    "${_libhugr_rs_bridge_a}"
-    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.cc"
-    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.h"
-    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/rust/cxx.h"
+    OUTPUT "${_libhugr_rs_bridge_a}"
     DEPENDS "${_cargo_config}"
     COMMAND cargo build ${HUGR_MLIR_CARGO_FLAGS}
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -56,6 +57,15 @@ add_custom_command(
     BYPRODUCTS "${_libhugr_rs_bridge_a_d}" "${_cargo_lock}"
     USES_TERMINAL
 )
+
+# add_custom_command(
+#     COMMAND "${CMAKE_CURRENT_BINARY_DIR}/cargo/bin/cxxbridge-cmd"
+#     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/cargo/bin/cxxbridge-cmd"
+#     OUTPUT
+#     "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.cc"
+#     "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.h"
+#     "${HUGR_MLIR_TARGET_DIR}/cxxbridge/rust/cxx.h"
+# )
 
 # depending on files in cmake is flaky, depending on them through a custom
 # target works reliably
@@ -74,7 +84,11 @@ add_library(hugr-rs-bridge
 add_dependencies(hugr-rs-bridge hugr-rs-bridge-cargo)
 target_link_libraries(hugr-rs-bridge PUBLIC
   "${_libhugr_rs_bridge_a}"
-  MLIRSupport
+  mlir-headers-interface
+
+  # We need these because melior calls into them
+  MLIRExecutionEngine
+  LLVMX86AsmParser
 )
 target_include_directories(hugr-rs-bridge PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
