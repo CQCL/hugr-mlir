@@ -456,7 +456,7 @@ void hugr_mlir::getHugrTypeMemoryEffects(
     if (auto htt = llvm::dyn_cast<HugrTypeInterface>(v.getType())) {
       if (htt.getConstraint() == TypeConstraint::Linear) {
         effects.push_back(
-            mlir::SideEffects::EffectInstance(e, v, LinearityResource::get()));
+            mlir::SideEffects::EffectInstance<mlir::MemoryEffects::Effect>(e, v, LinearityResource::get()));
       }
     }
   };

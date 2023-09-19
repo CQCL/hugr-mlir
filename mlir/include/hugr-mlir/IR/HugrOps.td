@@ -185,7 +185,7 @@ def Hugr_ConditionalOp : Hugr_Op<"conditional",
           $_state.addOperands(predicate);
           $_state.addOperands(other_inputs);
           if(auto pred_type = llvm::dyn_cast<SumType>(predicate.getType())) {
-            for(auto i = 0; i < pred_type.numAlts(); ++i) { $_state.addRegion(); }
+            for(auto i = 0u; i < pred_type.numAlts(); ++i) { $_state.addRegion(); }
           }
         }]>
     ];
