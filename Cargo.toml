@@ -1,0 +1,8 @@
+[workspace]
+members = ["hugr-rs-bridge"]
+
+[patch.crates-io]
+mlir-sys = { git = "https://github.com/doug-q/mlir-sys", branch = "llvm18" }
+tblgen = { git = "https://github.com/doug-q/tblgen-rs", branch = "llvm18" }
+melior = { git = "https://github.com/doug-q/melior", branch = "llvm18" }
+melior-macro = { git = "https://github.com/doug-q/melior", branch = "llvm18" }

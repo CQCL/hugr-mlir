@@ -1,4 +1,5 @@
 {
+  nixConfig = { };
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05";
@@ -6,6 +7,10 @@
     devenv = {
       url = "github:cachix/devenv";
       inputs = { nixpkgs.follows = "nixpkgs"; };
+    };
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     llvm-src = {
       url = "github:llvm/llvm-project";
@@ -22,7 +27,7 @@
           self-mlir = config.packages.mlir;
           # nixfmt depends on ghc, so take it from nixpkgs-stable to have a
           # better chance of a nix cache hit.
-          nixfmt = inputs.nixpkgs-stable.legacyPackages.${system}.nixfmt;
+          inherit (inputs.nixpkgs-stable.legacyPackages.${system}) nixfmt;
         in {
           packages = {
             # for now, assertions are always on
@@ -55,6 +60,11 @@
                 PATH=${nixfmt}/bin:''${PATH+:$PATH}
                 exec ${./scripts/lint-nixfmt.sh} "$@"
               '');
+            lint-clang-format.program = toString
+              (pkgs.writeShellScript "lint-nixfmt" ''
+                PATH=${pkgs.clang-tools}/bin:''${PATH+:$PATH}
+                exec ${./scripts/lint-clang-format.sh} "$@"
+              '');
           };
           checks = let
             check-mlir = suffix: mlir:
@@ -72,21 +82,50 @@
             # check-mlir-debug = check-mlir "-debug" config.packages.mlir-debug;
           };
           devenv = {
-
             shells = let
+
               # inputs needed to build (checked) mlir. There is probably a better way to do this.
               # Including these means the shell can build LLVM in local
               # development workflows excluding mlir from the shell environment.
               mlir-inputs = self-mlir.buildInputs ++ self-mlir.nativeBuildInputs
                 ++ self-mlir.propagatedBuildInputs
                 ++ self-mlir.propagatedNativeBuildInputs;
+
               lint-inputs = [ nixfmt ];
-              mkShell = shell-mlir: {
-                packages = mlir-inputs ++ lint-inputs
-                  ++ pkgs.lib.optional (shell-mlir != null) shell-mlir;
-                #  workaround https://github.com/cachix/devenv/issues/760
-                containers = pkgs.lib.mkForce { };
-              };
+
+              mkShell = shell-mlir:
+                { config, pkgs, ... }:
+                let
+                  rustPlatform = pkgs.makeRustPlatform {
+                    inherit (config.languages.rust.toolchain) rustc cargo;
+                  };
+                in {
+                  packages = mlir-inputs ++ lint-inputs
+                    ++ pkgs.lib.optional (shell-mlir != null) shell-mlir ++ [
+                      pkgs.clang-tools
+                      pkgs.llvmPackages_latest.bintools
+                    ]; # clangd and clang-format
+
+                  languages.rust = {
+                    enable = true;
+                    channel = "stable";
+                    components =
+                      [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
+                  };
+
+                  languages.cplusplus = { enable = true; };
+
+                  env = {
+                    CMAKE_PREFIX_PATH =
+                      pkgs.lib.concatMapStringsSep ":" toString mlir-inputs;
+
+                    # rust bindgen requires this environment variable
+                    LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
+                  };
+
+                  #  workaround https://github.com/cachix/devenv/issues/760
+                  containers = pkgs.lib.mkForce { };
+                };
               yes-mlir = mkShell config.packages.mlir-unchecked;
             in {
               inherit yes-mlir;
