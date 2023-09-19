@@ -117,6 +117,7 @@
                   env = {
                     CMAKE_PREFIX_PATH =
                       pkgs.lib.concatMapStringsSep ":" toString mlir-inputs;
+                    LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
                   };
 
                   #  workaround https://github.com/cachix/devenv/issues/760

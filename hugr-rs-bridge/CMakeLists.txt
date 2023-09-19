@@ -49,7 +49,11 @@ file(GENERATE OUTPUT "${_cargo_config}"
 
 add_custom_command(
     COMMENT "Compiling hugr_rs_bridge rust crate"
-    OUTPUT "${_libhugr_rs_bridge_a}"
+    OUTPUT
+    "${_libhugr_rs_bridge_a}"
+    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.cc"
+    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/hugr-rs-bridge/src/lib.rs.h"
+    "${HUGR_MLIR_TARGET_DIR}/cxxbridge/rust/cxx.h"
     DEPENDS "${_cargo_config}"
     COMMAND cargo build ${HUGR_MLIR_CARGO_FLAGS}
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
