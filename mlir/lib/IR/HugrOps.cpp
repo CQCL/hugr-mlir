@@ -6,7 +6,7 @@
 #include "hugr-mlir/IR/HugrTypes.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/IR/Builders.h"
-#include "mlir/IR/FunctionImplementation.h"
+#include "mlir/Interfaces/FunctionImplementation.h"
 
 #define GET_OP_CLASSES
 #include "hugr-mlir/IR/HugrOps.cpp.inc"

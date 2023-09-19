@@ -121,11 +121,11 @@
     "llvm-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1693313855,
-        "narHash": "sha256-U11QAdSpm6pNav0M3XVUiZyCnvvAFG+GgozMJgVCok0=",
+        "lastModified": 1695039642,
+        "narHash": "sha256-ziP3zN1tkaE+7whovgr8AukeEKZ0tgwZCAQodfs42SY=",
         "owner": "llvm",
         "repo": "llvm-project",
-        "rev": "18f1c1ace7a6099f3e8e56cf4b81aa0f64a7dd23",
+        "rev": "1a8b36b16c3778dc458182ea342904e574b008c7",
         "type": "github"
       },
       "original": {
