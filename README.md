@@ -4,6 +4,7 @@ A prototype for integrating (hugr)[https://github.com/CQCL-DEV/hugr] and (mlir)[
 
 ## Building and Dependencies
 
+* C++17 compiler and toolchain
 * A recent build of LLVM including MLIR
 * A python installation including libraries: TODO
 
@@ -46,9 +47,29 @@ $ cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX
 $ ninja -C build
 
 ```
-
 ## Components
 
-For now, a cmake project in the root that pulls in MLIR and builds nothing.
+### mlir
 
+An mlir extension. Includes a dialect `hugr` and associated tooling.
+
+Python bindings to hugr.
+
+## mlir <--> hugr mapping
+
+Our goal is to create a bidirectional mapping between mlir and hugr. We will likely not be able to exactly round trip everything, but it would be good to get close.
+
+We begin by defining a subset of mlir as a domain for this mapping.
+
+We can map an arbitrary no-successor, no-region,  mlir op into hugr by creating an mlir hugr extension with an op "mlir_op" and a type "mlir_type".
+
+We map types in mlir into hugr by special casing a whitelist of types(which include all types in the hugr dialect), and mapping the remainder to `mlir.mlir_type<{dialect}.{name}.{str}>` where `str` is the string serialisation fo the mlir type.
+
+We map ops similarly, special casing a whitelist of ops(which include all ops in the hugr dialect) and mapping the remainder to `mlir.mlir_op` with a signature is defined by applying the type mapping to each of it's arguments and results. Attributes on the op are mapped to node weights on `mlir_op`. Attributes can be mapped to strings in the same way as types. 
+
+mlir locations will be mapped into metadata on the hugr ops.
+
+We will define a dialect Attribute "HugrMetadata" that can be applied to any mlir op and will map to metadata in hugr. We will reserve at least one key in the metadata dictionary, i.e. location, so that a "HugrMetadata" attribute may not contain a key e.g. "org.quantinuum.hugr.mlir.location". Note that dialect Attributes may be discarded by passes (much the same as metadata in hugr).
+
+Note that any mlir region ops, or successor ops, must be whitelisted and special cased. We expect to do this initially for the `ControlFlow`, `Func`, `arith`, `index`, `llvm` dialects. We may extend in the future to `StructuredControlFlow`, `Affine`, `Tensor`, `LinearAlgebra`.
 

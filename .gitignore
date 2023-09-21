@@ -1,4 +1,5 @@
 /_build*/
+/_install*/
 /build*/
 /_b/
 /_b_*
@@ -8,3 +9,5 @@
 /.direnv/
 /.devenv/
 compile_commands.json
+/__pycache__/
+/_venv/

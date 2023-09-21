@@ -1,0 +1,4 @@
+install(DIRECTORY .
+    TYPE DOC
+    FILES_MATCHING PATTERN "*.md"
+)
