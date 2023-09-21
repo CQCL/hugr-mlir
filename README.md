@@ -51,7 +51,7 @@ $ ninja -C build
 
 ### mlir
 
-An mlir extension. Includes a dialect `hugr`and associated tooling.
+An mlir extension. Includes a dialect `hugr` and associated tooling.
 
 Python bindings to hugr.
 
