@@ -6,7 +6,7 @@ A prototype for integrating (hugr)[https://github.com/CQCL-DEV/hugr] and (mlir)[
 
 * C++17 compiler and toolchain
 * A recent build of LLVM including MLIR
-* A python installation including libraries: TODO
+* A python installation including libraries: numpy pybind11 psutil pyyaml lit 
 
 All dependencies are available through nix, to enter a shell with all dependencies available:
 
@@ -20,8 +20,12 @@ This shell includes a customised LLVM install (see nix/mlir) with MLIR, assertio
 
 Alternatively, you may wish to bring your own LLVM build or install tree(say, `$prefix`), in
 which case you can use `nix develop .#no-mlir`. This shell does include all LLVM
-dependencies. To point cmake at your LLVM tree, pass
-`-DMLIR_DIR=$prefix/lib/cmake/mlir` to cmake.
+dependencies. To point cmake at your LLVM tree, pass 
+`-DMLIR_DIR=$prefix/lib/cmake/mlir` to cmake. We require some settings on the MLIR build:
+ * -DLLVM_ENABLE_PROJECTS=mlir
+ * -DMLIR_ENABLE_BINDINGS_PYTHON=On
+ * -DBUILD_SHARED_LIBS=On
+ * -DMLIR_BUILD_MLIR_C_DYLIB=On
 
 The `.#debug-mlir` shell includes a debug build of our LLVM.
 
@@ -48,6 +52,15 @@ $ ninja -C build
 
 ```
 ## Components
+
+### LLVM + MLIR
+
+We prepare a build of LLVM including MLIR, where the source of truth is `nix/mlir/default.nix`.
+
+For now we are building with `BUILD_SHARED_LIBS=On`, which results in our dependent binaries pulling in ~250 shared libraries. This is fine for prototyping and development, but for deployment this would likely not be acceptable. 
+
+In the future we will prepare a build of LLVM that includes `./mlir` using the `LLVM_EXTENRAL_PROJECTS`
+
 
 ### mlir
 
