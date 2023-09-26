@@ -83,6 +83,11 @@ def Hugr_StaticEdgeAttr: Hugr_Attr<"StaticEdge", "static_edge",
         AttrParameter<"mlir::SymbolRefAttr", "ref">:$ref
     );
     let genVerifyDecl = 1;
+    let builders = [
+        AttrBuilderWithInferredContext<(ins "mlir::Type":$type, "mlir::SymbolRefAttr":$ref), [{
+          return $_get(type.getContext(), type, ref);
+        }]>
+    ];
 }
 
 def Hugr_UnitAttr : Hugr_Attr<"Unit", "unit",

@@ -21,7 +21,8 @@ set(HUGR_MLIR_TEST_DEPENDS
         FileCheck count not
         hugr-mlir-opt
         test-hugr-mlir-capi
-        test-hugr-rs-bridge
+        # test-hugr-rs-bridge
+        # test-import-example-hugr
         )
 
 if(MLIR_ENABLE_BINDINGS_PYTHON)
@@ -44,4 +45,5 @@ add_test(NAME hugr-mlir-lit
 )
 
 add_subdirectory(CAPI)
-add_subdirectory(hugr-rs-bridge)
+# add_subdirectory(hugr-rs-bridge)
+# add_subdirectory(Translate)

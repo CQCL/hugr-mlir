@@ -20,8 +20,7 @@ crate-type = ["staticlib"]
 [dependencies]
 quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
 mlir-sys = "^0.2"
-melior = "^0.11"
-melior-macro = "*"
+melior = { version = "^0.11", features = ["ods-dialects"] }
 rmp-serde = "^1.1.2"
 serde_json = "*"
 cxx = "^1.0.107"

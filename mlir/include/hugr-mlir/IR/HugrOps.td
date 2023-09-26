@@ -48,6 +48,19 @@ def Hugr_ModuleOp : Hugr_Op<"module",
     );
 
     let regions = (region SizedRegion<1>:$body);
+
+
+    let skipDefaultBuilders = 1;
+    let builders = [
+        OpBuilder<(ins CArg<"std::optional<llvm::StringRef>", "std::nullopt">:$name), [{
+          $_state.addRegion()->emplaceBlock();
+          if(name) {
+             $_state.attributes.push_back($_builder.getNamedAttr("sym_name", $_builder.getStringAttr(*name)));
+          }
+        }]>
+
+    ];
+
     let extraClassDeclaration = [{
         static mlir::StringRef getDefaultDialect() { return "hugr"; }
         bool isOptionalSymbol() { return true; }

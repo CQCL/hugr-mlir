@@ -6,7 +6,7 @@ pub struct Hugr(hugr::Hugr);
 pub struct WrappedContext(mlir_sys::MlirContext);
 
 #[repr(transparent)]
-pub struct WrappedOperation(mlir_sys::MlirOperation);
+pub struct WrappedBlock(mlir_sys::MlirBlock);
 
 #[cxx::bridge(namespace = "hugr_rs_bridge::detail")]
 pub mod ffi {
@@ -26,15 +26,15 @@ pub mod ffi {
         size: usize
     }
 
-    struct OperationResult {
+    struct BlockResult {
         msg: String,
-        result: Box<WrappedOperation>
+        result: Box<WrappedBlock>
     }
 
     extern "Rust" {
         type Hugr;
         type WrappedContext;
-        type WrappedOperation;
+        type WrappedBlock;
 
         pub fn get_example_hugr() -> * mut Hugr;
         pub fn parse_hugr_json(buf: &[u8]) -> ParseResult;
@@ -42,7 +42,8 @@ pub mod ffi {
         pub unsafe fn hugr_to_mlir(
             context: &WrappedContext,
             hugr: &Hugr,
-        ) -> OperationResult;
+            block: &WrappedBlock
+        ) -> String;
 
         pub fn hugr_to_json(hugr: &Hugr) -> SerializeToStringResult;
         pub fn hugr_to_rmp(hugr: &Hugr) -> SerializeToBytesResult;
@@ -73,15 +74,6 @@ pub fn parse_hugr_rmp(buf: &[u8]) -> ffi::ParseResult {
     try_deserialize_hugr(buf, rmp_serde::from_slice::<hugr::Hugr>)
 }
 
-pub unsafe fn hugr_to_mlir(
-    context: &WrappedContext,
-    hugr: &Hugr,
-) -> ffi::OperationResult {
-    match to_mlir::to_mlir(melior::ContextRef::from_raw(context.0), hugr.0.as_ref()) {
-        Ok(op) => ffi::OperationResult { msg: "".into(), result: Box::new(WrappedOperation(op.to_raw()))},
-        Err(msg) => ffi::OperationResult { msg, result: Box::from_raw(std::ptr::null_mut()) }
-    }
-}
 
 pub fn hugr_to_json(h: &Hugr) -> ffi::SerializeToStringResult {
     match serde_json::to_string_pretty(&h.0) {
@@ -101,6 +93,14 @@ pub fn hugr_to_rmp(h: &Hugr) -> ffi::SerializeToBytesResult {
             ffi::SerializeToBytesResult{ msg: "".into(), result, size }
         }
     }
+}
+
+pub unsafe fn hugr_to_mlir(
+    context: &WrappedContext,
+    hugr: &Hugr,
+    block: &WrappedBlock
+) -> String {
+    to_mlir::to_mlir(melior::ContextRef::from_raw(context.0), hugr.0.as_ref(), melior::ir::BlockRef::from_raw(block.0)).err().unwrap_or("".into())
 }
 
 fn get_example_hugr_impl() -> Result<hugr::Hugr, hugr::builder::BuildError> {
@@ -143,3 +143,11 @@ extern "C" {
 
 //     }
 // }
+
+pub mod hugr_dialect {
+melior::dialect! {
+    name: "hugr",
+    td_file: "mlir/include/hugr-mlir/IR/HugrOps.td",
+    include_dirs: ["../hugr-mlir/mlir-src-18.0.0-git-1a8b36b/mlir/include", "mlir/include"],
+}
+}

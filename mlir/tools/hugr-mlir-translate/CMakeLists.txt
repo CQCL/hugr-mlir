@@ -5,6 +5,7 @@ target_link_libraries(hugr-mlir-translate
   PRIVATE
   MLIRTranslateLib
   HugrMLIRDialect
+  # hugr-rs-bridge
 )
 set_target_properties(hugr-mlir-translate
   PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${HUGR_MLIR_TOOLS_DIR}"

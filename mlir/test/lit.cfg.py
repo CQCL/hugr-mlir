@@ -72,6 +72,7 @@ tools = [
     "hugr-mlir-opt",
     "test-hugr-mlir-capi",
     "test-hugr-rs-bridge",
+    "test-import-example-hugr",
     ToolSubst("%PYTHON", config.python_executable),
 ]
 

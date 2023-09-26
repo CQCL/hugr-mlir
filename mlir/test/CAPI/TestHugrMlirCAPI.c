@@ -18,7 +18,8 @@ int main() {
 
   MlirNamedAttribute attrs[2];
 
-  MlirAttribute test_attr = mlirHugrTypeConstraintAttrGet(ctx, "Linear");
+  const char* linear = "Linear";
+  MlirAttribute test_attr = mlirHugrTypeConstraintAttrGet(ctx, mlirStringRefCreate(linear, strlen(linear)));
   const char* test_attr_str = "test_attr";
   MlirStringRef test_attr_strref =
       mlirStringRefCreate(test_attr_str, strlen(test_attr_str));

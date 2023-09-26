@@ -2,7 +2,17 @@
 target-dir = "@HUGR_MLIR_TARGET_DIR@"
 
 [env]
-MLIR_SYS_180_PREFIX="@LLVM_BINARY_DIR@"
-TABLEGEN_180_PREFIX="@LLVM_BINARY_DIR@"
+TABLEGEN_180_PREFIX = "@LLVM_BINARY_DIR@"
 BINDGEN_EXTRA_CLANG_ARGS="@BINDGEN_EXTRA_CLANG_ARGS@"
 # HUGR_MLIR_MLIR_INCLUDE_DIRS="@HUGR_MLIR_MLIR_INCLUDE_DIRS@"
+
+# TODO use target system
+[target.x86_64-unknown-linux-gnu.MLIR]
+rustc-link-lib = ["$<TARGET_FILE:MLIR-C>"]
+
+# TODO use host system
+[target.x86_64-unknown-linux-gnu.LLVMTableGen]
+rustc-link-lib = [
+  "$<TARGET_FILE:LLVM>",
+  "$<TARGET_FILE:LLVMTableGen>",
+  ]

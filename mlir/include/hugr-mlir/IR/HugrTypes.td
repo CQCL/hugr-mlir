@@ -19,11 +19,18 @@ def Hugr_FunctionType : Hugr_Type<"Function", "function"> {
         Implements `HugrTypeInterface`, although this is implemented outside of
         tablegen.
     }];
+    let assemblyFormat = "$extensions``$function_type";
+
     let parameters = (ins
         ExtensionSetParameter<"extensions">:$extensions,
         TypeParameter<"::mlir::FunctionType","function_type">:$function_type
     );
-    let assemblyFormat = "$extensions``$function_type";
+
+    let builders = [
+        TypeBuilderWithInferredContext<(ins "::hugr_mlir::ExtensionSetAttr":$extensions, "::mlir::FunctionType":$function_type), [{
+          return $_get(function_type.getContext(), extensions, function_type);
+        }]>
+    ];
 
     let extraClassDeclaration = [{
         FunctionType clone(mlir::TypeRange,mlir::TypeRange);
@@ -45,16 +52,21 @@ def Hugr_OpaqueType : Hugr_Type<"Opaque", "opaque"
         TODO for now we take type_args as Attributes. We'll need to iterate on
         this as it comes up
     }];
+    let assemblyFormat = "$name`[`$extension`]`(`[`$constraint^`]`)?(`<`$type_args^`>`)?";
     let parameters = (ins
         StringRefParameter<"type name">:$name,
-        ExtensionSetParameter<"extensions">:$extensions,
+        TypeParameter<"hugr_mlir::ExtensionAttr","extension">:$extension,
         OptionalArrayRefParameter<"::mlir::Attribute", "type args">:$type_args,
         DefaultValuedParameter<"TypeConstraint","TypeConstraint::Equatable">:$constraint
     );
-    let assemblyFormat = "$name``$extensions(`[`$constraint^`]`)?(`<`$type_args^`>`)?";
     // TODO type args can be usize, type, extensionset, or SumType, TupleType, FunctionType, OpaqueType
     // Q: Can they be extended types?
    // let genVerifyDecl = 1;
+   let builders = [
+       TypeBuilderWithInferredContext<(ins "llvm::StringRef":$name, "hugr_mlir::ExtensionAttr":$extension, "llvm::ArrayRef<mlir::Attribute>":$args, CArg<"hugr_mlir::TypeConstraint","hugr_mlir::TypeConstraint::Equatable">:$constraint), [{
+           return $_get(extension.getContext(), name, extension, args, constraint);
+       }]>
+   ];
 }
 
 def Hugr_SumType : Hugr_Type<"Sum", "sum",[]> {
@@ -128,12 +140,19 @@ def Hugr_AliasRefType : Hugr_Type<"AliasRef","ref"> {
         TODO Hugr Ops should implement SymbolOpUserInterface and verify any
         AliasRefTypes they contain .
     }];
+    let assemblyFormat = "`<`$extensions``$ref(`,`$constraint^)?`>`";
     let parameters = (ins
         ExtensionSetParameter<"Extension">:$extensions,
         TypeParameter<"mlir::SymbolRefAttr","ref">:$ref,
         DefaultValuedParameter<"TypeConstraint","TypeConstraint::Equatable">:$constraint
     );
-    let assemblyFormat = "`<`$extensions``$ref(`,`$constraint^)?`>`";
+
+    let builders = [
+        TypeBuilderWithInferredContext<(ins "hugr_mlir::ExtensionSetAttr":$extensions, "mlir::SymbolRefAttr":$ref, CArg<"hugr_mlir::TypeConstraint","hugr_mlir::TypeConstraint::Equatable">:$constraint), [{
+          return $_get(extensions.getContext(), extensions, ref, constraint);
+        }]>
+    ];
+
 }
 
 #endif

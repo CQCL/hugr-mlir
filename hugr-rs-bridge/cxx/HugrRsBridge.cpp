@@ -52,14 +52,12 @@ auto hugr_rs_bridge::get_example_hugr() -> hugr_unique_ptr<Hugr> {
 }
 
 
-mlir::FailureOr<mlir::OwningOpRef<mlir::Operation*>> hugr_rs_bridge::hugr_to_mlir(mlir::MLIRContext* context, Hugr const& hugr) {
+mlir::LogicalResult hugr_rs_bridge::hugr_to_mlir(mlir::MLIRContext* context, Hugr const& hugr, mlir::Block* block) {
     auto wc = wrap(context);
-    auto r = detail::hugr_to_mlir(reinterpret_cast<detail::WrappedContext const&>(wc), hugr);
-    auto raw = r.result.into_raw();
-    if(!raw) {
-        return mlir::emitError(mlir::UnknownLoc::get(context), "Failed to convert hugr to mlir: ") << r.msg;
+    auto wb = wrap(block);
+    auto r = detail::hugr_to_mlir(reinterpret_cast<detail::WrappedContext const&>(wc), hugr, reinterpret_cast<detail::WrappedBlock const&>(wb));
+    if(r.size()) {
+        return mlir::emitError(mlir::UnknownLoc::get(context), "Failed to convert hugr to mlir: ") << r;
     }
-    auto box = rust::Box<detail::WrappedOperation>::from_raw(raw);
-    auto op = unwrap(reinterpret_cast<MlirOperation&>(*box));
-    return mlir::success(mlir::OwningOpRef<mlir::Operation*>(op));
+    return mlir::success();
 }
