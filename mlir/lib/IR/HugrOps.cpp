@@ -472,6 +472,7 @@ void hugr_mlir::getHugrTypeMemoryEffects(
   for (auto result : op->getResults()) {
     add_linear_effect(result, mlir::MemoryEffects::Allocate::get());
   }
+
 }
 
 bool hugr_mlir::isDataflowGraphRegion(mlir::Region& region) {

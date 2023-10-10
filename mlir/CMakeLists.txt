@@ -13,6 +13,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS On)
 # POSITION_INDEPENDENT_CODE property instead
 set(CMAKE_POSITION_INDEPENDENT_CODE On)
 
+set(BUILD_SHARED_LIBS 1 CACHE BOOL "")
+if(NOT BUILD_SHARED_LIBS)
+  message(FATAL_ERROR "We only support building with shared libraries")
+endif()
+
 find_package(MLIR REQUIRED CONFIG)
 list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
 
@@ -69,6 +74,7 @@ set(HUGR_MLIR_PYTHON_PACKAGES_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_packages")
 add_subdirectory(include/hugr-mlir/IR)
 add_subdirectory(lib/IR)
 add_subdirectory(lib/CAPI)
+add_subdirectory(lib/Translate)
 add_subdirectory(tools/hugr-mlir-opt)
 add_subdirectory(tools/hugr-mlir-translate)
 add_subdirectory(tools/hugr-mlir-lsp-server)

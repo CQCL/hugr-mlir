@@ -1,5 +1,6 @@
 #include "hugr-mlir/IR/HugrAttrs.h"
 
+#include "hugr-mlir/IR/HugrTypes.h"
 #include "hugr-mlir/IR/HugrDialect.h"
 #include "llvm/ADT/TypeSwitch.h"
 #include "mlir/IR/Builders.h"
@@ -58,6 +59,10 @@ hugr_mlir::ExtensionSetAttr hugr_mlir::ExtensionSetAttr::remove(
       getExtensions(), std::back_inserter(new_attrs),
       [&rhs_set](auto x) { return !rhs_set.contains(x); });
   return ExtensionSetAttr::get(getContext(), new_attrs);
+}
+
+auto hugr_mlir::SumAttr::getSumType() -> SumType {
+  return llvm::cast<SumType>(getType());
 }
 
 void hugr_mlir::HugrDialect::registerAttrs() {

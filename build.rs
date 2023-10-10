@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 fn main() {
     let mut cmake = cmake::Config::new("mlir");
+    cmake.define("BUILD_SHARED_LIBS", "1");
     let mut clang_args = std::vec::Vec::new();
     if let Ok(mlir_path) = std::env::var("DEP_MLIR_CONFIG_PATH") {
         cmake.define("MLIR_DIR", format!("{}/lib/cmake/mlir", mlir_path));
@@ -14,7 +15,8 @@ fn main() {
     let bindings = bindgen::Builder::default()
         .clang_args(clang_args)
         .header("mlir/include/hugr-mlir-c/Dialects.h")
-        .allowlist_file("mlir/include/hugr-mlir-c/Dialects.h")
+        .header("mlir/include/hugr-mlir-c/Translate.h")
+        .allowlist_file(".*mlir/include/hugr-mlir-c/(Translate|Dialects).h")
         .allowlist_recursively(false)
         .raw_line("use mlir_sys::*;")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))

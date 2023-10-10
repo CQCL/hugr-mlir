@@ -66,13 +66,13 @@ mlirHugrExtensionSetAttrGet(MlirContext context, int32_t n_extensions, MlirAttri
 
 }
 
-MLIR_CAPI_EXPORTED bool
+bool
 mlirTypeIsAHugrAliasRefType(MlirType t) {
   return llvm::isa_and_present<hugr_mlir::AliasRefType>(unwrap(t));
 
 }
 
-MLIR_CAPI_EXPORTED MlirType
+MlirType
 mlirHugrAliasRefTypeGet(MlirAttribute extensions, MlirAttribute sym_ref, MlirAttribute type_constraint) {
   auto es = llvm::cast<hugr_mlir::ExtensionSetAttr>(unwrap(extensions));
   auto sym = llvm::cast<SymbolRefAttr>(unwrap(sym_ref));
@@ -80,13 +80,13 @@ mlirHugrAliasRefTypeGet(MlirAttribute extensions, MlirAttribute sym_ref, MlirAtt
   return wrap(hugr_mlir::AliasRefType::get(es, sym, constraint_attr.getValue()));
 }
 
-MLIR_CAPI_EXPORTED bool
+bool
 mlirTypeIsAHugrOpaqueType(MlirType t) {
   return llvm::isa_and_present<hugr_mlir::OpaqueType>(unwrap(t));
 
 }
 
-MLIR_CAPI_EXPORTED MlirType
+MlirType
 mlirHugrOpaqueTypeGet(MlirStringRef name, MlirAttribute extension, MlirAttribute type_constraint, intptr_t n_args, MlirAttribute const* args) {
   llvm::SmallVector<Attribute> as;
   std::transform(args, args + n_args, std::back_inserter(as), [](auto x) { return unwrap(x); });
@@ -95,12 +95,25 @@ mlirHugrOpaqueTypeGet(MlirStringRef name, MlirAttribute extension, MlirAttribute
   return wrap(hugr_mlir::OpaqueType::get(unwrap(name), e, as, tc.getValue()));
 }
 
-MLIR_CAPI_EXPORTED bool
+bool
 mlirAttributeIsHugrStaticEdgeAttr(MlirAttribute attr) {
   return llvm::isa_and_present<hugr_mlir::StaticEdgeAttr>(unwrap(attr));
 }
 
-MLIR_CAPI_EXPORTED MlirAttribute
+MlirAttribute
 mlirHugrStaticEdgeAttrGet(MlirType type, MlirAttribute sym) {
   return wrap(hugr_mlir::StaticEdgeAttr::get(unwrap(type), llvm::cast<SymbolRefAttr>(unwrap(sym))));
+}
+
+bool
+mlirAttributeIsHugrSumAttr(MlirAttribute x) {
+  return llvm::isa_and_present<hugr_mlir::SumAttr>(unwrap(x));
+}
+
+MlirAttribute
+mlirHugrSumAttrGet(MlirType type, uint32_t tag, MlirAttribute value) {
+  auto t = llvm::cast<hugr_mlir::SumType>(unwrap(type));
+  return wrap(hugr_mlir::SumAttr::get(t, tag, unwrap(value)));
+
+
 }

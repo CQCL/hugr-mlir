@@ -105,6 +105,32 @@ def Hugr_UnitAttr : Hugr_Attr<"Unit", "unit",
     }];
 }
 
+def Hugr_SumAttr : Hugr_Attr<"Sum", "sum",
+    [TypedAttrInterface]> {
+    let summary = "The single inhabitant of tuple<>";
+    let description = [{
+        A representation of a compile-time-constant Value of type tuple<>
+
+        TODO we should use a more general Tuple attribute type. Likely
+        `ArrayAttr` will be fine.
+    }];
+    let assemblyFormat = "`<`$tag`,`$value`>`";
+    let parameters = (ins
+        AttributeSelfTypeParameter<"type">:$type,
+        AttrParameter<"uint32_t", "tag">:$tag,
+        AttrParameter<"mlir::Attribute","value">:$value
+    );
+    let builders = [
+        AttrBuilderWithInferredContext<(ins "hugr_mlir::SumType":$type, "uint32_t":$tag, "mlir::Attribute":$value), [{
+          return $_get(type.getContext(), type, tag, value);
+        }]>
+
+    ];
+    let extraClassDeclaration = [{
+        hugr_mlir::SumType getSumType();
+    }];
+}
+
 def Hugr_TypeConstraintAttr : Hugr_EnumAttr<Hugr_TypeConstraintEnum, "constraint", []> {
     let summary = "The set of constraints on a type";
     let description = [{

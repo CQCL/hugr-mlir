@@ -58,6 +58,13 @@ mlirAttributeIsHugrStaticEdgeAttr(MlirAttribute);
 MLIR_CAPI_EXPORTED MlirAttribute
 mlirHugrStaticEdgeAttrGet(MlirType type, MlirAttribute sym);
 
+MLIR_CAPI_EXPORTED bool
+mlirAttributeIsHugrSumAttr(MlirAttribute);
+
+MLIR_CAPI_EXPORTED MlirAttribute
+mlirHugrSumAttrGet(MlirType type, uint32_t tag, MlirAttribute value);
+
+
 #ifdef __cplusplus
 }
 #endif

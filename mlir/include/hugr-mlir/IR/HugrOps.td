@@ -522,7 +522,7 @@ def Hugr_TagOp : Hugr_Op<"tag",
     }];
 
     let arguments = (ins
-        IndexAttr:$tag,
+        I32Attr:$tag,
         HugrTypeInterface:$input
     );
 

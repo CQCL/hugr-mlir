@@ -1,8 +1,16 @@
 add_mlir_public_c_api_library(HugrMLIRDialectCAPI
   Dialects.cpp
+  PARTIAL_SOURCES_INTENDED
   LINK_LIBS PUBLIC
   HugrMLIRDialect
   MLIRCAPIIR
+)
+
+add_mlir_public_c_api_library(HugrMLIRTranslateCAPI
+  Translate.cpp
+  PARTIAL_SOURCES_INTENDED
+  LINK_LIBS PUBLIC
+  HugrMLIRTranslate
 )
 
 
@@ -10,6 +18,7 @@ add_mlir_aggregate(HugrMLIR-C
   SHARED
   EMBED_LIBS
   HugrMLIRDialectCAPI
+  HugrMLIRTranslateCAPI
 )
 set_property(TARGET HugrMLIR-C APPEND PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}")
 

@@ -11,24 +11,34 @@ description = "TODO"
 edition = "2021"
 rust-version = "1.70"
 
+[lib]
+name = "hugr_mlir"
+bench = false
+
+[[bin]]
+name = "hugr-mlir-translate"
+
 [dependencies]
-# quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
-quantinuum-hugr = { path = "../hugr" }
+quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
 mlir-sys = { path = "../mlir-sys" }
 melior = { path = "../melior/melior" , features = [] }
 rmp-serde = "^1.1.2"
 serde_json = "*"
-cxx = "^1.0.107"
+itertools = "*"
+anyhow = "*"
 
 [build-dependencies]
 cmake = "^0.1"
 bindgen = "^0.68.1"
 
 [patch.crates-io]
-tblgen = { path = "../tblgen-rs" }
+# tblgen = { path = "../tblgen-rs" }
 mlir-sys = { path = "../mlir-sys" }
 melior-macro = { path = "../melior/macro" }
 
+[patch."https://github.com/CQCL-DEV/hugr.git"]
+quantinuum-hugr = { path = "../hugr" }
+
 
 [workspace]
-# members = ["hugr-rs-bridge"]
+members = ["guppy/validator"]

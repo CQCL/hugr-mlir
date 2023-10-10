@@ -9,6 +9,10 @@ namespace mlir {
 class TupleType;
 }
 
+namespace hugr_mlir {
+class SumType;
+}
+
 #define GET_ATTRDEF_CLASSES
 #include "hugr-mlir/IR/HugrAttrs.h.inc"
 

@@ -7,12 +7,13 @@ pub mod hugr {
     use std::{fmt, ops::Deref};
 
     use hugr::types::FunctionType;
-    use melior::ir::{AttributeLike, TypeLike};
+    use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike};
 
     use self::ffi::mlirHugrTypeConstraintAttrGet;
 
     /// Generated bindings for the C apis of the hugr dialect C++ libraries
     /// The symbols bound all come from libHugrMLIR-C.so
+    #[allow(non_camel_case_types)]
     pub mod ffi {
         include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
     }
@@ -52,6 +53,10 @@ pub mod hugr {
 
     pub fn is_static_edge_attr(x: melior::ir::Attribute<'_>) -> bool {
         unsafe { ffi::mlirAttributeIsHugrStaticEdgeAttr(x.to_raw()) }
+    }
+
+    pub fn is_sum_attr(x: melior::ir::Attribute<'_>) -> bool {
+        unsafe { ffi::mlirAttributeIsHugrSumAttr(x.to_raw()) }
     }
 
     impl<'c> ExtensionAttr<'c> {
@@ -361,7 +366,7 @@ pub mod hugr {
 
     impl<'c> TypeConstraintAttr<'c> {
         pub fn new(context: &'c melior::Context, bound: ::hugr::types::TypeBound) -> Self {
-            use ::hugr::types::TypeBound;
+            use hugr::types::TypeBound;
             let s: melior::StringRef<'_> = match bound {
                 TypeBound::Any => "Linear",
                 TypeBound::Copyable => "Copyable",
@@ -459,6 +464,54 @@ pub mod hugr {
         }
     }
 
+    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
+    pub struct SumAttribute<'c> {
+        attribute: melior::ir::Attribute<'c>,
+    }
+
+    impl<'c> SumAttribute<'c> {
+        pub fn new(typ: melior::ir::Type<'c>, tag: u32, value: melior::ir::Attribute<'c>) -> Self {
+            unsafe { Self::from_raw(ffi::mlirHugrSumAttrGet(typ.to_raw(), tag, value.to_raw())) }
+        }
+
+        pub unsafe fn from_raw(t: mlir_sys::MlirAttribute) -> Self {
+            SumAttribute {
+                attribute: melior::ir::Attribute::from_raw(t),
+            }
+        }
+    }
+
+    impl<'c> From<SumAttribute<'c>> for melior::ir::Attribute<'c> {
+        fn from(x: SumAttribute<'c>) -> Self {
+            x.attribute
+        }
+    }
+
+    impl<'c> TryFrom<melior::ir::Attribute<'c>> for SumAttribute<'c> {
+        type Error = crate::Error;
+        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
+            if is_sum_attr(attribute) {
+                Ok(SumAttribute { attribute })
+            } else {
+                Err(melior::Error::AttributeExpected(
+                    "sum attr",
+                    attribute.to_string(),
+                ))?
+            }
+        }
+    }
+
+    impl<'c> fmt::Display for SumAttribute<'c> {
+        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+            fmt::Display::fmt(&self.attribute, formatter)
+        }
+    }
+
+    impl<'c> AttributeLike<'c> for SumAttribute<'c> {
+        fn to_raw(&self) -> mlir_sys::MlirAttribute {
+            self.attribute.to_raw()
+        }
+    }
     #[derive(Clone, Copy, Eq, PartialEq, Debug)]
     pub struct AliasRefType<'c> {
         type_: melior::ir::Type<'c>,
@@ -579,12 +632,28 @@ pub mod hugr {
     pub struct ModuleOp<'c>(melior::ir::Operation<'c>);
 
     impl<'c> ModuleOp<'c> {
-        pub fn new(body: melior::ir::Region<'c>, loc: melior::ir::Location<'c>) -> Self {
+        pub fn new_with_body(body: melior::ir::Region<'c>, loc: melior::ir::Location<'c>) -> Self {
             ModuleOp(
                 melior::ir::operation::OperationBuilder::new("hugr.module", loc)
                     .add_regions(vec![body])
                     .build(),
             )
+        }
+        pub fn new(loc: melior::ir::Location<'c>) -> Self {
+            let body = melior::ir::Region::new();
+            body.append_block(melior::ir::Block::new(&[]));
+            Self::new_with_body(body, loc)
+        }
+
+        pub fn body<'a>(&'a self) -> melior::ir::BlockRef<'c, 'a>
+        where
+            'c: 'a,
+        {
+            unsafe {
+                melior::ir::BlockRef::from_raw(mlir_sys::mlirRegionGetFirstBlock(
+                    self.0.region(0).unwrap().clone().to_raw(),
+                ))
+            }
         }
     }
 
@@ -677,6 +746,189 @@ pub mod hugr {
                     )])
                     .add_operands(inputs)
                     .add_results(output_types)
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct SwitchOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<SwitchOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: SwitchOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> SwitchOp<'c> {
+        pub fn new(
+            inputs: &[melior::ir::Value<'c, '_>],
+            successors: &[melior::ir::BlockRef<'c, 'c>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            use itertools::Itertools;
+            SwitchOp(
+                melior::ir::operation::OperationBuilder::new("hugr.switch", loc)
+                    .add_operands(inputs)
+                    .add_successors(
+                        successors
+                            .iter()
+                            .map(|x| x.deref())
+                            .collect_vec()
+                            .as_slice(),
+                    )
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct CfgOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<CfgOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: CfgOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> CfgOp<'c> {
+        pub fn new(
+            body: melior::ir::Region<'c>,
+            output_types: &[melior::ir::Type<'c>],
+            inputs: &[melior::ir::Value<'c, '_>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            CfgOp(
+                melior::ir::operation::OperationBuilder::new("hugr.cfg", loc)
+                    .add_operands(inputs)
+                    .add_results(output_types)
+                    .add_regions(vec![body])
+                    .build(),
+            )
+        }
+
+        pub fn body<'a>(&'a self) -> RegionRef<'c, 'a> {
+            self.0.region(0).expect("Cfg has exactly one region")
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct MakeTupleOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<MakeTupleOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: MakeTupleOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> MakeTupleOp<'c> {
+        pub fn new(
+            output_type: melior::ir::Type<'c>,
+            inputs: &[melior::ir::Value<'c, '_>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            MakeTupleOp(
+                melior::ir::operation::OperationBuilder::new("hugr.make_tuple", loc)
+                    .add_operands(inputs)
+                    .add_results(vec![output_type].as_slice())
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct ConstOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<ConstOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: ConstOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> ConstOp<'c> {
+        pub fn new(
+            name: impl Into<melior::ir::Attribute<'c>>,
+            typ: impl Into<melior::ir::Type<'c>>,
+            value: impl Into<melior::ir::Attribute<'c>>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+            ConstOp(
+                melior::ir::operation::OperationBuilder::new("hugr.const", loc)
+                    .add_attributes(&[
+                        (
+                            melior::ir::Identifier::new(context, "sym_name"),
+                            name.into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "type"),
+                            melior::ir::attribute::TypeAttribute::new(typ.into()).into(),
+                        ),
+                        (melior::ir::Identifier::new(context, "value"), value.into()),
+                    ])
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct TagOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<TagOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: TagOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> TagOp<'c> {
+        pub fn new(
+            result_type: melior::ir::Type<'c>,
+            tag: u32,
+            inputs: &[melior::ir::Value<'c, '_>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+            TagOp(
+                melior::ir::operation::OperationBuilder::new("hugr.tag", loc)
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(context, "tag"),
+                        melior::ir::attribute::IntegerAttribute::new(
+                            tag as i64,
+                            melior::ir::r#type::IntegerType::new(context, 32).into(),
+                        )
+                        .into(),
+                    )])
+                    .add_results(&[result_type])
+                    .add_operands(inputs)
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct LoadConstantOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<LoadConstantOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: LoadConstantOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> LoadConstantOp<'c> {
+        pub fn new(
+            result_type: impl Into<melior::ir::Type<'c>>,
+            target: impl Into<melior::ir::Attribute<'c>>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+
+            LoadConstantOp(
+                melior::ir::operation::OperationBuilder::new("hugr.load_constant", loc)
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(context, "const_ref"),
+                        target.into(),
+                    )])
+                    .add_results(&[result_type.into()])
                     .build(),
             )
         }
