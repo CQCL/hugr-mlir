@@ -25,7 +25,7 @@ fn translate_hugr_raw_to_mlir<'c>(
     let src = unsafe { melior::StringRef::from_raw(raw_src) };
 
     match translate_hugr_to_mlir(src.as_bytes(), loc, go) {
-        Ok(module) => module.as_operation().to_raw(),
+        Ok(module) => unsafe { mlir_sys::mlirModuleGetOperation(module.into_raw()) },
         Err(e) => {
             unsafe {
                 mlir_sys::mlirEmitError(
@@ -52,9 +52,9 @@ mod ffi {
         raw_src: mlir_sys::MlirStringRef,
         raw_loc: mlir_sys::MlirLocation,
     ) -> mlir_sys::MlirOperation {
-        super::translate_hugr_raw_to_mlir(raw_src, raw_loc, |src| {
+        super::translate_hugr_raw_to_mlir(raw_src, raw_loc, |src|
             serde_json::from_slice(src).map_err(Into::into)
-        })
+        )
     }
     pub extern "C" fn translate_hugr_rmp_to_mlir(
         raw_src: mlir_sys::MlirStringRef,

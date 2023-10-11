@@ -933,6 +933,67 @@ pub mod hugr {
             )
         }
     }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct ExtensionOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<ExtensionOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: ExtensionOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> ExtensionOp<'c> {
+        pub fn new(
+            result_types: &[melior::ir::Type<'c>],
+            name: impl AsRef<str>,
+            extension_set: ExtensionSetAttr<'c>,
+            args: &[melior::ir::Value<'c,'_>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+
+            ExtensionOp(
+                melior::ir::operation::OperationBuilder::new("hugr.ext_op", loc)
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(context, "extensions"),
+                        extension_set.into(),
+                    ), (melior::ir::Identifier::new(context, "hugr_opname"),
+                        melior::ir::attribute::StringAttribute::new(context, name.as_ref()).into()
+                    )]).add_results(result_types)
+                    .add_operands(args)
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct ConditionalOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<ConditionalOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: ConditionalOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> ConditionalOp<'c> {
+        pub fn new(
+            result_types: &[melior::ir::Type<'c>],
+            args: &[melior::ir::Value<'c,'_>],
+            cases: impl IntoIterator<Item = melior::ir::Region<'c>>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            ConditionalOp(
+                melior::ir::operation::OperationBuilder::new("hugr.conditional", loc)
+                    .add_results(result_types)
+                    .add_operands(args)
+                    .add_regions(cases.into_iter().collect())
+                    .build(),
+            )
+        }
+    }
+
+
 }
 
 pub fn get_sum_type<'a>(

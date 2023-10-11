@@ -659,6 +659,7 @@ dependencies = [
  "anyhow",
  "bindgen",
  "cmake",
+ "downcast-rs",
  "itertools 0.11.0",
  "melior",
  "mlir-sys",

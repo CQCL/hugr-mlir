@@ -456,6 +456,46 @@ where
         Ok(self)
     }
 
+    fn mk_custom_op(mut self, co_n: hugr::Node, external_op: &hugr::ops::custom::ExternalOp, loc: Location<'a>) -> Result<Self> {
+        use hugr::hugr::PortIndex;
+        let inputs = self
+            .collect_inputs_vec(co_n)?
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect_vec();
+        let (result_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(co_n)?.into_iter().unzip();
+        let extensions = extension_set_to_extension_set_attr(self.context, &external_op.signature().extension_reqs);
+        let name = match external_op {
+           hugr::ops::custom::ExternalOp::Extension(ref e)  => e.def().name(),
+           hugr::ops::custom::ExternalOp::Opaque(ref o)  => o.name()
+        };
+        self.push_operation(co_n, result_ports.into_iter(), mlir::hugr::ExtensionOp::new(result_types.as_slice(), name, extensions, inputs.as_slice(), loc))?;
+        Ok(self)
+    }
+
+    fn mk_conditional(mut self, c_n: hugr::Node, conditional: &hugr::ops::controlflow::Conditional, loc: Location<'a>) -> Result<Self> {
+        let optype = hugr::ops::OpType::Conditional(conditional.clone());
+        let inputs = self
+            .collect_inputs_vec(c_n)?
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect_vec();
+        let (result_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(c_n)?.into_iter().unzip();
+        let self_ref = &mut self;
+        let cases = self_ref.hugr.children(c_n).map(|case_n| {
+            let r: Region<'a> = Region::new();
+            let b = r.append_block(Block::new(&[]));
+            let ((), new_self) = self_ref.clone().build_dataflow_block(case_n, b, |outputs,_| mk_output(outputs, loc).map(|x|((),x)))?;
+            *self_ref = new_self;
+            Ok(r)
+        }).collect::<Result<Vec<_>>>()?;
+        self.push_operation(c_n, result_ports.into_iter(), mlir::hugr::ConditionalOp::new(result_types.as_slice(), inputs.as_slice(), cases, loc))?;
+
+        Ok(self)
+    }
+
     fn collect_inputs_vec(
         &self,
         n: hugr::Node,
@@ -519,10 +559,12 @@ where
             &OpType::CFG(hugr::ops::CFG { ref signature }) => self.mk_cfg(n, signature, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::MakeTuple { .. }) => self.mk_make_tuple(n, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::Tag { tag, .. }) => self.mk_tag(n, tag, loc),
+            &OpType::LeafOp(hugr::ops::LeafOp::CustomOp(ref external_op)) => self.mk_custom_op(n, external_op, loc),
             &OpType::Const(ref const_) => {
                 self.mk_const(n, const_.value(), const_.const_type(), loc)
             }
             &OpType::LoadConstant(ref _const) => self.mk_load_constant(n, loc),
+            &OpType::Conditional(ref conditional) => self.mk_conditional(n, conditional, loc),
             t => panic!("unimplemented: {:?}", t),
         }
     }
