@@ -11,14 +11,14 @@ module {
     ^bb1:  // pred: ^bb4
       output
     ^bb2:  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(16) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
-      %0 = load_constant @"const_Node { index: NodeIndex(16) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_16 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
+      %0 = load_constant @const_16 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %1 = make_tuple()
       %2 = tag 0 %1 : tuple<> -> <tuple<>>
       switch %2 : !hugr.sum<tuple<>> ^bb4
     ^bb3:  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(21) }" : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
-      %3 = load_constant @"const_Node { index: NodeIndex(21) }" : !hugr.sum<tuple<>, tuple<>>
+      const @const_21 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
+      %3 = load_constant @const_21 : !hugr.sum<tuple<>, tuple<>>
       %4 = make_tuple()
       %5 = tag 0 %4 : tuple<> -> <tuple<>>
       switch %5 : !hugr.sum<tuple<>> ^bb4

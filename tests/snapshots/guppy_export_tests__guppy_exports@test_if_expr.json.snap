@@ -22,15 +22,15 @@ module {
     ^bb1(%4: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb4
       output %4 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
     ^bb2(%5: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
-      %6 = load_constant @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_27 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
+      %6 = load_constant @const_27 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %7 = ext_op []"iadd" %5, %6 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %8 = make_tuple()
       %9 = tag 0 %8 : tuple<> -> <tuple<>>
       switch %9, %7 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb4
     ^bb3:  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(33) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -22 : i6
-      %10 = load_constant @"const_Node { index: NodeIndex(33) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_33 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -22 : i6
+      %10 = load_constant @const_33 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %11 = make_tuple()
       %12 = tag 0 %11 : tuple<> -> <tuple<>>
       switch %12, %10 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb4

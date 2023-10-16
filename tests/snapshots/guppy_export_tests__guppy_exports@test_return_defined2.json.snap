@@ -7,8 +7,8 @@ module {
   hugr.func @foo[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
     %0 = cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
     ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-      const @"const_Node { index: NodeIndex(17) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
-      %1 = load_constant @"const_Node { index: NodeIndex(17) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_17 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
+      %1 = load_constant @const_17 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %2 = ext_op []"igt_s" %arg1, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
       %3 = make_tuple()
       %4 = make_tuple(%arg1 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>)
@@ -25,8 +25,8 @@ module {
     ^bb1(%6: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // 2 preds: ^bb2, ^bb3
       output %6 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
     ^bb2:  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(28) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -19 : i6
-      %7 = load_constant @"const_Node { index: NodeIndex(28) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_28 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -19 : i6
+      %7 = load_constant @const_28 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %8 = make_tuple()
       %9 = tag 0 %8 : tuple<> -> <tuple<>>
       switch %9, %7 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1

@@ -22,6 +22,9 @@ fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
         let src = fs::read(path).unwrap();
         let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);
         let m = hugr_mlir::translate::translate_hugr_to_mlir(&src, ul, |bytes| serde_json::from_slice::<hugr::Hugr>(bytes)).unwrap();
+        let o = m.as_operation();
+        println!("{o}");
+        assert!(m.as_operation().verify());
         insta::assert_display_snapshot!(m.as_operation());
     });
     Ok(())

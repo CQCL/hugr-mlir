@@ -3,62 +3,57 @@ source: tests/guppy_export_tests.rs
 expression: m.as_operation()
 input_file: tests/guppy-exports/test_capture_deep.json
 ---
-"builtin.module"() ({
-  "hugr.func"() <{function_type = !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, sym_name = "foo", sym_visibility = "private"}> ({
-  ^bb0(%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-    %0 = "hugr.cfg"(%arg0) ({
+module {
+  hugr.func @foo[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+    %0 = cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
     ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-      "hugr.const"() <{sym_name = "const_Node { index: NodeIndex(21) }", sym_visibility = "private", type = !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, value = 2 : i6}> : () -> ()
-      %1 = "hugr.load_constant"() <{const_ref = #hugr.static_edge<@"const_Node { index: NodeIndex(21) }"> : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>}> : () -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-      %2 = "hugr.ext_op"(%arg1, %1) <{extensions = #hugr<exts[]>, hugr_opname = "imul"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-      "hugr.func"() <{function_type = !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, sym_name = "bar", sym_visibility = "private"}> ({
-      ^bb0(%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-        %9 = "hugr.cfg"(%arg2, %arg3) ({
+      const @const_21 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 2 : i6
+      %1 = load_constant @const_21 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      %2 = ext_op []"imul" %arg1, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      func @bar[](%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+        %9 = cfg %arg2, %arg3 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
         ^bb0(%arg4: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg5: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-          "hugr.const"() <{sym_name = "const_Node { index: NodeIndex(26) }", sym_visibility = "private", type = !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, value = 1 : i6}> : () -> ()
-          %10 = "hugr.load_constant"() <{const_ref = #hugr.static_edge<@"const_Node { index: NodeIndex(26) }"> : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>}> : () -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-          %11 = "hugr.ext_op"(%arg4, %10) <{extensions = #hugr<exts[]>, hugr_opname = "iadd"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-          "hugr.func"() <{function_type = !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, sym_name = "baz", sym_visibility = "private"}> ({
-          ^bb0(%arg6: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg7: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg8: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg9: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-            %19 = "hugr.cfg"(%arg6, %arg7, %arg8, %arg9) ({
+          const @const_26 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
+          %10 = load_constant @const_26 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %11 = ext_op []"iadd" %arg4, %10 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          func @baz[](%arg6: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg7: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg8: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg9: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+            %19 = cfg %arg6, %arg7, %arg8, %arg9 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
             ^bb0(%arg10: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg11: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg12: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg13: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-              %20 = "hugr.ext_op"(%arg10, %arg11) <{extensions = #hugr<exts[]>, hugr_opname = "iadd"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-              %21 = "hugr.ext_op"(%20, %arg13) <{extensions = #hugr<exts[]>, hugr_opname = "iadd"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-              %22 = "hugr.ext_op"(%21, %arg12) <{extensions = #hugr<exts[]>, hugr_opname = "iadd"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-              %23 = "hugr.make_tuple"() : () -> tuple<>
-              %24 = "hugr.tag"(%23) <{tag = 0 : i32}> : (tuple<>) -> !hugr.sum<tuple<>>
-              "hugr.switch"(%24, %22)[^bb1] : (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
+              %20 = ext_op []"iadd" %arg10, %arg11 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+              %21 = ext_op []"iadd" %20, %arg13 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+              %22 = ext_op []"iadd" %21, %arg12 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+              %23 = make_tuple()
+              %24 = tag 0 %23 : tuple<> -> <tuple<>>
+              switch %24, %22 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
             ^bb1(%25: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
-              "hugr.output"(%25) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-            }) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-            "hugr.output"(%19) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-          }) : () -> ()
-          %12 = "hugr.load_constant"() <{const_ref = #hugr.static_edge<@baz> : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>}> : () -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-          %13 = "hugr.call"(%arg4, %11, %arg5, %12) <{callee_attr = #hugr.static_edge<@partial> : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>>, operandSegmentSizes = array<i32: 0, 4>}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-          %14 = "hugr.ext_op"(%11, %arg4) <{extensions = #hugr<exts[]>, hugr_opname = "imul"}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-          %15 = "hugr.call"(%13, %14) <{operandSegmentSizes = array<i32: 1, 1>}> : (!hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-          %16 = "hugr.make_tuple"() : () -> tuple<>
-          %17 = "hugr.tag"(%16) <{tag = 0 : i32}> : (tuple<>) -> !hugr.sum<tuple<>>
-          "hugr.switch"(%17, %15)[^bb1] : (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
+              output %25 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+            }
+            output %19 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          }
+          %12 = load_constant @baz : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+          %13 = call @partial  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>> %arg4, %11, %arg5, %12
+          %14 = ext_op []"imul" %11, %arg4 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %15 = call %13  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> %14
+          %16 = make_tuple()
+          %17 = tag 0 %16 : tuple<> -> <tuple<>>
+          switch %17, %15 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
         ^bb1(%18: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
-          "hugr.output"(%18) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-        }) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-        "hugr.output"(%9) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-      }) : () -> ()
-      %3 = "hugr.load_constant"() <{const_ref = #hugr.static_edge<@bar> : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>}> : () -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-      %4 = "hugr.call"(%2, %arg1, %3) <{callee_attr = #hugr.static_edge<@partial> : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>>, operandSegmentSizes = array<i32: 0, 3>}> : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-      %5 = "hugr.call"(%4) <{operandSegmentSizes = array<i32: 1, 0>}> : (!hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-      %6 = "hugr.make_tuple"() : () -> tuple<>
-      %7 = "hugr.tag"(%6) <{tag = 0 : i32}> : (tuple<>) -> !hugr.sum<tuple<>>
-      "hugr.switch"(%7, %5)[^bb1] : (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
+          output %18 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+        }
+        output %9 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      }
+      %3 = load_constant @bar : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+      %4 = call @partial  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>> %2, %arg1, %3
+      %5 = call %4  []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> 
+      %6 = make_tuple()
+      %7 = tag 0 %6 : tuple<> -> <tuple<>>
+      switch %7, %5 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
     ^bb1(%8: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
-      "hugr.output"(%8) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-    }) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-    "hugr.output"(%0) : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> ()
-  }) : () -> ()
-  "hugr.func"() <{function_type = !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>>, sym_name = "partial", sym_visibility = "private"}> ({
-  }) : () -> ()
-  "hugr.func"() <{function_type = !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>>, sym_name = "partial", sym_visibility = "private"}> ({
-  }) : () -> ()
-}) : () -> ()
+      output %8 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+    }
+    output %0 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+  }
+  hugr.func @partial[](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+  hugr.func @partial_0[](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>) -> !hugr<function []() -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+}
 

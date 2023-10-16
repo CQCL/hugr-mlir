@@ -13,8 +13,8 @@ module {
           func @baz[](%arg4: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
             %16 = cfg %arg4 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
             ^bb0(%arg5: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-              const @"const_Node { index: NodeIndex(25) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
-              %17 = load_constant @"const_Node { index: NodeIndex(25) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+              const @const_25 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
+              %17 = load_constant @const_25 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
               %18 = ext_op []"sub" %arg5, %17 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
               %19 = make_tuple()
               %20 = tag 0 %19 : tuple<> -> <tuple<>>
@@ -25,8 +25,8 @@ module {
             output %16 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
           }
           %9 = load_constant @baz : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-          const @"const_Node { index: NodeIndex(31) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
-          %10 = load_constant @"const_Node { index: NodeIndex(31) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          const @const_31 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 5 : i6
+          %10 = load_constant @const_31 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
           %11 = ext_op []"imul" %10, %arg3 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
           %12 = call %9  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> %11
           %13 = make_tuple()
@@ -38,8 +38,8 @@ module {
         output %8 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       }
       %1 = load_constant @bar : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
-      const @"const_Node { index: NodeIndex(38) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
-      %2 = load_constant @"const_Node { index: NodeIndex(38) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_38 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
+      %2 = load_constant @const_38 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %3 = ext_op []"iadd" %arg1, %2 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %4 = call %1  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> %3
       %5 = make_tuple()

@@ -5,10 +5,10 @@ use std::vec::Vec;
 use crate::hugr_to_mlir::hugr_to_mlir;
 use crate::{mlir, Error, Result};
 
-pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>, V: hugr::HugrView>(
+pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
     src: &[u8],
     loc: melior::ir::Location<'c>,
-    go: impl FnOnce(&[u8]) -> Result<V,E>,
+    go: impl FnOnce(&[u8]) -> Result<hugr::Hugr,E>,
 ) -> Result<melior::ir::Module<'c>> where
 {
     let hugr = go(src).map_err(Into::into)?;

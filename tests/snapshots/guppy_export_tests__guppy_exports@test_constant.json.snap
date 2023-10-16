@@ -6,8 +6,8 @@ input_file: tests/guppy-exports/test_constant.json
 module {
   hugr.func @const[]() -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
     %0 = cfg : () -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
-      const @"const_Node { index: NodeIndex(9) }" : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> = 4.200000e+01 : f64
-      %1 = load_constant @"const_Node { index: NodeIndex(9) }" : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
+      const @const_9 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> = 4.200000e+01 : f64
+      %1 = load_constant @const_9 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
       %2 = make_tuple()
       %3 = tag 0 %2 : tuple<> -> <tuple<>>
       switch %3, %1 : !hugr.sum<tuple<>>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> ^bb1

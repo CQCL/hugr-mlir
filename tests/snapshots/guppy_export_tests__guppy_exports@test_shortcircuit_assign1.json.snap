@@ -22,8 +22,8 @@ module {
     ^bb1(%4: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb3, ^bb4
       output %4 : !hugr.sum<tuple<>, tuple<>>
     ^bb2(%5: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %6: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-      const @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
-      %7 = load_constant @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      const @const_27 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
+      %7 = load_constant @const_27 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
       %8 = ext_op []"igt_s" %5, %7 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
       switch %8, %6 : !hugr.sum<tuple<>, tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb4, ^bb3
     ^bb3(%9: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb0, ^bb2
