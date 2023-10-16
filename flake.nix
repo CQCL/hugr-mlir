@@ -104,6 +104,7 @@
                     ++ pkgs.lib.optional (shell-mlir != null) shell-mlir ++ [
                       pkgs.clang-tools # clangd and clang-format
                       pkgs.llvmPackages_latest.bintools # lld
+                      pkgs.rq
                     ];
 
 

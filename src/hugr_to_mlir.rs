@@ -266,46 +266,54 @@ where
     fn mk_call(
         mut self,
         call_n: hugr::Node,
-        call: &hugr::ops::Call,
+        optype: &hugr::ops::OpType,
         loc: melior::ir::Location<'a>,
     ) -> Result<Self> {
         use hugr::hugr::PortIndex;
         use hugr::ops::OpType;
-        let args = self.collect_inputs_vec(call_n)?;
-        let optype = Into::<OpType>::into(call.clone());
-        let static_index = call.signature.input.len();
-        let static_port = self
-            .hugr
-            .node_inputs(call_n)
-            .find(|p| p.index() == static_index)
-            .ok_or(anyhow!("Failed to find static edge to function"))?;
-        assert_eq!(
-            optype.port_kind(static_port),
-            Some(EdgeKind::Static(hugr::types::Type::new_function(
-                call.signature.clone()
-            )))
-        );
-        let (target_n, _) = self
-            .hugr
-            .linked_ports(call_n, static_port)
-            .collect_vec()
-            .into_iter()
-            .exactly_one()?;
-        let (static_edge, _, _) = self.get_static_edge(target_n)?;
-
+        let args_ports = self.collect_inputs_vec(call_n)?;
+        let args = args_ports.into_iter().map(|(_,v)| v).collect_vec();
         let (result_ports, result_types): (Vec<_>, Vec<_>) =
             self.collect_outputs_vec(call_n)?.into_iter().unzip();
-        let call = mlir::hugr::CallOp::new(
-            static_edge.into(),
-            args.into_iter()
-                .map(|(_, v)| v)
-                .collect::<Vec<_>>()
-                .as_slice(),
-            result_types.as_slice(),
-            loc,
-        );
+        let op = match optype {
+          &OpType::Call(hugr::ops::Call{ref signature}) => {
+            let static_index = signature.input.len();
+            let static_port = self
+                .hugr
+                .node_inputs(call_n)
+                .find(|p| p.index() == static_index)
+                .ok_or(anyhow!("Failed to find static edge to function"))?;
+            assert_eq!(
+                optype.port_kind(static_port),
+                Some(EdgeKind::Static(hugr::types::Type::new_function(
+                    signature.clone()
+                )))
+            );
+            let (target_n, _) = self
+                .hugr
+                .linked_ports(call_n, static_port)
+                .collect_vec()
+                .into_iter()
+                .exactly_one()?;
+            let (static_edge, _, _) = self.get_static_edge(target_n)?;
 
-        self.push_operation(call_n, result_ports.into_iter(), call)?;
+            mlir::hugr::CallOp::new(
+                static_edge.into(),
+                args.as_slice(),
+                result_types.as_slice(),
+                loc,
+            )
+         }
+         &OpType::CallIndirect{..} => mlir::hugr::CallOp::new_indirect(
+                args[0],
+                &args[1..],
+                result_types.as_slice(),
+                loc,
+            ),
+         &_ => Err(anyhow!("mk_call received bad optype: {}", optype.tag()))?
+        };
+
+        self.push_operation(call_n, result_ports.into_iter(), op)?;
         Ok(self)
     }
 
@@ -397,6 +405,22 @@ where
             n,
             result_ports.into_iter(),
             mlir::hugr::MakeTupleOp::new(result_types[0].into(), inputs.as_slice(), loc),
+        )?;
+        Ok(self)
+    }
+
+    fn mk_unpack_tuple(mut self, n: hugr::Node, loc: Location<'a>) -> Result<Self> {
+        let (result_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(n)?.into_iter().unzip();
+        let inputs = self
+            .collect_inputs_vec(n)?
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect_vec();
+        self.push_operation(
+            n,
+            result_ports.into_iter(),
+            mlir::hugr::UnpackTupleOp::new(result_types.as_slice(), inputs[0], loc),
         )?;
         Ok(self)
     }
@@ -550,14 +574,15 @@ where
         // self.seen_nodes.to_mut().insert(n);
         use hugr::ops::OpType;
         let optype = self.hugr.get_optype(n);
-        dbg!(n, optype.tag());
+        // dbg!(n, optype.tag());
         match optype {
             &OpType::Module(_) => self.mk_module(n, loc),
             &OpType::FuncDefn(ref defn) => self.mk_function_defn(n, defn, loc),
             &OpType::FuncDecl(ref decl) => self.mk_function_decl(n, decl, loc),
-            &OpType::Call(ref call) => self.mk_call(n, call, loc),
+            &OpType::Call{..} | &OpType::CallIndirect{..} => self.mk_call(n, optype, loc),
             &OpType::CFG(hugr::ops::CFG { ref signature }) => self.mk_cfg(n, signature, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::MakeTuple { .. }) => self.mk_make_tuple(n, loc),
+            &OpType::LeafOp(hugr::ops::LeafOp::UnpackTuple { .. }) => self.mk_unpack_tuple(n, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::Tag { tag, .. }) => self.mk_tag(n, tag, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::CustomOp(ref external_op)) => self.mk_custom_op(n, external_op, loc),
             &OpType::Const(ref const_) => {
@@ -648,7 +673,8 @@ pub fn hugr_to_mlir<'c>(
 #[cfg(test)]
 mod test {
 
-    use crate::mlir::test::get_test_context;
+    use rstest::rstest;
+    use crate::mlir::test::test_context;
     use hugr::builder::{
         BuildError, CFGBuilder, Container, Dataflow, DataflowSubContainer, FunctionBuilder,
         HugrBuilder, ModuleBuilder, SubContainer,
@@ -728,20 +754,18 @@ mod test {
         module_builder.finish_prelude_hugr().map_err(|x| x.into())
     }
 
-    #[test]
-    fn test_example_hugr() {
-        let ctx = get_test_context();
+    #[rstest]
+    fn test_example_hugr(test_context: melior::Context) {
         let h = get_example_hugr().unwrap();
-        let loc = melior::ir::Location::unknown(&ctx);
+        let loc = melior::ir::Location::unknown(&test_context);
         let m = melior::ir::Module::new(loc);
         assert!(super::hugr_to_mlir(loc, &h).is_ok());
         assert!(m.as_operation().verify());
     }
-    #[test]
-    fn test_cfg_hugr() -> super::Result<()> {
-        let ctx = get_test_context();
+    #[rstest]
+    fn test_cfg_hugr(test_context: melior::Context) -> super::Result<()> {
         let h = get_example_hugr_cfg().unwrap();
-        let loc = melior::ir::Location::unknown(&ctx);
+        let loc = melior::ir::Location::unknown(&test_context);
         let r = super::hugr_to_mlir(loc, &h)?;
         println!("{}", r.as_operation());
         println!("dougrulx");

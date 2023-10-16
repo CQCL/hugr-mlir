@@ -39,9 +39,12 @@ pub fn hugr_to_mlir_value<'c>(
         }
         &Value::Prim { val: PrimValue::Extension { ref c } } => {
             if let Some(i) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>() {
-                Ok(melior::ir::attribute::IntegerAttribute::new(i.value, melior::ir::r#type::IntegerType::new(context, i.log_width.into()).into()).into())
+                Ok(melior::ir::attribute::IntegerAttribute::new(i.value(), melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
             } else if let Some(i) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntU>() {
-                Ok(melior::ir::attribute::IntegerAttribute::new(i.value as i64, melior::ir::r#type::IntegerType::new(context, i.log_width.into()).into()).into())
+                // this as i64 is naughty
+                Ok(melior::ir::attribute::IntegerAttribute::new(i.value() as i64, melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
+            } else if let Some(f) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::float_types::ConstF64>() {
+                Ok(melior::ir::attribute::FloatAttribute::new(context, f.value() as f64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))}).into())
             } else {
                 Err(anyhow!("hugr_to_mlir_value:unimplemented extension constant: {:?}", c))
             }

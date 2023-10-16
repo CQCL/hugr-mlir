@@ -1,0 +1,19 @@
+---
+source: tests/guppy_export_tests.rs
+expression: m.as_operation()
+input_file: tests/guppy-exports/test_assign.json
+---
+module {
+  hugr.func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
+    %0 = cfg %arg0 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
+    ^bb0(%arg1: !hugr<opaque "qubit"["prelude"] [Linear]>):
+      %1 = make_tuple()
+      %2 = tag 0 %1 : tuple<> -> <tuple<>>
+      switch %2, %arg1 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb1
+    ^bb1(%3: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb0
+      output %3 : !hugr<opaque "qubit"["prelude"] [Linear]>
+    }
+    output %0 : !hugr<opaque "qubit"["prelude"] [Linear]>
+  }
+}
+

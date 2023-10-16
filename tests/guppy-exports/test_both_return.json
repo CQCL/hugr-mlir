@@ -1,0 +1,916 @@
+{
+  "edges": [
+    [
+      [
+        3,
+        0
+      ],
+      [
+        12,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        1
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    [
+      [
+        12,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        13,
+        null
+      ]
+    ],
+    [
+      [
+        1,
+        1
+      ],
+      [
+        19,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        0
+      ],
+      [
+        7,
+        0
+      ]
+    ],
+    [
+      [
+        4,
+        1
+      ],
+      [
+        7,
+        1
+      ]
+    ],
+    [
+      [
+        13,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        14,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        15,
+        0
+      ],
+      [
+        16,
+        1
+      ]
+    ],
+    [
+      [
+        16,
+        0
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    [
+      [
+        17,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        18,
+        0
+      ],
+      [
+        8,
+        0
+      ]
+    ],
+    [
+      [
+        19,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        22,
+        0
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        21,
+        0
+      ]
+    ],
+    [
+      [
+        21,
+        0
+      ],
+      [
+        22,
+        1
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    [
+      [
+        23,
+        0
+      ],
+      [
+        24,
+        0
+      ]
+    ],
+    [
+      [
+        24,
+        0
+      ],
+      [
+        9,
+        0
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        17,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        null
+      ],
+      [
+        21,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        null
+      ],
+      [
+        23,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": [],
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 12,
+      "predicate_variants": [
+        [],
+        []
+      ]
+    },
+    {
+      "block": "Exit",
+      "cfg_outputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "input_extensions": [],
+      "op": "BasicBlock",
+      "parent": 12
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 11,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 13,
+      "types": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 19,
+      "types": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 13,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 19,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 11,
+      "types": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "name": "foo",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "CFG",
+      "parent": 11,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 12,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Const",
+      "parent": 13,
+      "typ": {
+        "args": [
+          {
+            "n": 6,
+            "tya": "BoundedNat"
+          }
+        ],
+        "bound": "C",
+        "extension": "arithmetic.int.types",
+        "id": "int",
+        "t": "Opaque"
+      },
+      "value": {
+        "v": "Prim",
+        "val": {
+          "c": [
+            {
+              "c": "ConstIntS",
+              "log_width": 6,
+              "value": 3
+            }
+          ],
+          "pv": "Extension"
+        }
+      }
+    },
+    {
+      "datatype": {
+        "args": [
+          {
+            "n": 6,
+            "tya": "BoundedNat"
+          }
+        ],
+        "bound": "C",
+        "extension": "arithmetic.int.types",
+        "id": "int",
+        "t": "Opaque"
+      },
+      "input_extensions": [],
+      "op": "LoadConstant",
+      "parent": 13
+    },
+    {
+      "args": [
+        {
+          "n": 6,
+          "tya": "BoundedNat"
+        }
+      ],
+      "description": "",
+      "extension": "arithmetic.int",
+      "input_extensions": [],
+      "lop": "CustomOp",
+      "op": "LeafOp",
+      "op_name": "iadd",
+      "parent": 13,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 13,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 13,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "C",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 12,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Const",
+      "parent": 19,
+      "typ": {
+        "args": [
+          {
+            "n": 6,
+            "tya": "BoundedNat"
+          }
+        ],
+        "bound": "C",
+        "extension": "arithmetic.int.types",
+        "id": "int",
+        "t": "Opaque"
+      },
+      "value": {
+        "v": "Prim",
+        "val": {
+          "c": [
+            {
+              "c": "ConstIntS",
+              "log_width": 6,
+              "value": 4
+            }
+          ],
+          "pv": "Extension"
+        }
+      }
+    },
+    {
+      "datatype": {
+        "args": [
+          {
+            "n": 6,
+            "tya": "BoundedNat"
+          }
+        ],
+        "bound": "C",
+        "extension": "arithmetic.int.types",
+        "id": "int",
+        "t": "Opaque"
+      },
+      "input_extensions": [],
+      "op": "LoadConstant",
+      "parent": 19
+    },
+    {
+      "args": [
+        {
+          "n": 6,
+          "tya": "BoundedNat"
+        }
+      ],
+      "description": "",
+      "extension": "arithmetic.int",
+      "input_extensions": [],
+      "lop": "CustomOp",
+      "op": "LeafOp",
+      "op_name": "idiv_s",
+      "parent": 19,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "C",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 19,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 19,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    }
+  ],
+  "version": "v0"
+}

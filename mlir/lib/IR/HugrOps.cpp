@@ -151,23 +151,42 @@ void hugr_mlir::FuncOp::print(mlir::OpAsmPrinter& p) {
 //  CallOp
 /////////////////////////////////////////////////////////////////////////////
 mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
-    ::mlir::OpAsmParser& parser, StaticEdgeAttr& callee,
+    ::mlir::OpAsmParser& parser,
+    StaticEdgeAttr& callee_attr,
+    mlir::Type& callee_value_type, std::optional<mlir::OpAsmParser::UnresolvedOperand>& callee_value,
     mlir::SmallVectorImpl<mlir::OpAsmParser::UnresolvedOperand>& inputs,
     mlir::SmallVectorImpl<mlir::Type>& inputTypes,
     mlir::SmallVectorImpl<mlir::Type>& outputTypes) {
-  mlir::SymbolRefAttr sym;
 
-  if (parser.parseAttribute(sym)) {
-    return mlir::failure();
+  mlir::SymbolRefAttr sym;
+  mlir::OpAsmParser::UnresolvedOperand mb_val;
+  auto val_parse_result = parser.parseOptionalOperand(mb_val);
+  if(val_parse_result.has_value()) {
+    if(*val_parse_result) {
+      return mlir::failure();
+    }
+    callee_value = mb_val;
+  } else {
+    if(parser.parseAttribute(sym)) {
+      return mlir::failure();
+    }
   }
-  auto t = FunctionType::parse(parser);
-  auto func_type = llvm::dyn_cast_if_present<FunctionType>(t);
-  if (!func_type) {
+
+  auto func_type = llvm::dyn_cast_if_present<FunctionType>(FunctionType::parse(parser));
+  if(!func_type) {
     return parser.emitError(
-               parser.getCurrentLocation(), "Callee is not a !hugr.function:")
-           << sym << ": " << t;
+              parser.getCurrentLocation(), "no callee type");
   }
-  callee = parser.getBuilder().getAttr<StaticEdgeAttr>(func_type, sym);
+  if(sym) {
+    callee_attr = parser.getBuilder().getAttr<StaticEdgeAttr>(func_type, sym);
+    callee_value_type = nullptr;
+    callee_value = std::nullopt;
+  } else {
+    callee_value_type = func_type;
+    callee_attr = nullptr;
+  }
+  assert(((callee_attr && !callee_value_type && !callee_value) || (!callee_attr && callee_value_type && callee_value)) &&
+         "callee is attribute xor valur");
 
   if (parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
     return mlir::failure();
@@ -178,13 +197,51 @@ mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
 }
 
 void hugr_mlir::printCallInputsOutputs(
-    ::mlir::OpAsmPrinter& printer, CallOp, StaticEdgeAttr callee,
-    mlir::OperandRange inputs, mlir::TypeRange, mlir::TypeRange) {
-  printer << callee.getRef() << " ";
+    ::mlir::OpAsmPrinter& printer, CallOp op, StaticEdgeAttr,
+    mlir::Type, std::optional<mlir::Value>,
+    mlir::OperandRange, mlir::TypeRange, mlir::TypeRange) {
+
+  mlir::Type func_type;
+
+  if(auto callee_attr = op.getCalleeAttrAttr()) {
+    printer << callee_attr.getRef() << " ";
+    func_type = callee_attr.getType();
+  } else {
+    auto callee = op.getCalleeValue();
+    assert(callee && "no callee attr means there must be a callee value");
+    printer << op.getCalleeValue() << " ";
+    func_type = callee.getType();
+  }
+
   printer.printStrippedAttrOrType<FunctionType>(
-      llvm::cast<FunctionType>(callee.getType()));
+      llvm::cast<FunctionType>(func_type));
   printer << " ";
-  printer.printOperands(inputs);
+  printer.printOperands(op.getInputs());
+}
+
+mlir::LogicalResult hugr_mlir::CallOp::verify() {
+  if(getCalleeAttr().has_value() == (getCalleeValue() != nullptr)) {
+    return emitOpError("call must have exactly one of callee_attr and callee_value:callee_value=") << getCalleeValue() << ",callee_attr=" << getCalleeAttrAttr();
+  }
+  if(!areTypesCompatible(getFunctionType().getArgumentTypes(), getInputs().getTypes())) {
+    return emitOpError("Arguments Type mismatch. Expected from callee:(") << getFunctionType().getArgumentTypes() <<"), but found (" << getInputs().getTypes() << ")";
+  }
+  if(!areTypesCompatible(getFunctionType().getResultTypes(), getOutputs().getTypes())) {
+    return emitOpError("Results Type mismatch. Expected from callee:(") << getFunctionType().getResultTypes() <<"), but found (" << getOutputs().getTypes() << ")";
+  }
+  return mlir::success();
+}
+
+hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
+  // INVARIANT: ODS verifiers have passed
+  assert(getCalleeAttr().has_value() != (getCalleeValue() != nullptr) && "callee_attr xor callee_value");
+
+  // ODS declarations guarantee these casts will succeed
+  if(auto attr = getCalleeAttrAttr()) {
+    return llvm::cast<FunctionType>(attr.getType());
+  } else {
+    return llvm::cast<FunctionType>(getCalleeValue().getType());
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,22 @@
+---
+source: tests/guppy_export_tests.rs
+expression: m.as_operation()
+input_file: tests/guppy-exports/test_linear_return_order.json
+---
+module {
+  hugr.func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>) {
+    %0:2 = cfg %arg0 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>) {
+    ^bb0(%arg1: !hugr<opaque "qubit"["prelude"] [Linear]>):
+      %1:2 = ext_op []"Measure" %arg1 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>)
+      %2 = make_tuple(%1#0, %1#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>)
+      %3:2 = unpack_tuple %2 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>>
+      %4 = make_tuple()
+      %5 = tag 0 %4 : tuple<> -> <tuple<>>
+      switch %5, %3#0, %3#1 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>> ^bb1
+    ^bb1(%6: !hugr<opaque "qubit"["prelude"] [Linear]>, %7: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+      output %6, %7 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>
+    }
+    output %0#0, %0#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr.sum<tuple<>, tuple<>>
+  }
+}
+

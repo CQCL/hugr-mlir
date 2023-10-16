@@ -1,0 +1,587 @@
+{
+  "edges": [
+    [
+      [
+        12,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        12,
+        0
+      ],
+      [
+        20,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        0
+      ],
+      [
+        13,
+        0
+      ]
+    ],
+    [
+      [
+        13,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        14,
+        null
+      ]
+    ],
+    [
+      [
+        1,
+        1
+      ],
+      [
+        19,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        0
+      ],
+      [
+        7,
+        0
+      ]
+    ],
+    [
+      [
+        14,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        15,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        16,
+        0
+      ],
+      [
+        8,
+        1
+      ]
+    ],
+    [
+      [
+        17,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        18,
+        0
+      ],
+      [
+        8,
+        0
+      ]
+    ],
+    [
+      [
+        19,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        9,
+        1
+      ]
+    ],
+    [
+      [
+        21,
+        0
+      ],
+      [
+        22,
+        0
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        9,
+        0
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        8,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        17,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        null
+      ],
+      [
+        9,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        null
+      ],
+      [
+        20,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        null
+      ],
+      [
+        21,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": [],
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ],
+      "op": "BasicBlock",
+      "other_outputs": [],
+      "parent": 13,
+      "predicate_variants": [
+        [],
+        []
+      ]
+    },
+    {
+      "block": "Exit",
+      "cfg_outputs": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ],
+      "input_extensions": [],
+      "op": "BasicBlock",
+      "parent": 13
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 11,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 14,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 19,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 14,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 19,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 11,
+      "types": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "name": "test",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "name": "new",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "CFG",
+      "parent": 11,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 13,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Call",
+      "parent": 14,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "args": [],
+      "description": "",
+      "extension": "quantum",
+      "input_extensions": [],
+      "lop": "CustomOp",
+      "op": "LeafOp",
+      "op_name": "H",
+      "parent": 14,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 14,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 14,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 13,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Call",
+      "parent": 19,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 19,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 19,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    }
+  ],
+  "version": "v0"
+}

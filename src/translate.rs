@@ -5,12 +5,13 @@ use std::vec::Vec;
 use crate::hugr_to_mlir::hugr_to_mlir;
 use crate::{mlir, Error, Result};
 
-fn translate_hugr_to_mlir<'c, V: hugr::HugrView>(
+pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>, V: hugr::HugrView>(
     src: &[u8],
     loc: melior::ir::Location<'c>,
-    go: impl FnOnce(&[u8]) -> Result<V>,
-) -> Result<melior::ir::Module<'c>> {
-    let hugr = go(src)?;
+    go: impl FnOnce(&[u8]) -> Result<V,E>,
+) -> Result<melior::ir::Module<'c>> where
+{
+    let hugr = go(src).map_err(Into::into)?;
     hugr_to_mlir(loc, &hugr)
 }
 
@@ -20,7 +21,7 @@ fn translate_hugr_raw_to_mlir<'c>(
     go: impl FnOnce(&[u8]) -> Result<hugr::Hugr, Error>,
 ) -> mlir_sys::MlirOperation {
     let loc = unsafe { melior::ir::Location::from_raw(raw_loc) };
-    dbg!("translate::translate_hugr_raw_to_mlir: {:?}", loc);
+    // dbg!("translate::translate_hugr_raw_to_mlir: {:?}", loc);
 
     let src = unsafe { melior::StringRef::from_raw(raw_src) };
 
@@ -83,7 +84,7 @@ fn translate_main(args: &[String]) -> Result<(), String> {
         .map(|x| x.as_bytes_with_nul().as_ptr() as *const std::os::raw::c_char)
         .collect();
 
-    dbg!("translate::translate_main args: {:?}", &args);
+    // dbg!("translate::translate_main args: {:?}", &args);
 
     unsafe {
         mlir::hugr::ffi::mlirHugrRegisterTranslationToMLIR(
@@ -112,7 +113,7 @@ fn translate_main(args: &[String]) -> Result<(), String> {
 }
 
 pub fn main() {
-    dbg!("translate::main");
+    // dbg!("translate::main");
     std::process::exit(
         match translate_main(env::args().collect::<Vec<_>>().as_slice()) {
             Ok(()) => 0,

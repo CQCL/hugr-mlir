@@ -51,11 +51,16 @@ struct LinearityResource
 };
 
 mlir::ParseResult parseCallInputsOutputs(
-    ::mlir::OpAsmParser &, StaticEdgeAttr &,
+    ::mlir::OpAsmParser &,
+    StaticEdgeAttr &,
+    mlir::Type&, std::optional<mlir::OpAsmParser::UnresolvedOperand>&,
     mlir::SmallVectorImpl<mlir::OpAsmParser::UnresolvedOperand> &,
     mlir::SmallVectorImpl<mlir::Type> &, mlir::SmallVectorImpl<mlir::Type> &);
 void printCallInputsOutputs(
-    ::mlir::OpAsmPrinter &, CallOp, StaticEdgeAttr, mlir::OperandRange,
+    ::mlir::OpAsmPrinter &, CallOp,
+    StaticEdgeAttr,
+    mlir::Type, std::optional<mlir::Value>,
+    mlir::OperandRange,
     mlir::TypeRange, mlir::TypeRange);
 
 mlir::ParseResult parseStaticEdge(::mlir::OpAsmParser &, StaticEdgeAttr &);

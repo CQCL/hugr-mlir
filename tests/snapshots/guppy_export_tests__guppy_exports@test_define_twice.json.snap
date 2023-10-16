@@ -1,0 +1,63 @@
+---
+source: tests/guppy_export_tests.rs
+expression: m.as_operation()
+input_file: tests/guppy-exports/test_define_twice.json
+---
+module {
+  hugr.func @foo[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+    %0 = cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+    ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+      const @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
+      %1 = load_constant @"const_Node { index: NodeIndex(27) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      %2 = ext_op []"ieq" %arg1, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
+      switch %2, %arg1 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb2, ^bb3
+    ^bb1(%3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb4
+      output %3 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+    ^bb2(%4: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
+      func @bar[](%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+        %17 = cfg %arg2 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+        ^bb0(%arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+          const @"const_Node { index: NodeIndex(33) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 3 : i6
+          %18 = load_constant @"const_Node { index: NodeIndex(33) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %19 = ext_op []"iadd" %arg3, %18 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %20 = make_tuple()
+          %21 = tag 0 %20 : tuple<> -> <tuple<>>
+          switch %21, %19 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
+        ^bb1(%22: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
+          output %22 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+        }
+        output %17 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      }
+      %5 = load_constant @bar : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+      %6 = make_tuple()
+      %7 = tag 0 %6 : tuple<> -> <tuple<>>
+      switch %7, %5, %4 : !hugr.sum<tuple<>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb4
+    ^bb3(%8: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
+      func @bar[](%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+        %17 = cfg %arg2 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+        ^bb0(%arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+          const @"const_Node { index: NodeIndex(44) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -22 : i6
+          %18 = load_constant @"const_Node { index: NodeIndex(44) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %19 = ext_op []"sub" %arg3, %18 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+          %20 = make_tuple()
+          %21 = tag 0 %20 : tuple<> -> <tuple<>>
+          switch %21, %19 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
+        ^bb1(%22: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
+          output %22 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+        }
+        output %17 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      }
+      %9 = load_constant @bar : !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>
+      %10 = make_tuple()
+      %11 = tag 0 %10 : tuple<> -> <tuple<>>
+      switch %11, %9, %8 : !hugr.sum<tuple<>>, !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb4
+    ^bb4(%12: !hugr<function [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>>, %13: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // 2 preds: ^bb2, ^bb3
+      %14 = call %12  [](!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> %13
+      %15 = make_tuple()
+      %16 = tag 0 %15 : tuple<> -> <tuple<>>
+      switch %16, %14 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
+    }
+    output %0 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+  }
+}
+

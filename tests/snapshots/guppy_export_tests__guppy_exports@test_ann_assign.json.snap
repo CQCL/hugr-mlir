@@ -1,0 +1,22 @@
+---
+source: tests/guppy_export_tests.rs
+expression: m.as_operation()
+input_file: tests/guppy-exports/test_ann_assign.json
+---
+module {
+  hugr.func @add[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+    %0 = cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> {
+    ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+      const @"const_Node { index: NodeIndex(9) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 1 : i6
+      %1 = load_constant @"const_Node { index: NodeIndex(9) }" : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      %2 = ext_op []"iadd" %arg1, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+      %3 = make_tuple()
+      %4 = tag 0 %3 : tuple<> -> <tuple<>>
+      switch %4, %2 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> ^bb1
+    ^bb1(%5: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):  // pred: ^bb0
+      output %5 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+    }
+    output %0 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+  }
+}
+

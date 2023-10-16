@@ -1,0 +1,861 @@
+{
+  "edges": [
+    [
+      [
+        19,
+        0
+      ],
+      [
+        28,
+        0
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        32,
+        0
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        14,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        4,
+        null
+      ]
+    ],
+    [
+      [
+        23,
+        0
+      ],
+      [
+        24,
+        0
+      ]
+    ],
+    [
+      [
+        24,
+        0
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    [
+      [
+        25,
+        0
+      ],
+      [
+        26,
+        0
+      ]
+    ],
+    [
+      [
+        26,
+        0
+      ],
+      [
+        13,
+        0
+      ]
+    ],
+    [
+      [
+        27,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        2,
+        0
+      ],
+      [
+        5,
+        null
+      ]
+    ],
+    [
+      [
+        28,
+        0
+      ],
+      [
+        15,
+        1
+      ]
+    ],
+    [
+      [
+        29,
+        0
+      ],
+      [
+        30,
+        0
+      ]
+    ],
+    [
+      [
+        30,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        31,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        0
+      ],
+      [
+        6,
+        null
+      ]
+    ],
+    [
+      [
+        32,
+        0
+      ],
+      [
+        33,
+        0
+      ]
+    ],
+    [
+      [
+        33,
+        0
+      ],
+      [
+        17,
+        1
+      ]
+    ],
+    [
+      [
+        34,
+        0
+      ],
+      [
+        35,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        0
+      ],
+      [
+        17,
+        0
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        14,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        22,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        null
+      ],
+      [
+        13,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        null
+      ],
+      [
+        24,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        null
+      ],
+      [
+        25,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        null
+      ],
+      [
+        16,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        null
+      ],
+      [
+        27,
+        null
+      ]
+    ],
+    [
+      [
+        10,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        10,
+        null
+      ],
+      [
+        28,
+        null
+      ]
+    ],
+    [
+      [
+        10,
+        null
+      ],
+      [
+        29,
+        null
+      ]
+    ],
+    [
+      [
+        11,
+        null
+      ],
+      [
+        18,
+        null
+      ]
+    ],
+    [
+      [
+        11,
+        null
+      ],
+      [
+        31,
+        null
+      ]
+    ],
+    [
+      [
+        12,
+        null
+      ],
+      [
+        17,
+        null
+      ]
+    ],
+    [
+      [
+        12,
+        null
+      ],
+      [
+        32,
+        null
+      ]
+    ],
+    [
+      [
+        12,
+        null
+      ],
+      [
+        34,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": [],
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ],
+      "parent": 22,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Simple",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "t": "G"
+        }
+      ],
+      "parent": 27,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "block": "DFB",
+      "extension_delta": [],
+      "input_extensions": [],
+      "inputs": [],
+      "op": "BasicBlock",
+      "other_outputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ],
+      "parent": 31,
+      "predicate_variants": [
+        []
+      ]
+    },
+    {
+      "block": "Exit",
+      "cfg_outputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ],
+      "input_extensions": [],
+      "op": "BasicBlock",
+      "parent": 22
+    },
+    {
+      "block": "Exit",
+      "cfg_outputs": [
+        {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Simple",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "t": "G"
+        }
+      ],
+      "input_extensions": [],
+      "op": "BasicBlock",
+      "parent": 27
+    },
+    {
+      "block": "Exit",
+      "cfg_outputs": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ],
+      "input_extensions": [],
+      "op": "BasicBlock",
+      "parent": 31
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 19,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 1,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 20,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 2,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 21,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Input",
+      "parent": 3,
+      "types": []
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 19,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 2,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Simple",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "t": "G"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 20,
+      "types": [
+        {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Simple",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "t": "G"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 3,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Output",
+      "parent": 21,
+      "types": [
+        {
+          "s": "Simple",
+          "size": 2,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "name": "bar",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "name": "foo",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Simple",
+                "size": 2,
+                "t": "Sum"
+              }
+            ],
+            "t": "G"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "name": "baz",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "CFG",
+      "parent": 19,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "Const",
+      "parent": 1,
+      "typ": {
+        "s": "Simple",
+        "size": 2,
+        "t": "Sum"
+      },
+      "value": {
+        "tag": 0,
+        "v": "Sum",
+        "value": {
+          "v": "Tuple",
+          "vs": []
+        }
+      }
+    },
+    {
+      "datatype": {
+        "s": "Simple",
+        "size": 2,
+        "t": "Sum"
+      },
+      "input_extensions": [],
+      "op": "LoadConstant",
+      "parent": 1
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 1,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "CFG",
+      "parent": 20,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Simple",
+                "size": 2,
+                "t": "Sum"
+              }
+            ],
+            "t": "G"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "datatype": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      },
+      "input_extensions": [],
+      "op": "LoadConstant",
+      "parent": 2
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 2,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 2,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "CFG",
+      "parent": 21,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "Call",
+      "parent": 3,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Simple",
+                "size": 2,
+                "t": "Sum"
+              }
+            ],
+            "t": "G"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "op": "CallIndirect",
+      "parent": 3,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "s": "Simple",
+            "size": 2,
+            "t": "Sum"
+          }
+        ],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 3,
+      "tys": []
+    },
+    {
+      "input_extensions": [],
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 3,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    }
+  ],
+  "version": "v0"
+}

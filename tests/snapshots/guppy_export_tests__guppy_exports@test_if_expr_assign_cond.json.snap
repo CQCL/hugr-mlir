@@ -1,0 +1,42 @@
+---
+source: tests/guppy_export_tests.rs
+expression: m.as_operation()
+input_file: tests/guppy-exports/test_if_expr_assign_cond.json
+---
+module {
+  hugr.func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
+    %0 = cfg %arg0 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
+    ^bb0(%arg1: !hugr.sum<tuple<>, tuple<>>):
+      %1 = make_tuple(%arg1 : !hugr.sum<tuple<>, tuple<>>)
+      %2 = make_tuple()
+      %3 = conditional(%arg1, %1, %2 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> {
+      ^bb0(%arg2: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg3: tuple<>):
+        %14 = tag 0 %arg2 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        output %14 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+      }, {
+      ^bb0(%arg2: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg3: tuple<>):
+        %14 = tag 1 %arg3 : tuple<> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        output %14 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+      }
+      switch %3 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> ^bb2, ^bb3
+    ^bb1(%4: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb4
+      output %4 : !hugr.sum<tuple<>, tuple<>>
+    ^bb2(%5: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+      %6 = make_tuple()
+      %7 = tag 0 %6 : tuple<> -> <tuple<>>
+      switch %7, %5 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb4
+    ^bb3:  // pred: ^bb0
+      const @"const_Node { index: NodeIndex(30) }" : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
+      %8 = load_constant @"const_Node { index: NodeIndex(30) }" : !hugr.sum<tuple<>, tuple<>>
+      %9 = make_tuple()
+      %10 = tag 0 %9 : tuple<> -> <tuple<>>
+      switch %10, %8 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb4
+    ^bb4(%11: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb2, ^bb3
+      %12 = make_tuple()
+      %13 = tag 0 %12 : tuple<> -> <tuple<>>
+      switch %13, %11 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+    }
+    output %0 : !hugr.sum<tuple<>, tuple<>>
+  }
+}
+

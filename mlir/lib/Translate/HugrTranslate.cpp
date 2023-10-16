@@ -5,10 +5,10 @@
 
 
 mlir::LogicalResult hugr_mlir::translateMain(int argc, char const* const* argv) {
-    llvm::errs() << "hugr_mlir::translateMain " << argc;
-    for(auto i = 0; i < argc; ++i) {
-        llvm::errs() << "[" << argv[i] << "]";
-    }
-    llvm::errs() << "\n";
+    // llvm::errs() << "hugr_mlir::translateMain " << argc;
+    // for(auto i = 0; i < argc; ++i) {
+    //     llvm::errs() << "[" << argv[i] << "]";
+    // }
+    // llvm::errs() << "\n";
     return mlir::mlirTranslateMain(argc, const_cast<char**>(argv), "hugr-mlir translation tool");
 }

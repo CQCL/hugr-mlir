@@ -265,13 +265,14 @@ def FuncStaticEdgeAttr : Attr<CPred<"llvm::isa<hugr_mlir::FunctionType>(llvm::ca
 }
 
 def Hugr_CallOp : Hugr_Op<"call",
-  [ RangedTypesMatchWith<"inputs match function type", "callee", "inputs", "llvm::cast<FunctionType>($_self).getArgumentTypes()">
-  , RangedTypesMatchWith<"outputs match function type", "callee", "outputs", "llvm::cast<FunctionType>($_self).getResultTypes()">
+  [ AttrSizedOperandSegments
+  // RangedTypesMatchWith<"inputs match function type", "callee", "inputs", "llvm::cast<FunctionType>($_self).getArgumentTypes()">
+  // , RangedTypesMatchWith<"outputs match function type", "callee", "outputs", "llvm::cast<FunctionType>($_self).getResultTypes()">
   , HugrMemoryOp
   // , InferTypeOpInterface
   ]> {
     let summary = "A Hugr Call op";
-    let assemblyFormat = "custom<CallInputsOutputs>($callee,$inputs,type($inputs),type($outputs)) attr-dict";
+    let assemblyFormat = "custom<CallInputsOutputs>($callee_attr,type($callee_value),$callee_value,$inputs,type($inputs),type($outputs)) attr-dict";
     let description = [{
         Represents a `hugr::op::dataflow::Call` node.
 
@@ -283,15 +284,19 @@ def Hugr_CallOp : Hugr_Op<"call",
         TODO Implement CallOpInterface
     }];
     let arguments = (ins
+        Optional<Hugr_FunctionType>:$callee_value,
         Variadic<HugrTypeInterface>:$inputs,
-        FuncStaticEdgeAttr:$callee
+        OptionalAttr<FuncStaticEdgeAttr>:$callee_attr
     );
     let results = (outs
         Variadic<HugrTypeInterface>:$outputs
     );
 
+    let hasVerifier = 1;
+
     let extraClassDeclaration = [{
-        FunctionType getFunctionType() { return llvm::cast<FunctionType>(getCallee().getType()); }
+        FunctionType getFunctionType();
+        // { return llvm::cast<FunctionType>(getCallee().getType()); }
     }];
 }
 

@@ -732,17 +732,52 @@ pub mod hugr {
     }
 
     impl<'c> CallOp<'c> {
+        pub fn new_indirect<'a>(
+            callee: melior::ir::Value<'c, 'a>,
+            inputs: &'_ [melior::ir::Value<'c, 'a>],
+            output_types: &'_ [melior::ir::Type<'c>],
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+            CallOp(
+                melior::ir::operation::OperationBuilder::new("hugr.call", loc)
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(context, "operand_segment_sizes"),
+                        melior::ir::attribute::DenseI32ArrayAttribute::new(
+                            context,
+                            &[
+                                1,
+                                inputs.len() as i32,
+                            ],
+                        ).into()
+                    )])
+                    .add_operands(&[callee])
+                    .add_operands(inputs)
+                    .add_results(output_types)
+                    .build(),
+            )
+        }
         pub fn new<'a>(
             callee: StaticEdgeAttr<'c>,
             inputs: &'_ [melior::ir::Value<'c, 'a>],
             output_types: &'_ [melior::ir::Type<'c>],
             loc: melior::ir::Location<'c>,
         ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
             CallOp(
                 melior::ir::operation::OperationBuilder::new("hugr.call", loc)
                     .add_attributes(&[(
-                        melior::ir::Identifier::new(loc.context().deref(), "callee"),
+                        melior::ir::Identifier::new(loc.context().deref(), "callee_attr"),
                         callee.into(),
+                    ),(
+                        melior::ir::Identifier::new(context, "operand_segment_sizes"),
+                        melior::ir::attribute::DenseI32ArrayAttribute::new(
+                            context,
+                            &[
+                                0,
+                                inputs.len() as i32,
+                            ],
+                        ).into()
                     )])
                     .add_operands(inputs)
                     .add_results(output_types)
@@ -993,7 +1028,29 @@ pub mod hugr {
         }
     }
 
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct UnpackTupleOp<'c>(melior::ir::Operation<'c>);
 
+    impl<'c> From<UnpackTupleOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: UnpackTupleOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> UnpackTupleOp<'c> {
+        pub fn new(
+            result_types: &[melior::ir::Type<'c>],
+            arg: melior::ir::Value<'c,'_>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            UnpackTupleOp(
+                melior::ir::operation::OperationBuilder::new("hugr.unpack_tuple", loc)
+                    .add_results(result_types)
+                    .add_operands(&[arg])
+                    .build(),
+            )
+        }
+    }
 }
 
 pub fn get_sum_type<'a>(
@@ -1015,7 +1072,9 @@ pub fn get_sum_type<'a>(
 
 #[cfg(test)]
 pub mod test {
-    pub fn get_test_context() -> melior::Context {
+    use rstest::{rstest, fixture};
+    #[fixture]
+    pub fn test_context() -> melior::Context {
         let dr = melior::dialect::DialectRegistry::new();
         let hugr_dh = super::hugr::get_hugr_dialect_handle();
         hugr_dh.insert_dialect(&dr);
@@ -1025,13 +1084,12 @@ pub mod test {
         ctx
     }
 
-    #[test]
-    fn test_sum_type() {
-        let ctx = get_test_context();
+    #[rstest]
+    fn test_sum_type(test_context: melior::Context) {
 
-        let t_i32 = melior::ir::r#type::IntegerType::new(&ctx, 32);
-        let t_i64 = melior::ir::r#type::IntegerType::new(&ctx, 64);
-        let sum_type = super::get_sum_type(&ctx, &[t_i32.into(), t_i64.into()]);
+        let t_i32 = melior::ir::r#type::IntegerType::new(&test_context, 32);
+        let t_i64 = melior::ir::r#type::IntegerType::new(&test_context, 64);
+        let sum_type = super::get_sum_type(&test_context, &[t_i32.into(), t_i64.into()]);
         assert_eq!(sum_type.to_string(), "!hugr.sum<i32, i64>");
     }
 }

@@ -17,7 +17,7 @@ struct ExternalIndexHugrTypeInterfaceModel
     return ExtensionSetAttr::get(t.getContext());
   }
   TypeConstraint getConstraint(mlir::Type t) const {
-    return TypeConstraint::Copyable;
+    return TypeConstraint::Equatable;
   }
 };
 
@@ -39,7 +39,7 @@ struct ExternalIntegerHugrTypeInterfaceModel
     return ExtensionSetAttr::get(t.getContext());
   }
   TypeConstraint getConstraint(mlir::Type t) const {
-    return TypeConstraint::Copyable;
+    return TypeConstraint::Equatable;
   }
 };
 
@@ -108,6 +108,17 @@ struct ExtendedHugrTypeInterfaceModel
   }
 };
 
+struct FunctionHugrTypeInterfaceModel
+    : public HugrTypeInterface::ExternalModel<
+          ExtendedHugrTypeInterfaceModel, FunctionType> {
+  ExtensionSetAttr getExtensions(mlir::Type t) const {
+    return ExtensionSetAttr::get(t.getContext());
+  }
+  TypeConstraint getConstraint(mlir::Type t) const {
+    return TypeConstraint::Copyable;
+  }
+};
+
 }  // namespace
 
 void hugr_mlir::HugrDialect::registerTypeInterfaces() {
@@ -115,6 +126,7 @@ void hugr_mlir::HugrDialect::registerTypeInterfaces() {
   OpaqueType::attachInterface<OpaqueHugrTypeInterfaceModel>(*getContext());
   AliasRefType::attachInterface<AliasRefHugrTypeInterfaceModel>(*getContext());
   ExtendedType::attachInterface<ExtendedHugrTypeInterfaceModel>(*getContext());
+  FunctionType::attachInterface<FunctionHugrTypeInterfaceModel>(*getContext());
 
   mlir::IndexType::attachInterface<ExternalIndexHugrTypeInterfaceModel>(
       *getContext());
