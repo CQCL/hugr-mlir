@@ -207,12 +207,12 @@ where
     fn push_operation(
         &mut self,
         n: hugr::Node,
-        result_ports: impl Iterator<Item = hugr::Port>,
+        result_ports: impl IntoIterator<Item = hugr::Port>,
         op: impl Into<Operation<'a>>,
     ) -> Result<()> {
         let op_ref = unsafe { self.block.to_ref() }.append_operation(op.into());
         let u = unsafe { op_ref.to_ref() };
-        let outputs = zip_eq(result_ports, u.results())
+        let outputs = zip_eq(result_ports.into_iter(), u.results())
             .map(|(p, v)| ((n, p), Into::<Value<'a, 'b>>::into(v)))
             .collect_vec();
         self.push_scope(outputs.into_iter());
@@ -514,6 +514,34 @@ where
         self.push_operation(c_n, result_ports.into_iter(), mlir::hugr::ConditionalOp::new(result_types.as_slice(), inputs.as_slice(), cases, loc))
     }
 
+    fn mk_tail_loop(&mut self, tl_n: hugr::Node, tailloop: &hugr::ops::TailLoop, loc: Location<'a>) -> Result<()> {
+        let all_inputs = self
+            .collect_inputs_vec(tl_n)?
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect_vec();
+        let (result_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(tl_n)?.into_iter().unzip();
+        let inputs = &all_inputs[0..tailloop.just_inputs.len()];
+        let passthrough_inputs = &all_inputs[tailloop.just_inputs.len()..];
+        let outputs_types = &result_types[0..tailloop.just_outputs.len()];
+        let body = Region::new();
+        let block = body.append_block(Block::new(&[]));
+        self.build_dataflow_block(tl_n, block, |outputs,_| mk_output(outputs, loc).map(|x|((),x)))?;
+        self.push_operation(tl_n, result_ports, mlir::hugr::TailLoopOp::new(outputs_types, inputs, passthrough_inputs, body, loc))
+    }
+
+    fn mk_lift(&mut self, l_n: hugr::Node, extension: hugr::extension::ExtensionId, loc: Location<'a>) -> Result<()> {
+        let inputs = self
+            .collect_inputs_vec(l_n)?
+            .into_iter()
+            .map(|(_, v)| v)
+            .collect_vec();
+        let (result_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(l_n)?.into_iter().unzip();
+        self.push_operation(l_n, result_ports, mlir::hugr::LiftOp::new(result_types.as_slice(), inputs.as_slice(), extension_id_to_extension_attr(self.context, &extension), loc))
+    }
+
     fn collect_inputs_vec(
         &self,
         n: hugr::Node,
@@ -564,8 +592,6 @@ where
     }
 
     fn node_to_op(&mut self, n: hugr::Node, loc: Location<'a>) -> Result<()> {
-        // assert!(!self.seen_nodes.contains(&n));
-        // self.seen_nodes.to_mut().insert(n);
         use hugr::ops::OpType;
         let optype = self.hugr.get_optype(n);
         // dbg!(n, optype.tag());
@@ -578,12 +604,14 @@ where
             &OpType::LeafOp(hugr::ops::LeafOp::MakeTuple { .. }) => self.mk_make_tuple(n, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::UnpackTuple { .. }) => self.mk_unpack_tuple(n, loc),
             &OpType::LeafOp(hugr::ops::LeafOp::Tag { tag, .. }) => self.mk_tag(n, tag, loc),
+            &OpType::LeafOp(hugr::ops::LeafOp::Lift { ref new_extension, .. }) => self.mk_lift(n, new_extension.clone(), loc),
             &OpType::LeafOp(hugr::ops::LeafOp::CustomOp(ref external_op)) => self.mk_custom_op(n, external_op, loc),
             &OpType::Const(ref const_) => {
                 self.mk_const(n, const_.value(), const_.const_type(), loc)
             }
             &OpType::LoadConstant(ref _const) => self.mk_load_constant(n, loc),
             &OpType::Conditional(ref conditional) => self.mk_conditional(n, conditional, loc),
+            &OpType::TailLoop(ref tailloop) => self.mk_tail_loop(n, tailloop, loc),
             t => panic!("unimplemented: {:?}", t),
         }
     }
@@ -658,113 +686,53 @@ pub fn hugr_to_mlir<'c>(
     let block = module.body();
     let context = loc.context();
     let mut state = TranslationState::new(&context, hugr, block);
-    for n in state.hugr.children(hugr.root()) {
-        state.node_to_op(n, loc)?;
-    }
+    state.node_to_op(hugr.root(), loc)?;
     Ok(module)
 }
 
 #[cfg(test)]
 mod test {
+    use rstest::{rstest, fixture};
+    use crate::{test::example_hugrs, mlir::test::test_context};
+    use crate::Result;
 
-    use rstest::rstest;
-    use crate::mlir::test::test_context;
-    use hugr::builder::{
-        BuildError, CFGBuilder, Container, Dataflow, DataflowSubContainer, FunctionBuilder,
-        HugrBuilder, ModuleBuilder, SubContainer,
-    };
-    use hugr::extension::{prelude, ExtensionSet};
-    use hugr::hugr::ValidationError;
-    use hugr::types::{FunctionType, Type};
-    use hugr::{type_row, Hugr};
-    pub(super) const NAT: hugr::types::Type = hugr::extension::prelude::USIZE_T;
-
-    fn get_example_hugr() -> Result<Hugr, BuildError> {
-        const NAT: Type = prelude::USIZE_T;
-        let mut module_builder = ModuleBuilder::new();
-
-        let f_id = module_builder.declare(
-            "main",
-            FunctionType::new(type_row![NAT], type_row![NAT]).pure(),
-        )?;
-
-        let mut f_build = module_builder.define_declaration(&f_id)?;
-        let call = f_build.call(&f_id, f_build.input_wires())?;
-
-        f_build.finish_with_outputs(call.outputs())?;
-        module_builder.finish_prelude_hugr().map_err(|x| x.into())
-    }
-
-    fn build_basic_cfg<T: AsMut<Hugr> + AsRef<Hugr>>(
-        cfg_builder: &mut CFGBuilder<T>,
-    ) -> Result<(), BuildError> {
-        let sum2_variants = vec![type_row![NAT], type_row![NAT]];
-        let mut entry_b =
-            cfg_builder.entry_builder(sum2_variants.clone(), type_row![], ExtensionSet::new())?;
-        let entry = {
-            let [inw] = entry_b.input_wires_arr();
-
-            let sum = entry_b.make_predicate(1, sum2_variants, [inw])?;
-            entry_b.finish_with_outputs(sum, [])?
-        };
-        let mut middle_b = cfg_builder
-            .simple_block_builder(FunctionType::new(type_row![NAT], type_row![NAT]), 1)?;
-        let middle = {
-            let c = middle_b.add_load_const(
-                hugr::ops::Const::simple_unary_predicate(),
-                ExtensionSet::new(),
-            )?;
-            let [inw] = middle_b.input_wires_arr();
-            middle_b.finish_with_outputs(c, [inw])?
-        };
-        let exit = cfg_builder.exit_block();
-        cfg_builder.branch(&entry, 0, &middle)?;
-        cfg_builder.branch(&middle, 0, &exit)?;
-        cfg_builder.branch(&entry, 1, &exit)?;
+    #[rstest]
+    fn test_simple_recursion(test_context: melior::Context) -> Result<()> {
+        let hugr = example_hugrs::simple_recursion()?;
+        let ul = melior::ir::Location::unknown(&test_context);
+        let op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(op.as_operation().verify());
+        insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())
     }
 
-    fn get_example_hugr_cfg() -> std::result::Result<Hugr, BuildError> {
-        let mut module_builder = ModuleBuilder::new();
-        let mut func_builder = module_builder
-            .define_function("main", FunctionType::new(vec![NAT], type_row![NAT]).pure())?;
-        let _f_id = {
-            let [int] = func_builder.input_wires_arr();
-
-            let cfg_id = {
-                let mut cfg_builder = func_builder.cfg_builder(
-                    vec![(NAT, int)],
-                    None,
-                    type_row![NAT],
-                    ExtensionSet::new(),
-                )?;
-                build_basic_cfg(&mut cfg_builder)?;
-
-                cfg_builder.finish_sub_container()?
-            };
-
-            func_builder.finish_with_outputs(cfg_id.outputs())?
-        };
-        module_builder.finish_prelude_hugr().map_err(|x| x.into())
+    #[rstest]
+    fn test_cfg(test_context: melior::Context) -> Result<()> {
+        let hugr = example_hugrs::cfg()?;
+        let ul = melior::ir::Location::unknown(&test_context);
+        let op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(op.as_operation().verify());
+        insta::assert_snapshot!(op.as_operation().to_string());
+        Ok(())
     }
 
     #[rstest]
-    fn test_example_hugr(test_context: melior::Context) {
-        let h = get_example_hugr().unwrap();
-        let loc = melior::ir::Location::unknown(&test_context);
-        let m = melior::ir::Module::new(loc);
-        assert!(super::hugr_to_mlir(loc, &h).is_ok());
-        assert!(m.as_operation().verify());
+    fn test_basic_loop(test_context: melior::Context) -> Result<()> {
+        let hugr = example_hugrs::basic_loop()?;
+        let ul = melior::ir::Location::unknown(&test_context);
+        let op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(op.as_operation().verify());
+        insta::assert_snapshot!(op.as_operation().to_string());
+        Ok(())
     }
+
     #[rstest]
-    fn test_cfg_hugr(test_context: melior::Context) -> super::Result<()> {
-        let h = get_example_hugr_cfg().unwrap();
-        let loc = melior::ir::Location::unknown(&test_context);
-        let r = super::hugr_to_mlir(loc, &h)?;
-        println!("{}", r.as_operation());
-        println!("dougrulx");
-        assert!(r.as_operation().verify());
-        println!("{}", r.as_operation());
+    fn test_loop_with_conditional(test_context: melior::Context) -> Result<()> {
+        let hugr = example_hugrs::loop_with_conditional()?;
+        let ul = melior::ir::Location::unknown(&test_context);
+        let op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(op.as_operation().verify());
+        insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())
     }
 }

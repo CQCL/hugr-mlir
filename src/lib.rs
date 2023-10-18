@@ -8,3 +8,7 @@ pub mod translate;
 
 pub use anyhow::{Error, Result};
 
+#[cfg(test)]
+pub mod test {
+    pub mod example_hugrs;
+}

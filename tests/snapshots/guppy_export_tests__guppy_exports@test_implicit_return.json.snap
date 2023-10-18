@@ -4,15 +4,17 @@ expression: m.as_operation()
 input_file: tests/guppy-exports/test_implicit_return.json
 ---
 module {
-  hugr.func @ret[]() {
-    cfg : () -> () {
-      %0 = make_tuple()
-      %1 = tag 0 %0 : tuple<> -> <tuple<>>
-      switch %1 : !hugr.sum<tuple<>> ^bb1
-    ^bb1:  // pred: ^bb0
+  hugr.module {
+    func @ret[]() {
+      cfg : () -> () {
+        %0 = make_tuple()
+        %1 = tag 0 %0 : tuple<> -> <tuple<>>
+        switch %1 : !hugr.sum<tuple<>> ^bb1
+      ^bb1:  // pred: ^bb0
+        output
+      }
       output
     }
-    output
   }
 }
 

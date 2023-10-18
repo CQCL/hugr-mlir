@@ -4,40 +4,42 @@ expression: m.as_operation()
 input_file: tests/guppy-exports/test_call_1.json
 ---
 module {
-  hugr.func @bar[]() -> !hugr.sum<tuple<>, tuple<>> {
-    %0 = cfg : () -> !hugr.sum<tuple<>, tuple<>> {
-      const @const_23 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
-      %1 = load_constant @const_23 : !hugr.sum<tuple<>, tuple<>>
-      %2 = make_tuple()
-      %3 = tag 0 %2 : tuple<> -> <tuple<>>
-      switch %3, %1 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
-    ^bb1(%4: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-      output %4 : !hugr.sum<tuple<>, tuple<>>
+  hugr.module {
+    func @bar[]() -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = cfg : () -> !hugr.sum<tuple<>, tuple<>> {
+        const @const_23 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
+        %1 = load_constant @const_23 : !hugr.sum<tuple<>, tuple<>>
+        %2 = make_tuple()
+        %3 = tag 0 %2 : tuple<> -> <tuple<>>
+        switch %3, %1 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+      ^bb1(%4: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+        output %4 : !hugr.sum<tuple<>, tuple<>>
+      }
+      output %0 : !hugr.sum<tuple<>, tuple<>>
     }
-    output %0 : !hugr.sum<tuple<>, tuple<>>
-  }
-  hugr.func @foo[]() -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> {
-    %0 = cfg : () -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> {
-      %1 = load_constant @bar : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
-      %2 = make_tuple()
-      %3 = tag 0 %2 : tuple<> -> <tuple<>>
-      switch %3, %1 : !hugr.sum<tuple<>>, !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> ^bb1
-    ^bb1(%4: !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>):  // pred: ^bb0
-      output %4 : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
+    func @foo[]() -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> {
+      %0 = cfg : () -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> {
+        %1 = load_constant @bar : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
+        %2 = make_tuple()
+        %3 = tag 0 %2 : tuple<> -> <tuple<>>
+        switch %3, %1 : !hugr.sum<tuple<>>, !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> ^bb1
+      ^bb1(%4: !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>):  // pred: ^bb0
+        output %4 : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
+      }
+      output %0 : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
     }
-    output %0 : !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>>
-  }
-  hugr.func @baz[]() -> !hugr.sum<tuple<>, tuple<>> {
-    %0 = cfg : () -> !hugr.sum<tuple<>, tuple<>> {
-      %1 = call @foo  []() -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> 
-      %2 = call %1  []() -> !hugr.sum<tuple<>, tuple<>> 
-      %3 = make_tuple()
-      %4 = tag 0 %3 : tuple<> -> <tuple<>>
-      switch %4, %2 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
-    ^bb1(%5: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-      output %5 : !hugr.sum<tuple<>, tuple<>>
+    func @baz[]() -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = cfg : () -> !hugr.sum<tuple<>, tuple<>> {
+        %1 = call @foo  []() -> !hugr<function []() -> !hugr.sum<tuple<>, tuple<>>> 
+        %2 = call %1  []() -> !hugr.sum<tuple<>, tuple<>> 
+        %3 = make_tuple()
+        %4 = tag 0 %3 : tuple<> -> <tuple<>>
+        switch %4, %2 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+      ^bb1(%5: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+        output %5 : !hugr.sum<tuple<>, tuple<>>
+      }
+      output %0 : !hugr.sum<tuple<>, tuple<>>
     }
-    output %0 : !hugr.sum<tuple<>, tuple<>>
   }
 }
 

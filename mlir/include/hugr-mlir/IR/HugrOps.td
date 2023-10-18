@@ -231,7 +231,7 @@ def Hugr_LiftOp : Hugr_Op<"lift",
         Variadic<HugrTypeInterface>:$inputs
     );
     let results = (outs
-        Variadic<Hugr_ExtendedType>:$outputs
+        Variadic<HugrTypeInterface>:$outputs
     );
 }
 

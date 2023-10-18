@@ -45,6 +45,8 @@ pub fn hugr_to_mlir_value<'c>(
                 Ok(melior::ir::attribute::IntegerAttribute::new(i.value() as i64, melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
             } else if let Some(f) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::float_types::ConstF64>() {
                 Ok(melior::ir::attribute::FloatAttribute::new(context, f.value() as f64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))}).into())
+            } else if let Some(f) = c.0.downcast_ref::<hugr::extension::prelude::ConstUsize>() {
+                Ok(melior::ir::attribute::IntegerAttribute::new(f.value() as i64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirIndexTypeGet(context.to_raw()))}).into())
             } else {
                 Err(anyhow!("hugr_to_mlir_value:unimplemented extension constant: {:?}", c))
             }

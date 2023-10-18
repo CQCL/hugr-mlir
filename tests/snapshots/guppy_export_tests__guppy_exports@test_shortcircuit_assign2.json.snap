@@ -4,51 +4,53 @@ expression: m.as_operation()
 input_file: tests/guppy-exports/test_shortcircuit_assign2.json
 ---
 module {
-  hugr.func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-    %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-    ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-      const @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
-      %1 = load_constant @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-      %2 = ext_op []"igt_s" %arg3, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
-      %3 = make_tuple(%arg2 : !hugr.sum<tuple<>, tuple<>>)
-      %4 = make_tuple()
-      %5 = conditional(%2, %3, %4 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> {
-      ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
-        %17 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-        output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-      }, {
-      ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
-        %17 = tag 1 %arg5 : tuple<> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-        output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+  hugr.module {
+    func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+        const @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
+        %1 = load_constant @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+        %2 = ext_op []"igt_s" %arg3, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
+        %3 = make_tuple(%arg2 : !hugr.sum<tuple<>, tuple<>>)
+        %4 = make_tuple()
+        %5 = conditional(%2, %3, %4 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> {
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
+          %17 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+          output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        }, {
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
+          %17 = tag 1 %arg5 : tuple<> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+          output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        }
+        switch %5 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> ^bb2, ^bb3
+      ^bb1(%6: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb3, ^bb4
+        output %6 : !hugr.sum<tuple<>, tuple<>>
+      ^bb2(%7: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+        %8 = make_tuple(%7 : !hugr.sum<tuple<>, tuple<>>)
+        %9 = make_tuple()
+        %10 = conditional(%7, %8, %9 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> {
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
+          %17 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+          output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        }, {
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
+          %17 = tag 1 %arg5 : tuple<> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+          output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
+        }
+        switch %10 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> ^bb4, ^bb3
+      ^bb3:  // 2 preds: ^bb0, ^bb2
+        const @const_42 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
+        %11 = load_constant @const_42 : !hugr.sum<tuple<>, tuple<>>
+        %12 = make_tuple()
+        %13 = tag 0 %12 : tuple<> -> <tuple<>>
+        switch %13, %11 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+      ^bb4(%14: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb2
+        %15 = make_tuple()
+        %16 = tag 0 %15 : tuple<> -> <tuple<>>
+        switch %16, %14 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
       }
-      switch %5 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> ^bb2, ^bb3
-    ^bb1(%6: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb3, ^bb4
-      output %6 : !hugr.sum<tuple<>, tuple<>>
-    ^bb2(%7: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-      %8 = make_tuple(%7 : !hugr.sum<tuple<>, tuple<>>)
-      %9 = make_tuple()
-      %10 = conditional(%7, %8, %9 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> {
-      ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
-        %17 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-        output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-      }, {
-      ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<>):
-        %17 = tag 1 %arg5 : tuple<> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-        output %17 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>>
-      }
-      switch %10 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<>> ^bb4, ^bb3
-    ^bb3:  // 2 preds: ^bb0, ^bb2
-      const @const_42 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
-      %11 = load_constant @const_42 : !hugr.sum<tuple<>, tuple<>>
-      %12 = make_tuple()
-      %13 = tag 0 %12 : tuple<> -> <tuple<>>
-      switch %13, %11 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
-    ^bb4(%14: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb2
-      %15 = make_tuple()
-      %16 = tag 0 %15 : tuple<> -> <tuple<>>
-      switch %16, %14 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+      output %0 : !hugr.sum<tuple<>, tuple<>>
     }
-    output %0 : !hugr.sum<tuple<>, tuple<>>
   }
 }
 

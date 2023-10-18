@@ -4,18 +4,20 @@ expression: m.as_operation()
 input_file: tests/guppy-exports/test_float_coercion.json
 ---
 module {
-  hugr.func @coerce[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg1: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
-    %0 = cfg %arg0, %arg1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
-    ^bb0(%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg3: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>):
-      %1 = ext_op []"convert_s" %arg2 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
-      %2 = ext_op []"fmul" %1, %arg3 : (!hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
-      %3 = make_tuple()
-      %4 = tag 0 %3 : tuple<> -> <tuple<>>
-      switch %4, %2 : !hugr.sum<tuple<>>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> ^bb1
-    ^bb1(%5: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>):  // pred: ^bb0
-      output %5 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
+  hugr.module {
+    func @coerce[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg1: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
+      %0 = cfg %arg0, %arg1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> {
+      ^bb0(%arg2: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %arg3: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>):
+        %1 = ext_op []"convert_s" %arg2 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
+        %2 = ext_op []"fmul" %1, %arg3 : (!hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>) -> !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
+        %3 = make_tuple()
+        %4 = tag 0 %3 : tuple<> -> <tuple<>>
+        switch %4, %2 : !hugr.sum<tuple<>>, !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]> ^bb1
+      ^bb1(%5: !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>):  // pred: ^bb0
+        output %5 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
+      }
+      output %0 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
     }
-    output %0 : !hugr<opaque "float64"["arithmetic.float.types"] [Copyable]>
   }
 }
 

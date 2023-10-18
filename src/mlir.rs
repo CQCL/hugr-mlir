@@ -4,10 +4,11 @@ use melior::ir::r#type::TypeLike;
 /// This feature of melior is not well exercised, so we may well have to turn
 /// this off
 pub mod hugr {
-    use std::{fmt, ops::Deref};
+    use std::{fmt, ops::Deref, any::Any};
 
     use hugr::types::FunctionType;
-    use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike};
+    use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike, ValueLike};
+    use itertools::Itertools;
 
     use self::ffi::mlirHugrTypeConstraintAttrGet;
 
@@ -1047,6 +1048,72 @@ pub mod hugr {
                 melior::ir::operation::OperationBuilder::new("hugr.unpack_tuple", loc)
                     .add_results(result_types)
                     .add_operands(&[arg])
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct TailLoopOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<TailLoopOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: TailLoopOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> TailLoopOp<'c> {
+        pub fn new(
+            outputs_types: &[melior::ir::Type<'c>],
+            inputs: &[melior::ir::Value<'c,'_>],
+            passthrough_inputs: &[melior::ir::Value<'c,'_>],
+            body: melior::ir::Region<'c>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+            let inputs_types = inputs.iter().map(|x| x.r#type()).collect_vec();
+            let passthrough_inputs_types = passthrough_inputs.iter().map(|x| x.r#type()).collect_vec();
+            let predicate_type = SumType::new(context,[melior::ir::r#type::TupleType::new(context, &inputs_types).into(), melior::ir::r#type::TupleType::new(context, &outputs_types).into()]);
+
+            TailLoopOp(
+                melior::ir::operation::OperationBuilder::new("hugr.tailloop", loc)
+                    .add_results(outputs_types)
+                    .add_results(passthrough_inputs_types.as_slice())
+                    .add_operands(inputs)
+                    .add_operands(passthrough_inputs)
+                    .add_attributes(&[
+                        (melior::ir::Identifier::new(context, "operand_segment_sizes"), melior::ir::attribute::DenseI32ArrayAttribute::new(context, &[inputs.len() as i32, passthrough_inputs.len() as i32]).into()),
+                        (melior::ir::Identifier::new(context, "result_segment_sizes"), melior::ir::attribute::DenseI32ArrayAttribute::new(context, &[outputs_types.len() as i32, passthrough_inputs.len() as i32]).into()),
+                        (melior::ir::Identifier::new(context, "predicate_type"), melior::ir::attribute::TypeAttribute::new(predicate_type.into()).into())
+                    ])
+                    .add_regions(vec![body])
+                    .build(),
+            )
+        }
+    }
+
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct LiftOp<'c>(melior::ir::Operation<'c>);
+
+    impl<'c> From<LiftOp<'c>> for melior::ir::Operation<'c> {
+        fn from(op: LiftOp<'c>) -> Self {
+            op.0
+        }
+    }
+
+    impl<'c> LiftOp<'c> {
+        pub fn new(
+            outputs_types: &[melior::ir::Type<'c>],
+            inputs: &[melior::ir::Value<'c,'_>],
+            extension: ExtensionAttr<'c>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
+            LiftOp(
+                melior::ir::operation::OperationBuilder::new("hugr.lift", loc)
+                    .add_results(outputs_types)
+                    .add_operands(inputs)
+                    .add_attributes(&[(melior::ir::Identifier::new(context, "extensions"), ExtensionSetAttr::new(context, [extension]).into())])
                     .build(),
             )
         }
