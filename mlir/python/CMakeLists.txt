@@ -18,7 +18,7 @@ declare_mlir_python_sources(HugrMLIRPythonSources
 )
 
 declare_mlir_python_extension(HugrMLIRPythonSources.Extension
-  MODULE_NAME _hugr
+  MODULE_NAME _hugrDialects
   ADD_TO_PARENT HugrMLIRPythonSources
   SOURCES
     HugrExtension.cpp
@@ -27,14 +27,15 @@ declare_mlir_python_extension(HugrMLIRPythonSources.Extension
   EMBED_CAPI_LINK_LIBS
     HugrMLIRDialectCAPI
 )
-set_property(TARGET HugrMLIRPythonSources.Extension
-  APPEND
-  PROPERTY BUILD_RPATH "${LLVM_LIBRARY_DIR}"
-)
-set_property(TARGET HugrMLIRPythonSources.Extension
-  APPEND
-  PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}"
-)
+
+# set_property(TARGET HugrMLIRPythonSources.Extension
+#   APPEND
+#   PROPERTY BUILD_RPATH "${LLVM_LIBRARY_DIR}"
+# )
+# set_property(TARGET HugrMLIRPythonSources.Extension
+#   APPEND
+#   PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}"
+# )
 
 
 declare_mlir_dialect_python_bindings(
@@ -55,16 +56,9 @@ add_mlir_python_common_capi_library(HugrMLIRPythonCAPI
   OUTPUT_DIRECTORY "${HUGR_MLIR_PYTHON_PACKAGES_DIR}/hugr_mlir/_mlir_libs"
   RELATIVE_INSTALL_ROOT "../../.."
   DECLARED_SOURCES
+    MLIRPythonExtension.RegisterEverything
     MLIRPythonSources.Core
     HugrMLIRPythonSources
-)
-set_property(TARGET HugrMLIRPythonCAPI
-  APPEND
-  PROPERTY BUILD_RPATH "${LLVM_LIBRARY_DIR}"
-)
-set_property(TARGET HugrMLIRPythonCAPI
-  APPEND
-  PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}"
 )
 
 
@@ -76,29 +70,9 @@ add_mlir_python_modules(HugrMLIRPythonModules
   ROOT_PREFIX "${HUGR_MLIR_PYTHON_PACKAGES_DIR}/hugr_mlir"
   INSTALL_PREFIX "python_packages/hugr_mlir"
   DECLARED_SOURCES
-    MLIRPythonSources.Core
+    MLIRPythonExtension.RegisterEverything
+    MLIRPythonExtension.Core
     HugrMLIRPythonSources
   COMMON_CAPI_LINK_LIBS
     HugrMLIRPythonCAPI
-)
-set_property(TARGET HugrMLIRPythonModules
-  APPEND
-  PROPERTY BUILD_RPATH "${LLVM_LIBRARY_DIR}"
-)
-set_property(TARGET HugrMLIRPythonModules
-  APPEND
-  PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}"
-)
-
-set_property(TARGET MLIRPythonSources.Core
-  APPEND
-  PROPERTY BUILD_RPATH "${LLVM_LIBRARY_DIR}"
-)
-set_property(TARGET MLIRPythonSources.Core
-  APPEND
-  PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}"
-)
-set_property(TARGET MLIRPythonSources.Core
-  APPEND
-  PROPERTY SKIP_INSTALL_RPATH 0
 )

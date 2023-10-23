@@ -132,6 +132,9 @@ let
         "-DLLVM_ENABLE_ASSERTIONS=${boolToString enableAssertions}"
         "-DLLVM_INCLUDE_TESTS=${boolToString doCheck}"
         "-DMLIR_ENABLE_BINDINGS_PYTHON=On"
+        "-DMLIR_BUILD_MLIR_C_DYLIB=OFF"
+        "-DLLVM_BUILD_LLVM_SHLIB=On"
+        "-DLLVM_LINK_LLVM_SHLIB=On"
       ];
     });
   });
