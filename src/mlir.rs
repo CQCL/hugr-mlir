@@ -1,5 +1,8 @@
 use melior::ir::r#type::TypeLike;
 
+#[macro_use]
+mod macros;
+
 /// Generated rust bindings for the definitions in HugrOps.td
 /// This feature of melior is not well exercised, so we may well have to turn
 /// this off
@@ -9,6 +12,7 @@ pub mod hugr {
     use hugr::types::FunctionType;
     use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike, ValueLike};
     use itertools::Itertools;
+    use mlir_sys::mlirAttributeIsASymbolRef;
 
     use self::ffi::mlirHugrTypeConstraintAttrGet;
 
@@ -19,10 +23,6 @@ pub mod hugr {
         include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
     }
 
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct ExtensionAttr<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
 
     pub fn get_hugr_dialect_handle() -> melior::dialect::DialectHandle {
         unsafe { melior::dialect::DialectHandle::from_raw(ffi::mlirGetDialectHandle__hugr__()) }
@@ -30,6 +30,10 @@ pub mod hugr {
 
     pub fn is_extension_attr(x: melior::ir::Attribute<'_>) -> bool {
         unsafe { ffi::mlirAttributeIsAHugrExtensionAttr(x.to_raw()) }
+    }
+
+    pub fn is_symbol_ref_attr(x: melior::ir::Attribute<'_>) -> bool {
+        unsafe { mlirAttributeIsASymbolRef(x.to_raw()) }
     }
 
     pub fn is_extension_set_attr(x: melior::ir::Attribute<'_>) -> bool {
@@ -60,6 +64,13 @@ pub mod hugr {
         unsafe { ffi::mlirAttributeIsHugrSumAttr(x.to_raw()) }
     }
 
+    pub fn is_opaque_type(x: melior::ir::Type<'_>) -> bool {
+        unsafe { ffi::mlirTypeIsAHugrOpaqueType(x.to_raw()) }
+    }
+
+
+    declare_attribute!(ExtensionAttr,is_extension_attr,"extension");
+
     impl<'c> ExtensionAttr<'c> {
         pub fn new<'a>(
             context: &'c melior::Context,
@@ -72,50 +83,9 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(attribute: mlir_sys::MlirAttribute) -> Self {
-            ExtensionAttr {
-                attribute: melior::ir::Attribute::from_raw(attribute),
-            }
-        }
     }
 
-    impl<'c> From<ExtensionAttr<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: ExtensionAttr<'c>) -> Self {
-            x.attribute
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for ExtensionAttr<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if is_extension_attr(attribute) {
-                Ok(ExtensionAttr { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "extension",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for ExtensionAttr<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for ExtensionAttr<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct ExtensionSetAttr<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
+    declare_attribute!(ExtensionSetAttr,is_extension_set_attr,"extension set");
 
     impl<'c> ExtensionSetAttr<'c> {
         pub fn new(
@@ -132,50 +102,9 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(attribute: mlir_sys::MlirAttribute) -> Self {
-            ExtensionSetAttr {
-                attribute: melior::ir::Attribute::from_raw(attribute),
-            }
-        }
     }
 
-    impl<'c> From<ExtensionSetAttr<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: ExtensionSetAttr<'c>) -> Self {
-            x.attribute
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for ExtensionSetAttr<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if is_extension_set_attr(attribute) {
-                Ok(ExtensionSetAttr { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "extension set",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for ExtensionSetAttr<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for ExtensionSetAttr<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct HugrFunctionType<'c> {
-        type_: melior::ir::Type<'c>,
-    }
+    declare_type!(HugrFunctionType,is_hugr_function_type,"Hugr function type");
 
     impl<'c> HugrFunctionType<'c> {
         pub fn new(
@@ -189,50 +118,9 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirType) -> Self {
-            HugrFunctionType {
-                type_: melior::ir::Type::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<HugrFunctionType<'c>> for melior::ir::Type<'c> {
-        fn from(x: HugrFunctionType<'c>) -> Self {
-            x.type_
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Type<'c>> for HugrFunctionType<'c> {
-        type Error = crate::Error;
-        fn try_from(type_: melior::ir::Type<'c>) -> Result<Self, Self::Error> {
-            if is_hugr_function_type(type_) {
-                Ok(HugrFunctionType { type_ })
-            } else {
-                Err(melior::Error::TypeExpected(
-                    "hugr function type",
-                    type_.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for HugrFunctionType<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.type_, formatter)
-        }
-    }
-
-    impl<'c> TypeLike<'c> for HugrFunctionType<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirType {
-            self.type_.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct SumType<'c> {
-        type_: melior::ir::Type<'c>,
-    }
+    declare_type!(SumType,is_sum_type,"Sum type");
 
     impl<'c> SumType<'c> {
         pub fn new(
@@ -251,48 +139,9 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirType) -> Self {
-            SumType {
-                type_: melior::ir::Type::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<SumType<'c>> for melior::ir::Type<'c> {
-        fn from(x: SumType<'c>) -> Self {
-            x.type_
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Type<'c>> for SumType<'c> {
-        type Error = crate::Error;
-        fn try_from(type_: melior::ir::Type<'c>) -> Result<Self, Self::Error> {
-            if is_sum_type(type_) {
-                Ok(SumType { type_ })
-            } else {
-                Err(melior::Error::TypeExpected("sum type", type_.to_string()))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for SumType<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.type_, formatter)
-        }
-    }
-
-    impl<'c> TypeLike<'c> for SumType<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirType {
-            self.type_.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct SymbolRefAttr<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
-
+    declare_attribute!(SymbolRefAttr,is_symbol_ref_attr,"symbol ref attribute");
     impl<'c> SymbolRefAttr<'c> {
         pub fn new<'a, S: Into<melior::StringRef<'a>>>(
             context: &'c melior::Context,
@@ -312,18 +161,6 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirAttribute) -> Self {
-            SymbolRefAttr {
-                attribute: melior::ir::Attribute::from_raw(t),
-            }
-        }
-    }
-
-    impl<'c> From<SymbolRefAttr<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: SymbolRefAttr<'c>) -> Self {
-            x.attribute
-        }
     }
 
     impl<'c> From<melior::ir::attribute::FlatSymbolRefAttribute<'c>> for SymbolRefAttr<'c> {
@@ -334,36 +171,7 @@ pub mod hugr {
         }
     }
 
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for SymbolRefAttr<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if unsafe { mlir_sys::mlirAttributeIsASymbolRef(attribute.to_raw()) } {
-                Ok(SymbolRefAttr { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "sum type",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for SymbolRefAttr<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for SymbolRefAttr<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct TypeConstraintAttr<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
+    declare_attribute!(TypeConstraintAttr,is_type_constraint_attr,"Type constraint attribute");
 
     impl<'c> TypeConstraintAttr<'c> {
         pub fn new(context: &'c melior::Context, bound: ::hugr::types::TypeBound) -> Self {
@@ -376,147 +184,26 @@ pub mod hugr {
             .into();
             unsafe { Self::from_raw(mlirHugrTypeConstraintAttrGet(context.to_raw(), s.to_raw())) }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirAttribute) -> Self {
-            TypeConstraintAttr {
-                attribute: melior::ir::Attribute::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<TypeConstraintAttr<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: TypeConstraintAttr<'c>) -> Self {
-            x.attribute
-        }
-    }
 
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for TypeConstraintAttr<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if is_type_constraint_attr(attribute) {
-                Ok(TypeConstraintAttr { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "type constraint attr",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for TypeConstraintAttr<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for TypeConstraintAttr<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct StaticEdgeAttr<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
-
+    declare_attribute!(StaticEdgeAttr,is_static_edge_attr, "Static Edge Attribute");
     impl<'c> StaticEdgeAttr<'c> {
         pub fn new(type_: melior::ir::Type<'c>, sym: SymbolRefAttr<'c>) -> Self {
             unsafe { Self::from_raw(ffi::mlirHugrStaticEdgeAttrGet(type_.to_raw(), sym.to_raw())) }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirAttribute) -> Self {
-            StaticEdgeAttr {
-                attribute: melior::ir::Attribute::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<StaticEdgeAttr<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: StaticEdgeAttr<'c>) -> Self {
-            x.attribute
-        }
-    }
 
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for StaticEdgeAttr<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if is_static_edge_attr(attribute) {
-                Ok(StaticEdgeAttr { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "static edge attr",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for StaticEdgeAttr<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for StaticEdgeAttr<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct SumAttribute<'c> {
-        attribute: melior::ir::Attribute<'c>,
-    }
+    declare_attribute!(SumAttribute,is_sum_attr, "Sum Attribute");
 
     impl<'c> SumAttribute<'c> {
         pub fn new(typ: melior::ir::Type<'c>, tag: u32, value: melior::ir::Attribute<'c>) -> Self {
             unsafe { Self::from_raw(ffi::mlirHugrSumAttrGet(typ.to_raw(), tag, value.to_raw())) }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirAttribute) -> Self {
-            SumAttribute {
-                attribute: melior::ir::Attribute::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<SumAttribute<'c>> for melior::ir::Attribute<'c> {
-        fn from(x: SumAttribute<'c>) -> Self {
-            x.attribute
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Attribute<'c>> for SumAttribute<'c> {
-        type Error = crate::Error;
-        fn try_from(attribute: melior::ir::Attribute<'c>) -> Result<Self, Self::Error> {
-            if is_sum_attr(attribute) {
-                Ok(SumAttribute { attribute })
-            } else {
-                Err(melior::Error::AttributeExpected(
-                    "sum attr",
-                    attribute.to_string(),
-                ))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for SumAttribute<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.attribute, formatter)
-        }
-    }
-
-    impl<'c> AttributeLike<'c> for SumAttribute<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirAttribute {
-            self.attribute.to_raw()
-        }
-    }
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct AliasRefType<'c> {
-        type_: melior::ir::Type<'c>,
-    }
+    declare_type!(AliasRefType,is_type_alias_ref_type, "Type Alias Ref Type");
 
     impl<'c> AliasRefType<'c> {
         pub fn new(
@@ -532,47 +219,9 @@ pub mod hugr {
                 ))
             }
         }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirType) -> Self {
-            AliasRefType {
-                type_: melior::ir::Type::from_raw(t),
-            }
-        }
     }
 
-    impl<'c> From<AliasRefType<'c>> for melior::ir::Type<'c> {
-        fn from(x: AliasRefType<'c>) -> Self {
-            x.type_
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Type<'c>> for AliasRefType<'c> {
-        type Error = crate::Error;
-        fn try_from(type_: melior::ir::Type<'c>) -> Result<Self, Self::Error> {
-            if is_sum_type(type_) {
-                Ok(AliasRefType { type_ })
-            } else {
-                Err(melior::Error::TypeExpected("sum type", type_.to_string()))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for AliasRefType<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.type_, formatter)
-        }
-    }
-
-    impl<'c> TypeLike<'c> for AliasRefType<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirType {
-            self.type_.to_raw()
-        }
-    }
-
-    #[derive(Clone, Copy, Eq, PartialEq, Debug)]
-    pub struct OpaqueType<'c> {
-        type_: melior::ir::Type<'c>,
-    }
+    declare_type!(OpaqueType,is_opaque_type, "Opaque Type");
 
     impl<'c> OpaqueType<'c> {
         pub fn new<'a>(
@@ -591,41 +240,6 @@ pub mod hugr {
                     sys_args.as_ptr(),
                 ))
             }
-        }
-
-        pub unsafe fn from_raw(t: mlir_sys::MlirType) -> Self {
-            OpaqueType {
-                type_: melior::ir::Type::from_raw(t),
-            }
-        }
-    }
-
-    impl<'c> From<OpaqueType<'c>> for melior::ir::Type<'c> {
-        fn from(x: OpaqueType<'c>) -> Self {
-            x.type_
-        }
-    }
-
-    impl<'c> TryFrom<melior::ir::Type<'c>> for OpaqueType<'c> {
-        type Error = crate::Error;
-        fn try_from(type_: melior::ir::Type<'c>) -> Result<Self, Self::Error> {
-            if is_sum_type(type_) {
-                Ok(OpaqueType { type_ })
-            } else {
-                Err(melior::Error::TypeExpected("sum type", type_.to_string()))?
-            }
-        }
-    }
-
-    impl<'c> fmt::Display for OpaqueType<'c> {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-            fmt::Display::fmt(&self.type_, formatter)
-        }
-    }
-
-    impl<'c> TypeLike<'c> for OpaqueType<'c> {
-        fn to_raw(&self) -> mlir_sys::MlirType {
-            self.type_.to_raw()
         }
     }
 
@@ -1073,7 +687,7 @@ pub mod hugr {
             let context = unsafe { loc.context().to_ref() };
             let inputs_types = inputs.iter().map(|x| x.r#type()).collect_vec();
             let passthrough_inputs_types = passthrough_inputs.iter().map(|x| x.r#type()).collect_vec();
-            let predicate_type = SumType::new(context,[melior::ir::r#type::TupleType::new(context, &inputs_types).into(), melior::ir::r#type::TupleType::new(context, &outputs_types).into()]);
+            let predicate_type = SumType::new(context,[melior::ir::r#type::TupleType::new(context, &inputs_types).into(), melior::ir::r#type::TupleType::new(context, outputs_types).into()]);
 
             TailLoopOp(
                 melior::ir::operation::OperationBuilder::new("hugr.tailloop", loc)
@@ -1125,7 +739,7 @@ pub fn get_sum_type<'a>(
     components: &[melior::ir::Type<'a>],
 ) -> melior::ir::Type<'a> {
     let mut unwrapped_components = components
-        .into_iter()
+        .iter()
         .map(|x| x.to_raw())
         .collect::<std::vec::Vec<_>>();
     unsafe {

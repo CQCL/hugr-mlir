@@ -16,7 +16,7 @@ pub fn hugr_to_mlir_value<'c>(
     use hugr::values::PrimValue;
     use downcast_rs::Downcast;
     match value {
-        &Value::Tuple { ref vs } => {
+        Value::Tuple { vs } => {
             let TypeEnum::Tuple(ref typerow) = typ.as_type_enum() else { Err(anyhow!("not a tuple type"))? };
             Ok(melior::ir::attribute::ArrayAttribute::new(
                 context,
@@ -44,7 +44,7 @@ pub fn hugr_to_mlir_value<'c>(
                 // this as i64 is naughty
                 Ok(melior::ir::attribute::IntegerAttribute::new(i.value() as i64, melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
             } else if let Some(f) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::float_types::ConstF64>() {
-                Ok(melior::ir::attribute::FloatAttribute::new(context, f.value() as f64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))}).into())
+                Ok(melior::ir::attribute::FloatAttribute::new(context, f.value(), unsafe { melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))}).into())
             } else if let Some(f) = c.0.downcast_ref::<hugr::extension::prelude::ConstUsize>() {
                 Ok(melior::ir::attribute::IntegerAttribute::new(f.value() as i64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirIndexTypeGet(context.to_raw()))}).into())
             } else {

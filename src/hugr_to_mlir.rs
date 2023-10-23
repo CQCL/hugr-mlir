@@ -71,7 +71,7 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
 
     fn get_or_alloc<'b>(&'b mut self, k: hugr::Node) -> Result<SymbolItem<'a>> {
         if let Some(r) = self.node_to_symbol.get(&k) {
-            Ok(r.clone())
+            Ok(*r)
         } else {
             use hugr::hugr::NodeIndex;
             use hugr::ops::OpType;
@@ -87,8 +87,8 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
                     let ty = hugr_to_mlir_function_type(self.context, signature)?.into();
                     Ok((ty, name.to_string()))
                 }
-                &OpType::Const(ref const_) => {
-                    let ty = hugr_to_mlir_type(self.context, const_.const_type())?.into();
+                OpType::Const(const_) => {
+                    let ty = hugr_to_mlir_type(self.context, const_.const_type())?;
                     Ok((ty, format!("const_{}", k.index())))
                 }
                 opty => Err(anyhow!("Bad optype for static edge: {:?}", opty)),
@@ -107,7 +107,7 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
             if !self.allocated_symbols.insert(sym.clone()) {
                 panic!("Expected sym to be unallocated: {}", sym);
             }
-            Ok(self.node_to_symbol.get(&k).unwrap().clone())
+            Ok(*self.node_to_symbol.get(&k).unwrap())
         }
     }
 }
@@ -198,7 +198,7 @@ where
         }
     }
 
-    pub fn push_scope(&mut self, binders: impl Iterator<Item = ScopeItem<'a, 'b>>) -> () {
+    pub fn push_scope(&mut self, binders: impl Iterator<Item = ScopeItem<'a, 'b>>) {
         for (k, v) in binders {
             // self.scope.to_mut().insert(k, v);
             self.scope.insert(k, v);
@@ -322,8 +322,8 @@ where
         let args = args_ports.into_iter().map(|(_, v)| v).collect_vec();
         let (result_ports, result_types): (Vec<_>, Vec<_>) =
             self.collect_outputs_vec(call_n)?.into_iter().unzip();
-        let op = match optype {
-            &OpType::Call(hugr::ops::Call { ref signature }) => {
+        let op = match *optype {
+            OpType::Call(hugr::ops::Call { ref signature }) => {
                 let static_index = signature.input.len();
                 let static_port = self
                     .hugr
@@ -345,16 +345,16 @@ where
                 let (static_edge, _, _) = self.symbols.get_or_alloc(target_n)?;
 
                 mlir::hugr::CallOp::new(
-                    static_edge.clone().into(),
+                    static_edge,
                     args.as_slice(),
                     result_types.as_slice(),
                     loc,
                 )
             }
-            &OpType::CallIndirect { .. } => {
+            OpType::CallIndirect { .. } => {
                 mlir::hugr::CallOp::new_indirect(args[0], &args[1..], result_types.as_slice(), loc)
             }
-            &_ => Err(anyhow!("mk_call received bad optype: {}", optype.tag()))?,
+            _ => Err(anyhow!("mk_call received bad optype: {}", optype.tag()))?,
         };
 
         self.push_operation(call_n, result_ports.into_iter(), op)
@@ -441,7 +441,7 @@ where
         self.push_operation(
             n,
             result_ports.into_iter(),
-            mlir::hugr::MakeTupleOp::new(result_types[0].into(), inputs.as_slice(), loc),
+            mlir::hugr::MakeTupleOp::new(result_types[0], inputs.as_slice(), loc),
         )
     }
 
@@ -473,7 +473,7 @@ where
         self.push_operation(
             n,
             empty(),
-            mlir::hugr::ConstOp::new(name.clone(), ty, val, loc),
+            mlir::hugr::ConstOp::new(name, ty, val, loc),
         )
     }
 
@@ -512,7 +512,7 @@ where
         self.push_operation(
             lc_n,
             result_ports.into_iter(),
-            mlir::hugr::LoadConstantOp::new(result_types[0], edge.clone(), loc),
+            mlir::hugr::LoadConstantOp::new(result_types[0], edge, loc),
         )
     }
 
@@ -681,7 +681,7 @@ where
 
     fn collect_outputs<R: FromIterator<(hugr::Port, Type<'a>)>>(&self, n: hugr::Node) -> Result<R> {
         let optype = self.hugr.get_optype(n);
-        Ok(self
+        self
             .hugr
             .node_outputs(n)
             .filter_map(|p| match optype.port_kind(p) {
@@ -690,7 +690,7 @@ where
                 }
                 _ => None,
             })
-            .collect::<Result<R>>()?)
+            .collect::<Result<R>>()
     }
 
     fn node_to_op(&mut self, n: hugr::Node, loc: Location<'a>) -> Result<()> {
@@ -712,12 +712,12 @@ where
             &OpType::LeafOp(hugr::ops::LeafOp::CustomOp(ref external_op)) => {
                 self.mk_custom_op(n, external_op, loc)
             }
-            &OpType::Const(ref const_) => {
+            OpType::Const(const_) => {
                 self.mk_const(n, const_.value(), const_.const_type(), loc)
             }
-            &OpType::LoadConstant(ref _const) => self.mk_load_constant(n, loc),
-            &OpType::Conditional(ref conditional) => self.mk_conditional(n, conditional, loc),
-            &OpType::TailLoop(ref tailloop) => self.mk_tail_loop(n, tailloop, loc),
+            OpType::LoadConstant(_const) => self.mk_load_constant(n, loc),
+            OpType::Conditional(conditional) => self.mk_conditional(n, conditional, loc),
+            OpType::TailLoop(tailloop) => self.mk_tail_loop(n, tailloop, loc),
             t => panic!("unimplemented: {:?}", t),
         }
     }

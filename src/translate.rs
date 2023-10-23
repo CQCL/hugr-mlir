@@ -76,7 +76,7 @@ mod ffi {
 fn translate_main(args: &[String]) -> Result<(), String> {
     // one imagines that there must be a better way...
     let args: Vec<std::ffi::CString> = args
-        .into_iter()
+        .iter()
         .map(|x| std::ffi::CString::new(x.as_str()).map_err(|x| x.to_string()))
         .collect::<Result<_, _>>()?;
     let argsv: Vec<*const std::os::raw::c_char> = args
