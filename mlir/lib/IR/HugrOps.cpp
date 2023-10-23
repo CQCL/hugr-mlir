@@ -19,9 +19,7 @@ mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getArgumentTypes() {
   return getFunctionType().getArgumentTypes();
 }
 
-mlir::Region* hugr_mlir::FuncOp::getCallableRegion() {
-  return &getBody();
-}
+mlir::Region* hugr_mlir::FuncOp::getCallableRegion() { return &getBody(); }
 
 // Adapted from mlir/lib/IR/FunctionImplementation.cpp
 mlir::ParseResult hugr_mlir::FuncOp::parse(
@@ -151,33 +149,32 @@ void hugr_mlir::FuncOp::print(mlir::OpAsmPrinter& p) {
 //  CallOp
 /////////////////////////////////////////////////////////////////////////////
 mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
-    ::mlir::OpAsmParser& parser,
-    StaticEdgeAttr& callee_attr,
-    mlir::Type& callee_value_type, std::optional<mlir::OpAsmParser::UnresolvedOperand>& callee_value,
+    ::mlir::OpAsmParser& parser, StaticEdgeAttr& callee_attr,
+    mlir::Type& callee_value_type,
+    std::optional<mlir::OpAsmParser::UnresolvedOperand>& callee_value,
     mlir::SmallVectorImpl<mlir::OpAsmParser::UnresolvedOperand>& inputs,
     mlir::SmallVectorImpl<mlir::Type>& inputTypes,
     mlir::SmallVectorImpl<mlir::Type>& outputTypes) {
-
   mlir::SymbolRefAttr sym;
   mlir::OpAsmParser::UnresolvedOperand mb_val;
   auto val_parse_result = parser.parseOptionalOperand(mb_val);
-  if(val_parse_result.has_value()) {
-    if(*val_parse_result) {
+  if (val_parse_result.has_value()) {
+    if (*val_parse_result) {
       return mlir::failure();
     }
     callee_value = mb_val;
   } else {
-    if(parser.parseAttribute(sym)) {
+    if (parser.parseAttribute(sym)) {
       return mlir::failure();
     }
   }
 
-  auto func_type = llvm::dyn_cast_if_present<FunctionType>(FunctionType::parse(parser));
-  if(!func_type) {
-    return parser.emitError(
-              parser.getCurrentLocation(), "no callee type");
+  auto func_type =
+      llvm::dyn_cast_if_present<FunctionType>(FunctionType::parse(parser));
+  if (!func_type) {
+    return parser.emitError(parser.getCurrentLocation(), "no callee type");
   }
-  if(sym) {
+  if (sym) {
     callee_attr = parser.getBuilder().getAttr<StaticEdgeAttr>(func_type, sym);
     callee_value_type = nullptr;
     callee_value = std::nullopt;
@@ -185,8 +182,10 @@ mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
     callee_value_type = func_type;
     callee_attr = nullptr;
   }
-  assert(((callee_attr && !callee_value_type && !callee_value) || (!callee_attr && callee_value_type && callee_value)) &&
-         "callee is attribute xor valur");
+  assert(
+      ((callee_attr && !callee_value_type && !callee_value) ||
+       (!callee_attr && callee_value_type && callee_value)) &&
+      "callee is attribute xor valur");
 
   if (parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
     return mlir::failure();
@@ -197,13 +196,12 @@ mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
 }
 
 void hugr_mlir::printCallInputsOutputs(
-    ::mlir::OpAsmPrinter& printer, CallOp op, StaticEdgeAttr,
-    mlir::Type, std::optional<mlir::Value>,
-    mlir::OperandRange, mlir::TypeRange, mlir::TypeRange) {
-
+    ::mlir::OpAsmPrinter& printer, CallOp op, StaticEdgeAttr, mlir::Type,
+    std::optional<mlir::Value>, mlir::OperandRange, mlir::TypeRange,
+    mlir::TypeRange) {
   mlir::Type func_type;
 
-  if(auto callee_attr = op.getCalleeAttrAttr()) {
+  if (auto callee_attr = op.getCalleeAttrAttr()) {
     printer << callee_attr.getRef() << " ";
     func_type = callee_attr.getType();
   } else {
@@ -220,24 +218,35 @@ void hugr_mlir::printCallInputsOutputs(
 }
 
 mlir::LogicalResult hugr_mlir::CallOp::verify() {
-  if(getCalleeAttr().has_value() == (getCalleeValue() != nullptr)) {
-    return emitOpError("call must have exactly one of callee_attr and callee_value:callee_value=") << getCalleeValue() << ",callee_attr=" << getCalleeAttrAttr();
+  if (getCalleeAttr().has_value() == (getCalleeValue() != nullptr)) {
+    return emitOpError(
+               "call must have exactly one of callee_attr and "
+               "callee_value:callee_value=")
+           << getCalleeValue() << ",callee_attr=" << getCalleeAttrAttr();
   }
-  if(!areTypesCompatible(getFunctionType().getArgumentTypes(), getInputs().getTypes())) {
-    return emitOpError("Arguments Type mismatch. Expected from callee:(") << getFunctionType().getArgumentTypes() <<"), but found (" << getInputs().getTypes() << ")";
+  if (!areTypesCompatible(
+          getFunctionType().getArgumentTypes(), getInputs().getTypes())) {
+    return emitOpError("Arguments Type mismatch. Expected from callee:(")
+           << getFunctionType().getArgumentTypes() << "), but found ("
+           << getInputs().getTypes() << ")";
   }
-  if(!areTypesCompatible(getFunctionType().getResultTypes(), getOutputs().getTypes())) {
-    return emitOpError("Results Type mismatch. Expected from callee:(") << getFunctionType().getResultTypes() <<"), but found (" << getOutputs().getTypes() << ")";
+  if (!areTypesCompatible(
+          getFunctionType().getResultTypes(), getOutputs().getTypes())) {
+    return emitOpError("Results Type mismatch. Expected from callee:(")
+           << getFunctionType().getResultTypes() << "), but found ("
+           << getOutputs().getTypes() << ")";
   }
   return mlir::success();
 }
 
 hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
   // INVARIANT: ODS verifiers have passed
-  assert(getCalleeAttr().has_value() != (getCalleeValue() != nullptr) && "callee_attr xor callee_value");
+  assert(
+      getCalleeAttr().has_value() != (getCalleeValue() != nullptr) &&
+      "callee_attr xor callee_value");
 
   // ODS declarations guarantee these casts will succeed
-  if(auto attr = getCalleeAttrAttr()) {
+  if (auto attr = getCalleeAttrAttr()) {
     return llvm::cast<FunctionType>(attr.getType());
   } else {
     return llvm::cast<FunctionType>(getCalleeValue().getType());
@@ -517,7 +526,8 @@ void hugr_mlir::getHugrTypeMemoryEffects(
     if (auto htt = llvm::dyn_cast<HugrTypeInterface>(v.getType())) {
       if (htt.getConstraint() == TypeConstraint::Linear) {
         effects.push_back(
-            mlir::SideEffects::EffectInstance<mlir::MemoryEffects::Effect>(e, v, LinearityResource::get()));
+            mlir::SideEffects::EffectInstance<mlir::MemoryEffects::Effect>(
+                e, v, LinearityResource::get()));
       }
     }
   };
@@ -529,7 +539,6 @@ void hugr_mlir::getHugrTypeMemoryEffects(
   for (auto result : op->getResults()) {
     add_linear_effect(result, mlir::MemoryEffects::Allocate::get());
   }
-
 }
 
 bool hugr_mlir::isDataflowGraphRegion(mlir::Region& region) {

@@ -48,4 +48,4 @@ quantinuum-hugr = { path = "../hugr" }
 
 
 [workspace]
-members = ["guppy/validator"]
+members = []

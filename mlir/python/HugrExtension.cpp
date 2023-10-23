@@ -1,8 +1,8 @@
 #include "hugr-mlir-c/Dialects.h"
-#include "mlir-c/Bindings/Python/Interop.h"
-#include "mlir/Bindings/Python/PybindAdaptors.h"
 #include "llvm-c/ErrorHandling.h"
 #include "llvm/Support/Signals.h"
+#include "mlir-c/Bindings/Python/Interop.h"
+#include "mlir/Bindings/Python/PybindAdaptors.h"
 
 namespace py = pybind11;
 using namespace mlir::python::adaptors;
@@ -37,14 +37,24 @@ PYBIND11_MODULE(_hugrDialects, m) {
           },
           "cls"_a, "extensions"_a, "function_type"_a);
 
-  mlir_attribute_subclass(hugrM, "ExtensionAttr", mlirAttributeIsAHugrExtensionAttr)
-    .def_classmethod("get", [](py::object cls, std::string const& name ,MlirContext context) {
-      return cls(mlirHugrExtensionAttrGet(context, mlirStringRefCreateFromCString(name.c_str())));
-    }, "cls"_a, "name"_a, "context"_a = py::none());
+  mlir_attribute_subclass(
+      hugrM, "ExtensionAttr", mlirAttributeIsAHugrExtensionAttr)
+      .def_classmethod(
+          "get",
+          [](py::object cls, std::string const& name, MlirContext context) {
+            return cls(mlirHugrExtensionAttrGet(
+                context, mlirStringRefCreateFromCString(name.c_str())));
+          },
+          "cls"_a, "name"_a, "context"_a = py::none());
 
-  mlir_attribute_subclass(hugrM, "ExtensionSetAttr", mlirAttributeIsAHugrExtensionSetAttr)
-    .def_classmethod("get", [](py::object cls, std::vector<MlirAttribute> const& extensions, MlirContext context) {
-      return cls(mlirHugrExtensionSetAttrGet(context, extensions.size(), extensions.data()));
-    }, "cls"_a, "extensions"_a = py::list(), "context"_a = py::none());
-
+  mlir_attribute_subclass(
+      hugrM, "ExtensionSetAttr", mlirAttributeIsAHugrExtensionSetAttr)
+      .def_classmethod(
+          "get",
+          [](py::object cls, std::vector<MlirAttribute> const& extensions,
+             MlirContext context) {
+            return cls(mlirHugrExtensionSetAttrGet(
+                context, extensions.size(), extensions.data()));
+          },
+          "cls"_a, "extensions"_a = py::list(), "context"_a = py::none());
 }

@@ -7,11 +7,15 @@
 extern "C" {
 #endif
 
-typedef MlirOperation (*mlirHugrTranslateStringRefToMLIRFunction)(MlirStringRef, MlirLocation);
+typedef MlirOperation (*mlirHugrTranslateStringRefToMLIRFunction)(
+    MlirStringRef, MlirLocation);
 typedef void (*mlirHugrDialectRegistrationFunction)(MlirDialectRegistry);
 
 MLIR_CAPI_EXPORTED
-void mlirHugrRegisterTranslationToMLIR(MlirStringRef name, MlirStringRef description, mlirHugrTranslateStringRefToMLIRFunction, mlirHugrDialectRegistrationFunction);
+void mlirHugrRegisterTranslationToMLIR(
+    MlirStringRef name, MlirStringRef description,
+    mlirHugrTranslateStringRefToMLIRFunction,
+    mlirHugrDialectRegistrationFunction);
 
 MLIR_CAPI_EXPORTED
 int mlirHugrTranslateMain(int argc, char const* const* argv);
@@ -20,5 +24,4 @@ int mlirHugrTranslateMain(int argc, char const* const* argv);
 }
 #endif
 
-
-#endif // HUGR_MLIR_C_TRANSLATE_H
+#endif  // HUGR_MLIR_C_TRANSLATE_H

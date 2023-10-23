@@ -9,5 +9,4 @@ mlir::LogicalResult translateMain(int argc, char const* const* argv);
 
 }
 
-
 #endif
