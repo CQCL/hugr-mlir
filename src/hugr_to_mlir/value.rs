@@ -11,10 +11,10 @@ pub fn hugr_to_mlir_value<'c>(
     typ: &hugr::types::Type,
     value: &hugr::values::Value,
 ) -> Result<melior::ir::Attribute<'c>> {
-    use hugr::types::TypeEnum;
-    use hugr::values::Value;
-    use hugr::values::PrimValue;
     use downcast_rs::Downcast;
+    use hugr::types::TypeEnum;
+    use hugr::values::PrimValue;
+    use hugr::values::Value;
     match value {
         Value::Tuple { vs } => {
             let TypeEnum::Tuple(ref typerow) = typ.as_type_enum() else { Err(anyhow!("not a tuple type"))? };
@@ -37,18 +37,47 @@ pub fn hugr_to_mlir_value<'c>(
             )
             .into())
         }
-        &Value::Prim { val: PrimValue::Extension { ref c } } => {
-            if let Some(i) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>() {
-                Ok(melior::ir::attribute::IntegerAttribute::new(i.value(), melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
-            } else if let Some(i) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntU>() {
+        &Value::Prim {
+            val: PrimValue::Extension { ref c },
+        } => {
+            if let Some(i) =
+                c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>()
+            {
+                Ok(melior::ir::attribute::IntegerAttribute::new(
+                    i.value(),
+                    melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into(),
+                )
+                .into())
+            } else if let Some(i) =
+                c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntU>()
+            {
                 // this as i64 is naughty
-                Ok(melior::ir::attribute::IntegerAttribute::new(i.value() as i64, melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into()).into())
-            } else if let Some(f) = c.0.downcast_ref::<hugr::std_extensions::arithmetic::float_types::ConstF64>() {
-                Ok(melior::ir::attribute::FloatAttribute::new(context, f.value(), unsafe { melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))}).into())
+                Ok(melior::ir::attribute::IntegerAttribute::new(
+                    i.value() as i64,
+                    melior::ir::r#type::IntegerType::new(context, i.log_width().into()).into(),
+                )
+                .into())
+            } else if let Some(f) =
+                c.0.downcast_ref::<hugr::std_extensions::arithmetic::float_types::ConstF64>()
+            {
+                Ok(
+                    melior::ir::attribute::FloatAttribute::new(context, f.value(), unsafe {
+                        melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(context.to_raw()))
+                    })
+                    .into(),
+                )
             } else if let Some(f) = c.0.downcast_ref::<hugr::extension::prelude::ConstUsize>() {
-                Ok(melior::ir::attribute::IntegerAttribute::new(f.value() as i64, unsafe { melior::ir::Type::from_raw(mlir_sys::mlirIndexTypeGet(context.to_raw()))}).into())
+                Ok(
+                    melior::ir::attribute::IntegerAttribute::new(f.value() as i64, unsafe {
+                        melior::ir::Type::from_raw(mlir_sys::mlirIndexTypeGet(context.to_raw()))
+                    })
+                    .into(),
+                )
             } else {
-                Err(anyhow!("hugr_to_mlir_value:unimplemented extension constant: {:?}", c))
+                Err(anyhow!(
+                    "hugr_to_mlir_value:unimplemented extension constant: {:?}",
+                    c
+                ))
             }
         }
         x => Err(anyhow!("Unimplemented hugr_to_mlir_value: {:?}", x)),

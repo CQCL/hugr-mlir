@@ -5,7 +5,11 @@ use hugr::builder::{
     HugrBuilder, ModuleBuilder, SubContainer, TailLoopBuilder,
 };
 use hugr::extension::prelude::ConstUsize;
-use hugr::extension::{prelude, prelude::{USIZE_T,PRELUDE_ID}, ExtensionSet};
+use hugr::extension::{
+    prelude,
+    prelude::{PRELUDE_ID, USIZE_T},
+    ExtensionSet,
+};
 use hugr::hugr::ValidationError;
 use hugr::ops::Const;
 use hugr::types::{FunctionType, Type};
@@ -107,12 +111,10 @@ pub fn loop_with_conditional() -> Result<Hugr> {
     let _fdef = {
         let [b1] = fbuild.input_wires_arr();
         let loop_id = {
-            let mut loop_b =
-                fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
+            let mut loop_b = fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
             let signature = loop_b.loop_signature()?.clone();
             let const_val = Const::true_val();
-            let const_wire =
-                loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
+            let const_wire = loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
             let lift_node = loop_b.add_dataflow_op(
                 hugr::ops::LeafOp::Lift {
                     type_row: vec![const_val.const_type().clone()].into(),

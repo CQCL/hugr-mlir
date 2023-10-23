@@ -107,7 +107,6 @@
                       pkgs.rq
                     ];
 
-
                   languages.rust = {
                     enable = true;
                     channel = "stable";

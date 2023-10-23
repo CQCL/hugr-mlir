@@ -8,14 +8,14 @@ use crate::{mlir, Error, Result};
 pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
     src: &[u8],
     loc: melior::ir::Location<'c>,
-    go: impl FnOnce(&[u8]) -> Result<hugr::Hugr,E>,
+    go: impl FnOnce(&[u8]) -> Result<hugr::Hugr, E>,
 ) -> Result<melior::ir::Module<'c>> where
 {
     let hugr = go(src).map_err(Into::into)?;
     hugr_to_mlir(loc, &hugr)
 }
 
-fn translate_hugr_raw_to_mlir<'c>(
+fn translate_hugr_raw_to_mlir(
     raw_src: mlir_sys::MlirStringRef,
     raw_loc: mlir_sys::MlirLocation,
     go: impl FnOnce(&[u8]) -> Result<hugr::Hugr, Error>,
@@ -53,9 +53,9 @@ mod ffi {
         raw_src: mlir_sys::MlirStringRef,
         raw_loc: mlir_sys::MlirLocation,
     ) -> mlir_sys::MlirOperation {
-        super::translate_hugr_raw_to_mlir(raw_src, raw_loc, |src|
+        super::translate_hugr_raw_to_mlir(raw_src, raw_loc, |src| {
             serde_json::from_slice(src).map_err(Into::into)
-        )
+        })
     }
     pub extern "C" fn translate_hugr_rmp_to_mlir(
         raw_src: mlir_sys::MlirStringRef,

@@ -7,11 +7,11 @@ mod macros;
 /// This feature of melior is not well exercised, so we may well have to turn
 /// this off
 pub mod hugr {
-    use std::{fmt, ops::Deref, any::Any};
+    use std::{any::Any, fmt, ops::Deref};
 
     use hugr::types::FunctionType;
-    use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike, ValueLike};
     use itertools::Itertools;
+    use melior::ir::{attribute::StringAttribute, AttributeLike, RegionRef, TypeLike, ValueLike};
     use mlir_sys::mlirAttributeIsASymbolRef;
 
     use self::ffi::mlirHugrTypeConstraintAttrGet;
@@ -22,7 +22,6 @@ pub mod hugr {
     pub mod ffi {
         include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
     }
-
 
     pub fn get_hugr_dialect_handle() -> melior::dialect::DialectHandle {
         unsafe { melior::dialect::DialectHandle::from_raw(ffi::mlirGetDialectHandle__hugr__()) }
@@ -68,8 +67,7 @@ pub mod hugr {
         unsafe { ffi::mlirTypeIsAHugrOpaqueType(x.to_raw()) }
     }
 
-
-    declare_attribute!(ExtensionAttr,is_extension_attr,"extension");
+    declare_attribute!(ExtensionAttr, is_extension_attr, "extension");
 
     impl<'c> ExtensionAttr<'c> {
         pub fn new<'a>(
@@ -85,7 +83,7 @@ pub mod hugr {
         }
     }
 
-    declare_attribute!(ExtensionSetAttr,is_extension_set_attr,"extension set");
+    declare_attribute!(ExtensionSetAttr, is_extension_set_attr, "extension set");
 
     impl<'c> ExtensionSetAttr<'c> {
         pub fn new(
@@ -104,7 +102,11 @@ pub mod hugr {
         }
     }
 
-    declare_type!(HugrFunctionType,is_hugr_function_type,"Hugr function type");
+    declare_type!(
+        HugrFunctionType,
+        is_hugr_function_type,
+        "Hugr function type"
+    );
 
     impl<'c> HugrFunctionType<'c> {
         pub fn new(
@@ -120,7 +122,7 @@ pub mod hugr {
         }
     }
 
-    declare_type!(SumType,is_sum_type,"Sum type");
+    declare_type!(SumType, is_sum_type, "Sum type");
 
     impl<'c> SumType<'c> {
         pub fn new(
@@ -141,7 +143,7 @@ pub mod hugr {
         }
     }
 
-    declare_attribute!(SymbolRefAttr,is_symbol_ref_attr,"symbol ref attribute");
+    declare_attribute!(SymbolRefAttr, is_symbol_ref_attr, "symbol ref attribute");
     impl<'c> SymbolRefAttr<'c> {
         pub fn new<'a, S: Into<melior::StringRef<'a>>>(
             context: &'c melior::Context,
@@ -171,7 +173,11 @@ pub mod hugr {
         }
     }
 
-    declare_attribute!(TypeConstraintAttr,is_type_constraint_attr,"Type constraint attribute");
+    declare_attribute!(
+        TypeConstraintAttr,
+        is_type_constraint_attr,
+        "Type constraint attribute"
+    );
 
     impl<'c> TypeConstraintAttr<'c> {
         pub fn new(context: &'c melior::Context, bound: ::hugr::types::TypeBound) -> Self {
@@ -186,16 +192,14 @@ pub mod hugr {
         }
     }
 
-
-    declare_attribute!(StaticEdgeAttr,is_static_edge_attr, "Static Edge Attribute");
+    declare_attribute!(StaticEdgeAttr, is_static_edge_attr, "Static Edge Attribute");
     impl<'c> StaticEdgeAttr<'c> {
         pub fn new(type_: melior::ir::Type<'c>, sym: SymbolRefAttr<'c>) -> Self {
             unsafe { Self::from_raw(ffi::mlirHugrStaticEdgeAttrGet(type_.to_raw(), sym.to_raw())) }
         }
     }
 
-
-    declare_attribute!(SumAttribute,is_sum_attr, "Sum Attribute");
+    declare_attribute!(SumAttribute, is_sum_attr, "Sum Attribute");
 
     impl<'c> SumAttribute<'c> {
         pub fn new(typ: melior::ir::Type<'c>, tag: u32, value: melior::ir::Attribute<'c>) -> Self {
@@ -203,7 +207,7 @@ pub mod hugr {
         }
     }
 
-    declare_type!(AliasRefType,is_type_alias_ref_type, "Type Alias Ref Type");
+    declare_type!(AliasRefType, is_type_alias_ref_type, "Type Alias Ref Type");
 
     impl<'c> AliasRefType<'c> {
         pub fn new(
@@ -221,7 +225,7 @@ pub mod hugr {
         }
     }
 
-    declare_type!(OpaqueType,is_opaque_type, "Opaque Type");
+    declare_type!(OpaqueType, is_opaque_type, "Opaque Type");
 
     impl<'c> OpaqueType<'c> {
         pub fn new<'a>(
@@ -360,11 +364,9 @@ pub mod hugr {
                         melior::ir::Identifier::new(context, "operand_segment_sizes"),
                         melior::ir::attribute::DenseI32ArrayAttribute::new(
                             context,
-                            &[
-                                1,
-                                inputs.len() as i32,
-                            ],
-                        ).into()
+                            &[1, inputs.len() as i32],
+                        )
+                        .into(),
                     )])
                     .add_operands(&[callee])
                     .add_operands(inputs)
@@ -381,19 +383,20 @@ pub mod hugr {
             let context = unsafe { loc.context().to_ref() };
             CallOp(
                 melior::ir::operation::OperationBuilder::new("hugr.call", loc)
-                    .add_attributes(&[(
-                        melior::ir::Identifier::new(loc.context().deref(), "callee_attr"),
-                        callee.into(),
-                    ),(
-                        melior::ir::Identifier::new(context, "operand_segment_sizes"),
-                        melior::ir::attribute::DenseI32ArrayAttribute::new(
-                            context,
-                            &[
-                                0,
-                                inputs.len() as i32,
-                            ],
-                        ).into()
-                    )])
+                    .add_attributes(&[
+                        (
+                            melior::ir::Identifier::new(loc.context().deref(), "callee_attr"),
+                            callee.into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "operand_segment_sizes"),
+                            melior::ir::attribute::DenseI32ArrayAttribute::new(
+                                context,
+                                &[0, inputs.len() as i32],
+                            )
+                            .into(),
+                        ),
+                    ])
                     .add_operands(inputs)
                     .add_results(output_types)
                     .build(),
@@ -598,19 +601,25 @@ pub mod hugr {
             result_types: &[melior::ir::Type<'c>],
             name: impl AsRef<str>,
             extension_set: ExtensionSetAttr<'c>,
-            args: &[melior::ir::Value<'c,'_>],
+            args: &[melior::ir::Value<'c, '_>],
             loc: melior::ir::Location<'c>,
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
 
             ExtensionOp(
                 melior::ir::operation::OperationBuilder::new("hugr.ext_op", loc)
-                    .add_attributes(&[(
-                        melior::ir::Identifier::new(context, "extensions"),
-                        extension_set.into(),
-                    ), (melior::ir::Identifier::new(context, "hugr_opname"),
-                        melior::ir::attribute::StringAttribute::new(context, name.as_ref()).into()
-                    )]).add_results(result_types)
+                    .add_attributes(&[
+                        (
+                            melior::ir::Identifier::new(context, "extensions"),
+                            extension_set.into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "hugr_opname"),
+                            melior::ir::attribute::StringAttribute::new(context, name.as_ref())
+                                .into(),
+                        ),
+                    ])
+                    .add_results(result_types)
                     .add_operands(args)
                     .build(),
             )
@@ -629,7 +638,7 @@ pub mod hugr {
     impl<'c> ConditionalOp<'c> {
         pub fn new(
             result_types: &[melior::ir::Type<'c>],
-            args: &[melior::ir::Value<'c,'_>],
+            args: &[melior::ir::Value<'c, '_>],
             cases: impl IntoIterator<Item = melior::ir::Region<'c>>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
@@ -655,7 +664,7 @@ pub mod hugr {
     impl<'c> UnpackTupleOp<'c> {
         pub fn new(
             result_types: &[melior::ir::Type<'c>],
-            arg: melior::ir::Value<'c,'_>,
+            arg: melior::ir::Value<'c, '_>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
             UnpackTupleOp(
@@ -679,15 +688,22 @@ pub mod hugr {
     impl<'c> TailLoopOp<'c> {
         pub fn new(
             outputs_types: &[melior::ir::Type<'c>],
-            inputs: &[melior::ir::Value<'c,'_>],
-            passthrough_inputs: &[melior::ir::Value<'c,'_>],
+            inputs: &[melior::ir::Value<'c, '_>],
+            passthrough_inputs: &[melior::ir::Value<'c, '_>],
             body: melior::ir::Region<'c>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             let inputs_types = inputs.iter().map(|x| x.r#type()).collect_vec();
-            let passthrough_inputs_types = passthrough_inputs.iter().map(|x| x.r#type()).collect_vec();
-            let predicate_type = SumType::new(context,[melior::ir::r#type::TupleType::new(context, &inputs_types).into(), melior::ir::r#type::TupleType::new(context, outputs_types).into()]);
+            let passthrough_inputs_types =
+                passthrough_inputs.iter().map(|x| x.r#type()).collect_vec();
+            let predicate_type = SumType::new(
+                context,
+                [
+                    melior::ir::r#type::TupleType::new(context, &inputs_types).into(),
+                    melior::ir::r#type::TupleType::new(context, outputs_types).into(),
+                ],
+            );
 
             TailLoopOp(
                 melior::ir::operation::OperationBuilder::new("hugr.tailloop", loc)
@@ -696,9 +712,26 @@ pub mod hugr {
                     .add_operands(inputs)
                     .add_operands(passthrough_inputs)
                     .add_attributes(&[
-                        (melior::ir::Identifier::new(context, "operand_segment_sizes"), melior::ir::attribute::DenseI32ArrayAttribute::new(context, &[inputs.len() as i32, passthrough_inputs.len() as i32]).into()),
-                        (melior::ir::Identifier::new(context, "result_segment_sizes"), melior::ir::attribute::DenseI32ArrayAttribute::new(context, &[outputs_types.len() as i32, passthrough_inputs.len() as i32]).into()),
-                        (melior::ir::Identifier::new(context, "predicate_type"), melior::ir::attribute::TypeAttribute::new(predicate_type.into()).into())
+                        (
+                            melior::ir::Identifier::new(context, "operand_segment_sizes"),
+                            melior::ir::attribute::DenseI32ArrayAttribute::new(
+                                context,
+                                &[inputs.len() as i32, passthrough_inputs.len() as i32],
+                            )
+                            .into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "result_segment_sizes"),
+                            melior::ir::attribute::DenseI32ArrayAttribute::new(
+                                context,
+                                &[outputs_types.len() as i32, passthrough_inputs.len() as i32],
+                            )
+                            .into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "predicate_type"),
+                            melior::ir::attribute::TypeAttribute::new(predicate_type.into()).into(),
+                        ),
                     ])
                     .add_regions(vec![body])
                     .build(),
@@ -718,7 +751,7 @@ pub mod hugr {
     impl<'c> LiftOp<'c> {
         pub fn new(
             outputs_types: &[melior::ir::Type<'c>],
-            inputs: &[melior::ir::Value<'c,'_>],
+            inputs: &[melior::ir::Value<'c, '_>],
             extension: ExtensionAttr<'c>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
@@ -727,7 +760,10 @@ pub mod hugr {
                 melior::ir::operation::OperationBuilder::new("hugr.lift", loc)
                     .add_results(outputs_types)
                     .add_operands(inputs)
-                    .add_attributes(&[(melior::ir::Identifier::new(context, "extensions"), ExtensionSetAttr::new(context, [extension]).into())])
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(context, "extensions"),
+                        ExtensionSetAttr::new(context, [extension]).into(),
+                    )])
                     .build(),
             )
         }
@@ -753,7 +789,7 @@ pub fn get_sum_type<'a>(
 
 #[cfg(test)]
 pub mod test {
-    use rstest::{rstest, fixture};
+    use rstest::{fixture, rstest};
     #[fixture]
     pub fn test_context() -> melior::Context {
         let dr = melior::dialect::DialectRegistry::new();
@@ -767,7 +803,6 @@ pub mod test {
 
     #[rstest]
     fn test_sum_type(test_context: melior::Context) {
-
         let t_i32 = melior::ir::r#type::IntegerType::new(&test_context, 32);
         let t_i64 = melior::ir::r#type::IntegerType::new(&test_context, 64);
         let sum_type = super::get_sum_type(&test_context, &[t_i32.into(), t_i64.into()]);

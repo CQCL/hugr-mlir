@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 
-fn main() -> Result<(), Box<dyn std::error::Error>>{
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let include_dirs = std::env::var("DEP_MLIR_INCLUDE_DIRS")?;
-    let bindings =  bindgen::builder()
+    let bindings = bindgen::builder()
         .clang_args(include_dirs.split(';').map(|x| format!("-I{}", x)))
         .header("mlir/include/hugr-mlir-c/Dialects.h")
         .header("mlir/include/hugr-mlir-c/Translate.h")

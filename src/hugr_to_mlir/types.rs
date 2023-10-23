@@ -75,11 +75,7 @@ pub fn hugr_to_mlir_function_type<'a>(
     let type_outputs = collect_type_row::<Vec<_>>(ctx, &type_.output)?;
     Ok(mlir::hugr::HugrFunctionType::new(
         type_extensions,
-        melior::ir::r#type::FunctionType::new(
-            ctx,
-            type_inputs.as_slice(),
-            type_outputs.as_slice(),
-        ),
+        melior::ir::r#type::FunctionType::new(ctx, type_inputs.as_slice(), type_outputs.as_slice()),
     ))
 }
 
@@ -118,9 +114,7 @@ pub fn collect_type_args<'c, 'a, R: FromIterator<melior::ir::Attribute<'c>>>(
                 &collect_type_args::<Vec<_>>(ctx, args)?,
             )
             .into()),
-            TypeArg::Extensions { es } => {
-                Ok(extension_set_to_extension_set_attr(ctx, es).into())
-            }
+            TypeArg::Extensions { es } => Ok(extension_set_to_extension_set_attr(ctx, es).into()),
             ta => panic!("unimplemented type_arg: {:?}", ta),
         })
         .collect::<Result<R, Error>>()

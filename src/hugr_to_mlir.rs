@@ -113,7 +113,7 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
 }
 
 trait EmitMlir {
-    type Op<'a> : Into<Operation<'a>>;
+    type Op<'a>: Into<Operation<'a>>;
     fn emit<'a, 'b, V: HugrView>(
         &self,
         node: hugr::Node,
@@ -131,7 +131,7 @@ impl EmitMlir for hugr::ops::Conditional {
         node: hugr::Node,
         state: &mut TranslationState<'a, 'b, V>,
         result_types: &[Type<'a>],
-        inputs: &[Value<'a,'b>],
+        inputs: &[Value<'a, 'b>],
         loc: Location<'a>,
     ) -> Result<Self::Op<'a>> {
         let cases = state
@@ -146,7 +146,12 @@ impl EmitMlir for hugr::ops::Conditional {
                 Ok(r)
             })
             .collect::<Result<Vec<_>>>()?;
-        Ok(mlir::hugr::ConditionalOp::new(result_types, inputs, cases, loc))
+        Ok(mlir::hugr::ConditionalOp::new(
+            result_types,
+            inputs,
+            cases,
+            loc,
+        ))
     }
 }
 
@@ -344,12 +349,7 @@ where
                     .exactly_one()?;
                 let (static_edge, _, _) = self.symbols.get_or_alloc(target_n)?;
 
-                mlir::hugr::CallOp::new(
-                    static_edge,
-                    args.as_slice(),
-                    result_types.as_slice(),
-                    loc,
-                )
+                mlir::hugr::CallOp::new(static_edge, args.as_slice(), result_types.as_slice(), loc)
             }
             OpType::CallIndirect { .. } => {
                 mlir::hugr::CallOp::new_indirect(args[0], &args[1..], result_types.as_slice(), loc)
@@ -470,11 +470,7 @@ where
         let (_, _, name) = self.symbols.get_or_alloc(n)?;
         let ty = hugr_to_mlir_type(self.context, typ)?;
         let val = hugr_to_mlir_value(self.context, typ, value)?;
-        self.push_operation(
-            n,
-            empty(),
-            mlir::hugr::ConstOp::new(name, ty, val, loc),
-        )
+        self.push_operation(n, empty(), mlir::hugr::ConstOp::new(name, ty, val, loc))
     }
 
     fn mk_tag(&mut self, n: hugr::Node, tag: usize, loc: Location<'a>) -> Result<()> {
@@ -681,8 +677,7 @@ where
 
     fn collect_outputs<R: FromIterator<(hugr::Port, Type<'a>)>>(&self, n: hugr::Node) -> Result<R> {
         let optype = self.hugr.get_optype(n);
-        self
-            .hugr
+        self.hugr
             .node_outputs(n)
             .filter_map(|p| match optype.port_kind(p) {
                 Some(EdgeKind::Value(ref ty)) => {
@@ -712,9 +707,7 @@ where
             &OpType::LeafOp(hugr::ops::LeafOp::CustomOp(ref external_op)) => {
                 self.mk_custom_op(n, external_op, loc)
             }
-            OpType::Const(const_) => {
-                self.mk_const(n, const_.value(), const_.const_type(), loc)
-            }
+            OpType::Const(const_) => self.mk_const(n, const_.value(), const_.const_type(), loc),
             OpType::LoadConstant(_const) => self.mk_load_constant(n, loc),
             OpType::Conditional(conditional) => self.mk_conditional(n, conditional, loc),
             OpType::TailLoop(tailloop) => self.mk_tail_loop(n, tailloop, loc),
