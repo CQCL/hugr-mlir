@@ -13,5 +13,18 @@ with Context() as ctx, Location.unknown():
     Block.create_at_start(mod.body,[])
     mod.verify()
     print(mod)
+    set1 = hugr.ExtensionSetAttr.get()
+    print(set1)
+    ext1 = hugr.ExtensionAttr.get("ext1")
+    print(ext1)
+    set2 = hugr.ExtensionSetAttr.get([ext1])
+    print(set2)
 
-# CHECK: hugr.module @python_module
+    fun_ty = hugr.FunctionType.get(set2, FunctionType.get([],[]))
+    print(fun_ty)
+
+# CHECK-LABEL: hugr.module @python_module
+# CHECK: #hugr<exts[]>
+# CHECK: #hugr<ext"ext1">
+# CHECK: #hugr<exts["ext1"]>
+# CHECK: !hugr<function ["ext1"]() -> ()>

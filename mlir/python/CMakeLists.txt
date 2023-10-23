@@ -56,7 +56,6 @@ add_mlir_python_common_capi_library(HugrMLIRPythonCAPI
   OUTPUT_DIRECTORY "${HUGR_MLIR_PYTHON_PACKAGES_DIR}/hugr_mlir/_mlir_libs"
   RELATIVE_INSTALL_ROOT "../../.."
   DECLARED_SOURCES
-    MLIRPythonExtension.RegisterEverything
     MLIRPythonSources.Core
     HugrMLIRPythonSources
 )
@@ -70,8 +69,7 @@ add_mlir_python_modules(HugrMLIRPythonModules
   ROOT_PREFIX "${HUGR_MLIR_PYTHON_PACKAGES_DIR}/hugr_mlir"
   INSTALL_PREFIX "python_packages/hugr_mlir"
   DECLARED_SOURCES
-    MLIRPythonExtension.RegisterEverything
-    MLIRPythonExtension.Core
+    MLIRPythonSources.Core
     HugrMLIRPythonSources
   COMMON_CAPI_LINK_LIBS
     HugrMLIRPythonCAPI

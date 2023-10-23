@@ -38,8 +38,6 @@ jobs:
         run: nix run --impure --print-build-logs .#lint-clang-format
       - name: rust - Check formatting
         run: nix develop --impure .#no-mlir --command cargo fmt --check
-      - name: rust - Run clippy
-        run: nix develop --impure .#no-mlir --command cargo clippy --all-targets -- -D warnings
 
   build:
     # Ensure nix cache is populated
@@ -49,9 +47,6 @@ jobs:
       matrix:
         build_type: ["Debug", "Release"]
     steps:
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v3
       - name: Install nix
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
@@ -60,21 +55,26 @@ jobs:
         with:
           path: src
       - name: Configure
-        run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+        run: nix develop --impure src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
       - name: Build
-        run: nix develop --impure ./src#checked-mlir --command ninja -C build
+        run: nix develop --impure src#checked-mlir --command ninja -C build
+      - name: rust - Run clippy
+        run: nix develop --impure src#checked-mlir --command cargo clippy --all-targets -- -D warnings
       - name: Test
-        run: nix develop --impure ./src#checked-mlir --command ninja -C build check
+        run: nix develop --impure src#checked-mlir --command ninja -C build check
       - name: Install
-        run: nix develop --impure ./src#checked-mlir --command ninja -C build install
+        run: nix develop --impure src#checked-mlir --command ninja -C build install
       - name: Install Test
-        run: HUGR_MLIR_TOOLS_DIR=$(pwd)/install/bin HUGR_MLIR_PYTHONPATH_OVERRIDE=$(pwd)/install/python_packages nix develop --impure ./src#checked-mlir --command ninja -C build check
+        env:
+          HUGR_MLIR_TOOLS_DIR=${{ github.workspace }}/install/bin
+          HUGR_MLIR_PYTHONPATH_OVERRIDE=${{ github.workspace }}/install/python_packages
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build check
         # TODO: Once we've set up installing libraries + headers build a test
         # project against both the build and install trees
-      - name: Package Docs
-        uses: actions/upload-pages-artifact@main
-        with:
-          path: install/share/doc/hugr-mlir
+      # - name: Package Docs
+      #   uses: actions/upload-pages-artifact@main
+      #   with:
+      #     path: install/share/doc/hugr-mlir
 
   # TODO Commented out for now. Before we can enable this we need to work out
   # which branch to deploy docs from. In a perfect world we could somehow deploy
