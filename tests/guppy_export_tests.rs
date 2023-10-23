@@ -1,8 +1,7 @@
 
-use std::fs;
 use rstest::{rstest,fixture};
 
-use hugr_mlir::{Result, Error};
+use hugr_mlir::Result;
 
 #[fixture]
 pub fn test_context() -> melior::Context {

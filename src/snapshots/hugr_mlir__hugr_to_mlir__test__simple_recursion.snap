@@ -1,0 +1,13 @@
+---
+source: src/hugr_to_mlir.rs
+expression: op.as_operation().to_string()
+---
+module {
+  hugr.module {
+    func @main[](%arg0: !hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
+      %0 = call @main  [](!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> %arg0
+      output %0 : !hugr<opaque "usize"["prelude"]>
+    }
+  }
+}
+

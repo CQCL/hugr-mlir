@@ -1,0 +1,24 @@
+---
+source: src/hugr_to_mlir.rs
+expression: op.as_operation().to_string()
+---
+module {
+  hugr.module {
+    func @main[](%arg0: !hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
+      %0 = cfg %arg0 : (!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
+      ^bb0(%arg1: !hugr<opaque "usize"["prelude"]>):
+        %1 = make_tuple(%arg1 : !hugr<opaque "usize"["prelude"]>)
+        %2 = tag 1 %1 : tuple<!hugr<opaque "usize"["prelude"]>> -> <tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+        switch %2 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> ^bb2, ^bb1
+      ^bb1(%3: !hugr<opaque "usize"["prelude"]>):  // 2 preds: ^bb0, ^bb2
+        output %3 : !hugr<opaque "usize"["prelude"]>
+      ^bb2(%4: !hugr<opaque "usize"["prelude"]>):  // pred: ^bb0
+        const @const_14 : !hugr.sum<tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>>
+        %5 = load_constant @const_14 : !hugr.sum<tuple<>>
+        switch %5, %4 : !hugr.sum<tuple<>>, !hugr<opaque "usize"["prelude"]> ^bb1
+      }
+      output %0 : !hugr<opaque "usize"["prelude"]>
+    }
+  }
+}
+

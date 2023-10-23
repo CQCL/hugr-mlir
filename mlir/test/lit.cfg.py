@@ -71,8 +71,6 @@ tool_dirs = [config.hugr_mlir_tools_dir, config.llvm_tools_dir]
 tools = [
     "hugr-mlir-opt",
     "test-hugr-mlir-capi",
-    "test-hugr-rs-bridge",
-    "test-import-example-hugr",
     ToolSubst("%PYTHON", config.python_executable),
 ]
 

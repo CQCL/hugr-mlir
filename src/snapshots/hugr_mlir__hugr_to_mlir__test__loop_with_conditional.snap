@@ -1,0 +1,32 @@
+---
+source: src/hugr_to_mlir.rs
+expression: op.as_operation().to_string()
+---
+module {
+  hugr.module {
+    func @main[](%arg0: !hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
+      %0 = tailloop !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>(%arg0 : !hugr<opaque "usize"["prelude"]>) -> (!hugr<opaque "usize"["prelude"]>) {
+      ^bb0(%arg1: !hugr<opaque "usize"["prelude"]>):
+        const @const_7 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<1, []> : !hugr.sum<tuple<>, tuple<>>
+        %1 = load_constant @const_7 : !hugr.sum<tuple<>, tuple<>>
+        %2 = lift ["prelude"] %1 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>>
+        %3 = conditional(%2, %arg1 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "usize"["prelude"]>) -> !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> {
+        ^bb0(%arg2: !hugr<opaque "usize"["prelude"]>):
+          %4 = make_tuple(%arg2 : !hugr<opaque "usize"["prelude"]>)
+          %5 = tag 0 %4 : tuple<!hugr<opaque "usize"["prelude"]>> -> <tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+          output %5 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+        }, {
+        ^bb0(%arg2: !hugr<opaque "usize"["prelude"]>):
+          const @const_19 : !hugr<opaque "usize"["prelude"]> = 2 : index
+          %4 = load_constant @const_19 : !hugr<opaque "usize"["prelude"]>
+          %5 = make_tuple(%4 : !hugr<opaque "usize"["prelude"]>)
+          %6 = tag 1 %5 : tuple<!hugr<opaque "usize"["prelude"]>> -> <tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+          output %6 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+        }
+        output %3 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+      }
+      output %0 : !hugr<opaque "usize"["prelude"]>
+    }
+  }
+}
+

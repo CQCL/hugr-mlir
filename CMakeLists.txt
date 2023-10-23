@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 # default to Release
 get_property(gen_multi GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(NOT gen_multi AND NOT (CMAKE_BUILD_TYPE OR DEFINED ENV{CMAKE_BUILD_TYPE}))
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Release can have faster run time than Debug")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "")
 endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
@@ -18,45 +18,85 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS On)
 # POSITION_INDEPENDENT_CODE property instead
 set(CMAKE_POSITION_INDEPENDENT_CODE On)
 
-find_package(MLIR REQUIRED CONFIG)
-list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
-
-set(LLVM_EXTERNAL_LIT "${CMAKE_CURRENT_SOURCE_DIR}/scripts/lit-wrapped.py")
-set(LLVM_LIT_ARGS "-v" CACHE STRING "")
-
-include(AddMLIR)
-include(AddLLVM)
-include(TableGen)
 include(CMakePrintHelpers)
 include(CTest)
-
-if(MLIR_ENABLE_BINDINGS_PYTHON)
-  include(MLIRDetectPythonEnv)
-  mlir_configure_python_dev_packages()
-endif()
 
 add_custom_target(check)
 # We add docs to the ALL target for convenience. This could be controlled by an
 # option
-add_custom_target(doc ALL)
-
-# llvm doesn't provide targets with interface include directories, so we'll use
-# this
-add_library(mlir-headers-interface INTERFACE)
-# lists inside BUILD_INTERFACE generator expressions cause trouble
-foreach(_x ${MLIR_INCLUDE_DIRS} ${LLVM_INCLUDE_DIRS})
-target_include_directories(mlir-headers-interface
-  INTERFACE "$<BUILD_INTERFACE:${_x}>"
-)
-endforeach()
-
-message(STATUS "MLIR_INCLUDE_DIRS: ${MLIR_INCLUDE_DIRS}")
-message(STATUS "LLVM_INCLUDE_DIRS: ${LLVM_INCLUDE_DIRS}")
-message(STATUS "MLIR_INCLUDE_DIR: ${MLIR_INCLUDE_DIR}")
-message(STATUS "LLVM_INCLUDE_DIR: ${LLVM_INCLUDE_DIR}")
-target_compile_features(mlir-headers-interface INTERFACE cxx_std_17)
-cmake_print_properties(TARGETS mlir-headers-interface PROPERTIES INTERFACE_INCLUDE_DIRECTORIES)
+add_custom_target(doc)
 
 add_subdirectory(docs)
 add_subdirectory(mlir)
-add_subdirectory(hugr-rs-bridge)
+
+set(HUGR_MLIR_CARGO_BUILD_FLAGS "${HUGR_MLIR_CARGO_BUILD_FLAGS}")
+set(HUGR_MLIR_CARGO_TEST_FLAGS "${HUGR_MLIR_CARGO_TEST_FLAGS}")
+# set(HUGR_MLIR_CARGO_DOC_FLAGS "${HUGR_MLIR_CARGO_DOC_FLAGS}")
+
+# This is based on https://michael-f-bryan.github.io/rust-ffi-guide/setting_up.html
+set(HUGR_MLIR_CONFIG_TARGET_DIR "${CMAKE_CURRENT_BINARY_DIR}/target")
+set(HUGR_MLIR_CONFIG_PROFILE_RELEASE_DEBUG "false")
+set(HUGR_MLIR_CONFIG_RUSTFLAGS)
+set(_cargo_config_dir "${CMAKE_CURRENT_SOURCE_DIR}/.cargo")
+set(_cargo_config "${_cargo_config_dir}/config.toml")
+set(_cargo_lock Cargo.lock)
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(_outdir "${HUGR_MLIR_TARGET_DIR}/debug")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    list(APPEND HUGR_MLIR_CARGO_BUILD_FLAGS "--release")
+    list(APPEND HUGR_MLIR_CARGO_TEST_FLAGS "--release")
+    set(_outdir "${HUGR_MLIR_TARGET_DIR}/release")
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    list(APPEND HUGR_MLIR_CARGO_FLAGS "--release")
+    set(HUGR_MLIR_CONFIG_PROFILE_RELEASE_DEBUG "true")
+    set(_outdir "${HUGR_MLIR_TARGET_DIR}/release")
+endif ()
+
+configure_file(
+    "${_cargo_config}.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/config.toml.in"
+    @ONLY)
+
+file(GENERATE OUTPUT "${_cargo_config}"
+  INPUT "${CMAKE_CURRENT_BINARY_DIR}/config.toml.in"
+)
+
+add_custom_command(
+    COMMENT "Compiling hugr-mlir crate"
+    OUTPUT
+    "${HUGR_MLIR_TARGET_DIR}/libhugr_mlir.rlib"
+    DEPENDS "${_cargo_config}" HugrMLIR-C
+    COMMAND cargo build ${HUGR_MLIR_CARGO_BUILD_FLAGS}
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    DEPFILE
+    "${HUGR_MLIR_TARGET_DIR}/libhugr_mlir.d"
+    BYPRODUCTS
+    "${HUGR_MLIR_TARGET_DIR}/libhugr_mlir.d"
+    "${_cargo_lock}"
+    USES_TERMINAL
+)
+add_custom_target(hugr_mlir_crate_target ALL
+    DEPENDS "${HUGR_MLIR_TARGET_DIR}/libhugr_mlir.rlib"
+)
+add_custom_command(COMMENT "Building hugr-mlir crate docs"
+    OUTPUT
+    "${CMAKE_CURRENT_BINARY_DIR}/target/doc/settings.html"
+    COMMAND cargo doc
+    DEPENDS hugr_mlir_crate_target
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    USES_TERMINAL
+)
+add_custom_target(hugr_mlir_crate_doc
+  DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/target/doc/settings.html"
+)
+add_dependencies(doc hugr_mlir_crate_doc)
+
+add_custom_target(hugr_mlir_crate_test
+  COMMENT "Testing hugr-mlir crate"
+  DEPENDS "${_cargo_config}" HugrMLIR-C
+  COMMAND cargo test ${HUGR_MLIR_CARGO_TEST_FLAGS}
+  USES_TERMINAL
+)
+
+add_dependencies(check hugr_mlir_crate_test)

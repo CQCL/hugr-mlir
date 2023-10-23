@@ -2,22 +2,6 @@ cmake_minimum_required(VERSION 3.25)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-project(hugr-mlir LANGUAGES CXX C)
-
-set(CMAKE_CXX_STANDARD 17)
-# generate compile_commands.json
-set(CMAKE_EXPORT_COMPILE_COMMANDS On)
-# We will generate shared libraries by linking to static libraries, so ensure
-# said static libraries are built with -fPIC
-# TODO if we add an add_hugr_mlir_library function, have that set the
-# POSITION_INDEPENDENT_CODE property instead
-set(CMAKE_POSITION_INDEPENDENT_CODE On)
-
-set(BUILD_SHARED_LIBS 1 CACHE BOOL "")
-if(NOT BUILD_SHARED_LIBS)
-  message(FATAL_ERROR "We only support building with shared libraries")
-endif()
-
 find_package(MLIR REQUIRED CONFIG)
 list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
 
@@ -27,18 +11,16 @@ set(LLVM_LIT_ARGS "-v" CACHE STRING "")
 include(AddMLIR)
 include(AddLLVM)
 include(TableGen)
-include(CMakePrintHelpers)
-include(CTest)
 
 if(MLIR_ENABLE_BINDINGS_PYTHON)
   include(MLIRDetectPythonEnv)
   mlir_configure_python_dev_packages()
 endif()
 
-add_custom_target(check)
-# We add docs to the ALL target for convenience. This could be controlled by an
-# option
-add_custom_target(doc ALL)
+if(HUGR_MLIR_SANITIZER)
+  add_compile_options("-fsanitize=${HUGR_MLIR_SANTIZER}")
+  add_link_options("-fsanitize=${HUGR_MLIR_SANTIZER}")
+endif()
 
 # llvm doesn't provide targets with interface include directories, so we'll use
 # this

@@ -14,13 +14,20 @@ add_mlir_public_c_api_library(HugrMLIRTranslateCAPI
 )
 
 
+get_property(_capi_libraries GLOBAL PROPERTY MLIR_ALL_LIBS)
+list(FILTER _capi_libraries INCLUDE REGEX "^MLIRCAPI")
+
+message(STATUS "capi libraries: ${_capi_libraries}")
 add_mlir_aggregate(HugrMLIR-C
   SHARED
   EMBED_LIBS
+  ${_capi_libraries}
   HugrMLIRDialectCAPI
   HugrMLIRTranslateCAPI
 )
 set_property(TARGET HugrMLIR-C APPEND PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}")
+set_property(TARGET HugrMLIR-C PROPERTY OUTPUT_NAME "HugrMLIRC")
+
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_options(HugrMLIR-C PRIVATE "-Wl,-exclude-libs,ALL")

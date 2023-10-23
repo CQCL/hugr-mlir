@@ -20,25 +20,27 @@ name = "hugr-mlir-translate"
 
 [dependencies]
 quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
-mlir-sys = { path = "../mlir-sys" }
+mlir-sys = "*"
 melior = { path = "../melior/melior" , features = [] }
 rmp-serde = "^1.1.2"
 serde_json = "*"
 itertools = "*"
 anyhow = "*"
 downcast-rs = "*"
+mlir-sys0 = "*"
 
 [dev-dependencies]
 insta = { version = "*", features = ["glob"] }
 rstest = "*"
+serial_test = "*"
 
 [build-dependencies]
-cmake = "^0.1"
 bindgen = "^0.68.1"
 
 [patch.crates-io]
 # tblgen = { path = "../tblgen-rs" }
 mlir-sys = { path = "../mlir-sys" }
+mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
 melior-macro = { path = "../melior/macro" }
 
 [patch."https://github.com/CQCL-DEV/hugr.git"]
