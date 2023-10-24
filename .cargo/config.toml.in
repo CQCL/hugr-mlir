@@ -5,7 +5,7 @@ rustflags = "@HUGR_MLIR_CONFIG_RUSTFLAGS@"
 
 
 # TODO use target system
-[target.x86_64-unknown-linux-gnu.mlir]
+[target.x86_64-unknown-linux-gnu.MLIR]
 rustc-link-search = ["native=$<TARGET_FILE_DIR:HugrMLIR-C>"]
 include_dirs = "$<TARGET_PROPERTY:mlir-headers-interface,INTERFACE_INCLUDE_DIRECTORIES>"
 link_libs="dylib=$<TARGET_FILE_BASE_NAME:HugrMLIR-C>;dylib=stdc++"

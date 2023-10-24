@@ -55,19 +55,19 @@ jobs:
         with:
           path: src
       - name: Configure
-        run: nix develop --impure src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+        run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
       - name: Build
-        run: nix develop --impure src#checked-mlir --command ninja -C build
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build
       - name: rust - Run clippy
-        run: nix develop --impure src#checked-mlir --command cargo clippy --all-targets -- -D warnings
+        run: nix develop --impure ./src#checked-mlir --command cargo clippy --all-targets -- -D warnings
       - name: Test
-        run: nix develop --impure src#checked-mlir --command ninja -C build check
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build check
       - name: Install
-        run: nix develop --impure src#checked-mlir --command ninja -C build install
+        run: nix develop --impure ./src#checked-mlir --command ninja -C build install
       - name: Install Test
         env:
-          HUGR_MLIR_TOOLS_DIR=${{ github.workspace }}/install/bin
-          HUGR_MLIR_PYTHONPATH_OVERRIDE=${{ github.workspace }}/install/python_packages
+          HUGR_MLIR_TOOLS_DIR: "${{ github.workspace }}/install/bin"
+          HUGR_MLIR_PYTHONPATH_OVERRIDE: "${{ github.workspace }}/install/python_packages"
         run: nix develop --impure ./src#checked-mlir --command ninja -C build check
         # TODO: Once we've set up installing libraries + headers build a test
         # project against both the build and install trees

@@ -65,10 +65,6 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
         }
     }
 
-    // fn get(&self, k: &hugr::Node) -> Option<&SymbolItem<'a>> {
-    //     self.node_to_symbol.get(k)
-    // }
-
     fn get_or_alloc<'b>(&'b mut self, k: hugr::Node) -> Result<SymbolItem<'a>> {
         if let Some(r) = self.node_to_symbol.get(&k) {
             Ok(*r)
@@ -116,8 +112,8 @@ trait EmitMlir {
     type Op<'a>: Into<Operation<'a>>;
     fn emit<'a, 'b, V: HugrView>(
         &self,
-        node: hugr::Node,
         state: &mut TranslationState<'a, 'b, V>,
+        node: hugr::Node,
         result_types: &[Type<'a>],
         inputs: &[Value<'a, 'b>],
         loc: Location<'a>,
@@ -128,8 +124,8 @@ impl EmitMlir for hugr::ops::Conditional {
     type Op<'a> = mlir::hugr::ConditionalOp<'a>;
     fn emit<'a, 'b, V: HugrView>(
         &self,
-        node: hugr::Node,
         state: &mut TranslationState<'a, 'b, V>,
+        node: hugr::Node,
         result_types: &[Type<'a>],
         inputs: &[Value<'a, 'b>],
         loc: Location<'a>,
@@ -691,7 +687,6 @@ where
     fn node_to_op(&mut self, n: hugr::Node, loc: Location<'a>) -> Result<()> {
         use hugr::ops::OpType;
         let optype = self.hugr.get_optype(n);
-        // dbg!(n, optype.tag());
         match optype {
             &OpType::Module(_) => self.mk_module(n, loc),
             &OpType::FuncDefn(_) => self.mk_function_defn(n, loc),
@@ -753,11 +748,6 @@ where
                 .into_iter()
                 .map(|(p, _, _)| (i, p))
                 .collect_vec();
-            // let mut state = self.clone().push_block(block, it);
-
-            // for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
-            //     state = state.node_to_op(c, ul)?;
-            // }
 
             self.clone().push_block(block, it, |mut state| {
                 for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
@@ -777,6 +767,7 @@ where
     }
 }
 
+/// creates an MLIR module holding the mlir representation of the HugrView
 pub fn hugr_to_mlir<'c>(
     loc: Location<'c>,
     hugr: &impl HugrView,

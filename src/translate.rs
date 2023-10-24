@@ -92,28 +92,25 @@ fn translate_main(args: &[String]) -> Result<(), String> {
             melior::StringRef::from("hugr to mlir translation").to_raw(),
             Some(ffi::translate_hugr_json_to_mlir),
             Some(ffi::register_translation_dialects),
-        )
-    };
+        );
 
-    unsafe {
         mlir::hugr::ffi::mlirHugrRegisterTranslationToMLIR(
             melior::StringRef::from("hugr-rmp-to-mlir").to_raw(),
             melior::StringRef::from("hugr to mlir translation").to_raw(),
             Some(ffi::translate_hugr_rmp_to_mlir),
             Some(ffi::register_translation_dialects),
-        )
-    };
+        );
+    }
 
     match unsafe {
         crate::mlir::hugr::ffi::mlirHugrTranslateMain(args.len() as i32, argsv.as_ptr())
     } {
         0 => Ok(()),
-        x => Err(format!("failure {}", x)),
+        x => Err(format!("failure: {}", x)),
     }
 }
 
 pub fn main() {
-    // dbg!("translate::main");
     std::process::exit(
         match translate_main(env::args().collect::<Vec<_>>().as_slice()) {
             Ok(()) => 0,

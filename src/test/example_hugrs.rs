@@ -44,16 +44,13 @@ fn build_basic_cfg<T: AsMut<Hugr> + AsRef<Hugr>>(
     let entry = {
         let [inw] = entry_b.input_wires_arr();
 
-        let sum = entry_b.make_predicate(1, sum2_variants, [inw])?;
+        let sum = entry_b.make_tuple_sum(1, sum2_variants, [inw])?;
         entry_b.finish_with_outputs(sum, [])?
     };
     let mut middle_b =
         cfg_builder.simple_block_builder(FunctionType::new(type_row![NAT], type_row![NAT]), 1)?;
     let middle = {
-        let c = middle_b.add_load_const(
-            hugr::ops::Const::simple_unary_predicate(),
-            ExtensionSet::new(),
-        )?;
+        let c = middle_b.add_load_const(hugr::ops::Const::unary_unit_sum(), ExtensionSet::new())?;
         let [inw] = middle_b.input_wires_arr();
         middle_b.finish_with_outputs(c, [inw])?
     };

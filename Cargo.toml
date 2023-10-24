@@ -20,31 +20,40 @@ name = "hugr-mlir-translate"
 
 [dependencies]
 quantinuum-hugr = { git = "https://github.com/CQCL-DEV/hugr.git" }
-mlir-sys = "*"
-melior = { path = "../melior/melior" , features = [] }
-rmp-serde = "^1.1.2"
-serde_json = "*"
-itertools = "*"
-anyhow = "*"
-downcast-rs = "*"
-mlir-sys0 = "*"
+mlir-sys = "0.2.0"
+mlir-sys0 = { git = "https://github.com/doug-q/mlir-sys", branch="llvm18" }
+melior = { version = "0.11.0", features = [] }
+rmp-serde = "1.1.2"
+serde_json = "1.0"
+itertools = "0.11"
+anyhow = "1.0"
+downcast-rs = "1.2"
 
 [dev-dependencies]
-insta = { version = "*", features = ["glob"] }
-rstest = "*"
-serial_test = "*"
+insta = { version = "1.34", features = ["glob"] }
+rstest = "0.18.2"
+serial_test = "2.0"
 
 [build-dependencies]
-bindgen = "^0.68.1"
+bindgen = "0.68.1"
 
+# [patch.crates-io]
+# mlir-sys = { path = "../mlir-sys" }
+# mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
+# melior-macro = { path = "../melior/macro" }
+# melior = { path = "../melior/melior" , features = [] }
+
+# [patch."https://github.com/CQCL-DEV/hugr.git"]
+# quantinuum-hugr = { path = "../hugr" }
+
+# TODO
+# we have forks of mlir-sys and melior that allow us to override how mlir links,
+# and add some small missing features. These should be upstreamed.
 [patch.crates-io]
-# tblgen = { path = "../tblgen-rs" }
-mlir-sys = { path = "../mlir-sys" }
-mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
-melior-macro = { path = "../melior/macro" }
+mlir-sys = { git = "https://github.com/doug-q/mlir-sys", branch = "llvm18"}
+melior-macro = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
+melior = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
 
-[patch."https://github.com/CQCL-DEV/hugr.git"]
-quantinuum-hugr = { path = "../hugr" }
 
 
 [workspace]
