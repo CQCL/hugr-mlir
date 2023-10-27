@@ -57,4 +57,4 @@ melior = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
 
 
 [workspace]
-members = []
+members = ["guppy/validator"]

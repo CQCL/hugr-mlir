@@ -160,13 +160,13 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 8,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -181,7 +181,7 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -224,7 +224,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -236,7 +236,7 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -255,7 +255,7 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -286,7 +286,7 @@
             "t": "Opaque"
           },
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -318,7 +318,7 @@
             "t": "Opaque"
           },
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -329,7 +329,7 @@
     {
       "args": [],
       "description": "",
-      "extension": "quantum",
+      "extension": "quantum.tket2",
       "input_extensions": [],
       "lop": "CustomOp",
       "op": "LeafOp",
@@ -355,7 +355,7 @@
             "t": "Opaque"
           },
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -377,7 +377,7 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -397,7 +397,7 @@
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }

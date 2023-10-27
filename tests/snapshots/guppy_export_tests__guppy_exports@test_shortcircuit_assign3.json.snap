@@ -5,31 +5,31 @@ input_file: tests/guppy-exports/test_shortcircuit_assign3.json
 ---
 module {
   hugr.module {
-    func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-      %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-      ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+    func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
         %1 = make_tuple(%arg2 : !hugr.sum<tuple<>, tuple<>>)
-        %2 = make_tuple(%arg3, %arg2 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>)
-        %3 = conditional(%arg2, %1, %2 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>> {
-        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>):
-          %15 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
-          output %15 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
+        %2 = make_tuple(%arg3, %arg2 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>)
+        %3 = conditional(%arg2, %1, %2 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>) -> !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>> {
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>):
+          %15 = tag 0 %arg4 : tuple<!hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
+          output %15 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
         }, {
-        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>):
-          %15 = tag 1 %arg5 : tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
-          output %15 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
+        ^bb0(%arg4: tuple<!hugr.sum<tuple<>, tuple<>>>, %arg5: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>):
+          %15 = tag 1 %arg5 : tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>> -> <tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
+          output %15 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>>
         }
-        switch %3 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>> ^bb2, ^bb3
+        switch %3 : !hugr.sum<tuple<!hugr.sum<tuple<>, tuple<>>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr.sum<tuple<>, tuple<>>>> ^bb2, ^bb3
       ^bb1(%4: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb2, ^bb4
         output %4 : !hugr.sum<tuple<>, tuple<>>
       ^bb2(%5: !hugr.sum<tuple<>, tuple<>>):  // 2 preds: ^bb0, ^bb3
         %6 = make_tuple()
         %7 = tag 0 %6 : tuple<> -> <tuple<>>
         switch %7, %5 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
-      ^bb3(%8: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, %9: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-        const @const_30 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
-        %10 = load_constant @const_30 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-        %11 = ext_op []"igt_s" %8, %10 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
+      ^bb3(%8: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %9: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+        const @const_30 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 0 : i6
+        %10 = load_constant @const_30 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+        %11 = ext_op []"igt_s" %8, %10 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
         switch %11, %9 : !hugr.sum<tuple<>, tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb2, ^bb4
       ^bb4(%12: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb3
         %13 = make_tuple()

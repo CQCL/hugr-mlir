@@ -83,7 +83,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -91,13 +91,13 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 8,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -105,7 +105,7 @@
       "block": "Exit",
       "cfg_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -120,7 +120,7 @@
       "parent": 7,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -132,7 +132,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -144,12 +144,12 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -161,7 +161,7 @@
       "parent": 7,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -176,14 +176,14 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -199,14 +199,14 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }

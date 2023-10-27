@@ -285,7 +285,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 14,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -299,7 +299,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -345,7 +345,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         }
@@ -357,7 +357,7 @@
       "parent": 17,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -369,7 +369,7 @@
       "parent": 20,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         }
@@ -381,7 +381,7 @@
       "parent": 23,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -392,7 +392,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -411,7 +411,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -434,7 +434,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -458,7 +458,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -495,7 +495,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 14,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -505,7 +505,7 @@
       "op": "Const",
       "parent": 17,
       "typ": {
-        "s": "Simple",
+        "s": "Unit",
         "size": 2,
         "t": "Sum"
       },
@@ -520,7 +520,7 @@
     },
     {
       "datatype": {
-        "s": "Simple",
+        "s": "Unit",
         "size": 2,
         "t": "Sum"
       },
@@ -536,7 +536,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 14,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -574,14 +574,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 14,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -596,7 +596,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -623,7 +623,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"

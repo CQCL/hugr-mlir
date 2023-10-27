@@ -5,12 +5,12 @@ input_file: tests/guppy-exports/test_shortcircuit_assign4.json
 ---
 module {
   hugr.module {
-    func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-      %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
-      ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
-        const @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = 0 : i6
-        %1 = load_constant @const_23 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
-        %2 = ext_op []"igt_s" %arg3, %1 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
+    func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = cfg %arg0, %arg1 : (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>> {
+      ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
+        const @const_23 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 0 : i6
+        %1 = load_constant @const_23 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+        %2 = ext_op []"igt_s" %arg3, %1 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
         %3 = make_tuple()
         %4 = make_tuple(%arg2 : !hugr.sum<tuple<>, tuple<>>)
         %5 = conditional(%2, %3, %4 : !hugr.sum<tuple<>, tuple<>>, tuple<>, tuple<!hugr.sum<tuple<>, tuple<>>>) -> !hugr.sum<tuple<>, tuple<!hugr.sum<tuple<>, tuple<>>>> {

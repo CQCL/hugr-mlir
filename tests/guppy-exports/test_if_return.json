@@ -233,7 +233,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -241,7 +241,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 13,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -267,7 +267,7 @@
       "parent": 11,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -279,7 +279,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -303,7 +303,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -315,7 +315,7 @@
       "parent": 14,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -334,7 +334,7 @@
       "parent": 19,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -370,7 +370,7 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -415,7 +415,7 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -448,7 +448,7 @@
         }
       ],
       "parent": 13,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -474,7 +474,7 @@
     {
       "args": [],
       "description": "",
-      "extension": "quantum",
+      "extension": "quantum.tket2",
       "input_extensions": [],
       "lop": "CustomOp",
       "op": "LeafOp",
@@ -539,7 +539,7 @@
         }
       ],
       "parent": 13,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },

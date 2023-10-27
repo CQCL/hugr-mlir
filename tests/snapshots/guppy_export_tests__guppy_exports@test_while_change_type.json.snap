@@ -7,8 +7,8 @@ module {
   hugr.module {
     func @foo[]() {
       cfg : () -> () {
-        const @const_15 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>> = -22 : i6
-        %0 = load_constant @const_15 : !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>
+        const @const_15 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = -22 : i6
+        %0 = load_constant @const_15 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
         %1 = make_tuple()
         %2 = tag 0 %1 : tuple<> -> <tuple<>>
         switch %2 : !hugr.sum<tuple<>> ^bb2

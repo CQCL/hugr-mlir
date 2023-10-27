@@ -333,7 +333,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -341,10 +341,10 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 18,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -356,7 +356,7 @@
       "block": "Exit",
       "cfg_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -371,7 +371,7 @@
       "parent": 17,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -383,7 +383,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -397,7 +397,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -418,7 +418,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -437,7 +437,7 @@
       "parent": 26,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -455,7 +455,7 @@
       "parent": 34,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -471,7 +471,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -498,7 +498,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -525,7 +525,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -548,12 +548,12 @@
       "parent": 26,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -565,12 +565,12 @@
       "parent": 29,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -582,12 +582,12 @@
       "parent": 34,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -599,7 +599,7 @@
       "parent": 17,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -614,14 +614,14 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -637,14 +637,14 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -659,7 +659,7 @@
       "parent": 1,
       "tys": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -680,7 +680,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -698,7 +698,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -715,7 +715,7 @@
         }
       ],
       "parent": 1,
-      "predicate_inputs": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -730,7 +730,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -748,7 +748,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -777,7 +777,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -800,7 +800,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -818,7 +818,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -847,7 +847,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -866,7 +866,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -874,13 +874,13 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 18,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -912,13 +912,13 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 18,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -927,7 +927,7 @@
       "op": "Const",
       "parent": 29,
       "typ": {
-        "s": "Simple",
+        "s": "Unit",
         "size": 2,
         "t": "Sum"
       },
@@ -942,7 +942,7 @@
     },
     {
       "datatype": {
-        "s": "Simple",
+        "s": "Unit",
         "size": 2,
         "t": "Sum"
       },
@@ -976,7 +976,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -984,13 +984,13 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 18,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },

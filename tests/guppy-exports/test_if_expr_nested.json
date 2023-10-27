@@ -1553,7 +1553,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1564,7 +1564,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1573,7 +1573,7 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1584,14 +1584,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -1606,7 +1606,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1622,7 +1622,7 @@
       "parent": 55,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1633,7 +1633,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1646,7 +1646,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1657,7 +1657,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1670,7 +1670,7 @@
       "parent": 57,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1681,7 +1681,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1694,7 +1694,7 @@
       "parent": 63,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1705,7 +1705,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1720,7 +1720,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -1731,7 +1731,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1742,7 +1742,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -1759,7 +1759,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -1770,7 +1770,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1781,7 +1781,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -1802,13 +1802,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -1828,7 +1828,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1845,13 +1845,13 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
             },
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -1874,7 +1874,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1891,13 +1891,13 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
             },
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -1912,7 +1912,7 @@
       "parent": 85,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -1923,7 +1923,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -1938,7 +1938,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -1949,7 +1949,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1960,7 +1960,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -1977,7 +1977,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -1988,7 +1988,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -1999,7 +1999,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -2014,7 +2014,7 @@
       "parent": 96,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2032,7 +2032,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2051,13 +2051,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2069,7 +2069,7 @@
       "parent": 105,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -2080,7 +2080,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2099,13 +2099,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2123,7 +2123,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2135,7 +2135,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2156,7 +2156,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -2173,7 +2173,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -2197,7 +2197,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -2214,7 +2214,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -2236,7 +2236,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2255,7 +2255,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2274,7 +2274,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2293,7 +2293,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2312,7 +2312,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2331,7 +2331,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2344,12 +2344,12 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -2360,7 +2360,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2373,7 +2373,7 @@
       "parent": 57,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -2384,13 +2384,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2406,7 +2406,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2417,7 +2417,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2428,7 +2428,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2451,7 +2451,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2462,7 +2462,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2473,7 +2473,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2496,7 +2496,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2507,7 +2507,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2518,7 +2518,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2547,7 +2547,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2564,13 +2564,13 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
                 },
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2599,7 +2599,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2616,13 +2616,13 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
                 },
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2651,7 +2651,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2668,13 +2668,13 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
                 },
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2697,7 +2697,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2708,7 +2708,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2719,7 +2719,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2742,7 +2742,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2753,7 +2753,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2764,7 +2764,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2787,7 +2787,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -2798,7 +2798,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -2809,7 +2809,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -2828,7 +2828,7 @@
       "parent": 96,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -2839,13 +2839,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2857,7 +2857,7 @@
       "parent": 101,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -2868,7 +2868,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2880,7 +2880,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2893,7 +2893,7 @@
       "parent": 104,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -2904,7 +2904,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -2917,7 +2917,7 @@
       "parent": 105,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -2928,13 +2928,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2946,7 +2946,7 @@
       "parent": 109,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -2957,13 +2957,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -2985,7 +2985,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3002,7 +3002,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3032,7 +3032,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3049,7 +3049,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3079,7 +3079,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3096,7 +3096,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3116,7 +3116,7 @@
       "parent": 121,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -3127,7 +3127,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3139,7 +3139,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3152,7 +3152,7 @@
       "parent": 125,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -3163,7 +3163,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3176,7 +3176,7 @@
       "parent": 130,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -3187,7 +3187,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3200,7 +3200,7 @@
       "parent": 133,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -3211,7 +3211,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3224,7 +3224,7 @@
       "parent": 136,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -3235,7 +3235,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3248,7 +3248,7 @@
       "parent": 140,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
@@ -3259,7 +3259,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3278,7 +3278,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3294,7 +3294,7 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           },
@@ -3305,7 +3305,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3319,7 +3319,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3336,7 +3336,7 @@
         "extension_reqs": [],
         "input": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           },
@@ -3347,7 +3347,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3361,7 +3361,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3376,7 +3376,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -3387,7 +3387,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3402,19 +3402,19 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -3429,7 +3429,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -3456,7 +3456,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -3489,7 +3489,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3501,7 +3501,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3515,7 +3515,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3550,7 +3550,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -3561,7 +3561,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3570,10 +3570,10 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           },
@@ -3584,7 +3584,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3592,7 +3592,7 @@
         ],
         [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -3610,7 +3610,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -3637,7 +3637,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -3670,7 +3670,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3682,7 +3682,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -3690,7 +3690,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -3705,7 +3705,7 @@
       "parent": 63,
       "tys": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -3716,7 +3716,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -3730,7 +3730,7 @@
       "parent": 63,
       "tys": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -3744,7 +3744,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -3755,7 +3755,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -3766,7 +3766,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -3780,7 +3780,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -3791,7 +3791,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -3802,7 +3802,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -3815,7 +3815,7 @@
         }
       ],
       "parent": 63,
-      "predicate_inputs": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -3830,7 +3830,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               },
@@ -3841,7 +3841,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -3852,7 +3852,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -3866,7 +3866,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   },
@@ -3877,7 +3877,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -3888,7 +3888,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -3913,7 +3913,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -3924,7 +3924,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -3935,7 +3935,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -3954,7 +3954,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               },
@@ -3965,7 +3965,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -3976,7 +3976,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -3990,7 +3990,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   },
@@ -4001,7 +4001,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -4012,7 +4012,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -4037,7 +4037,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -4048,7 +4048,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -4059,7 +4059,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -4080,13 +4080,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -4094,7 +4094,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [
           {
             "args": [
@@ -4103,7 +4103,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4117,13 +4117,13 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
           },
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -4141,7 +4141,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -4168,7 +4168,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -4201,7 +4201,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4213,7 +4213,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4221,7 +4221,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -4242,7 +4242,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -4262,13 +4262,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -4288,7 +4288,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -4305,13 +4305,13 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
             },
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -4331,7 +4331,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -4348,13 +4348,13 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
                 },
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -4367,7 +4367,7 @@
         }
       ],
       "parent": 74,
-      "predicate_inputs": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -4388,7 +4388,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -4405,13 +4405,13 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
               },
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -4431,7 +4431,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -4448,13 +4448,13 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
                   },
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -4485,7 +4485,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -4502,13 +4502,13 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
             },
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -4533,7 +4533,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -4550,13 +4550,13 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
               },
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -4576,7 +4576,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -4593,13 +4593,13 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
                   },
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -4630,7 +4630,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -4647,13 +4647,13 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
             },
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -4668,7 +4668,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -4679,7 +4679,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -4688,10 +4688,10 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           },
@@ -4702,7 +4702,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4710,7 +4710,7 @@
         ],
         [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -4728,7 +4728,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -4755,7 +4755,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -4788,7 +4788,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4800,7 +4800,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -4808,7 +4808,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -4823,7 +4823,7 @@
       "parent": 85,
       "tys": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -4834,7 +4834,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -4848,7 +4848,7 @@
       "parent": 85,
       "tys": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -4862,7 +4862,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -4873,7 +4873,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -4884,7 +4884,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -4898,7 +4898,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 },
@@ -4909,7 +4909,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -4920,7 +4920,7 @@
             {
               "inner": [
                 {
-                  "s": "Simple",
+                  "s": "Unit",
                   "size": 2,
                   "t": "Sum"
                 }
@@ -4933,7 +4933,7 @@
         }
       ],
       "parent": 85,
-      "predicate_inputs": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -4948,7 +4948,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               },
@@ -4959,7 +4959,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -4970,7 +4970,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -4984,7 +4984,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   },
@@ -4995,7 +4995,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -5006,7 +5006,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -5031,7 +5031,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -5042,7 +5042,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5053,7 +5053,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -5072,7 +5072,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               },
@@ -5083,7 +5083,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -5094,7 +5094,7 @@
           {
             "inner": [
               {
-                "s": "Simple",
+                "s": "Unit",
                 "size": 2,
                 "t": "Sum"
               }
@@ -5108,7 +5108,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   },
@@ -5119,7 +5119,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -5130,7 +5130,7 @@
               {
                 "inner": [
                   {
-                    "s": "Simple",
+                    "s": "Unit",
                     "size": 2,
                     "t": "Sum"
                   }
@@ -5155,7 +5155,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             },
@@ -5166,7 +5166,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5177,7 +5177,7 @@
         {
           "inner": [
             {
-              "s": "Simple",
+              "s": "Unit",
               "size": 2,
               "t": "Sum"
             }
@@ -5192,7 +5192,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -5206,19 +5206,19 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -5233,7 +5233,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -5260,7 +5260,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -5301,7 +5301,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5316,7 +5316,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5328,14 +5328,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -5371,13 +5371,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -5391,14 +5391,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -5409,7 +5409,7 @@
       "input_extensions": [],
       "inputs": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         },
@@ -5420,7 +5420,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5435,19 +5435,19 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -5475,7 +5475,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5487,7 +5487,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5501,7 +5501,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5542,13 +5542,13 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
@@ -5562,19 +5562,19 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         },
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 2,
           "t": "Sum"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -5610,7 +5610,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5622,7 +5622,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5631,7 +5631,7 @@
       "op": "BasicBlock",
       "other_outputs": [],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [
           {
             "args": [
@@ -5640,7 +5640,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5654,7 +5654,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5686,7 +5686,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5698,7 +5698,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -5706,7 +5706,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -5727,7 +5727,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5747,7 +5747,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -5768,7 +5768,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5785,7 +5785,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5806,7 +5806,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -5823,7 +5823,7 @@
                       "tya": "BoundedNat"
                     }
                   ],
-                  "bound": "C",
+                  "bound": "E",
                   "extension": "arithmetic.int.types",
                   "id": "int",
                   "t": "Opaque"
@@ -5837,7 +5837,7 @@
         }
       ],
       "parent": 112,
-      "predicate_inputs": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -5858,7 +5858,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -5875,7 +5875,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -5896,7 +5896,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -5913,7 +5913,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -5945,7 +5945,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5962,7 +5962,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -5988,7 +5988,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -6005,7 +6005,7 @@
                     "tya": "BoundedNat"
                   }
                 ],
-                "bound": "C",
+                "bound": "E",
                 "extension": "arithmetic.int.types",
                 "id": "int",
                 "t": "Opaque"
@@ -6026,7 +6026,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -6043,7 +6043,7 @@
                         "tya": "BoundedNat"
                       }
                     ],
-                    "bound": "C",
+                    "bound": "E",
                     "extension": "arithmetic.int.types",
                     "id": "int",
                     "t": "Opaque"
@@ -6075,7 +6075,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -6092,7 +6092,7 @@
                   "tya": "BoundedNat"
                 }
               ],
-              "bound": "C",
+              "bound": "E",
               "extension": "arithmetic.int.types",
               "id": "int",
               "t": "Opaque"
@@ -6114,7 +6114,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6129,7 +6129,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6141,14 +6141,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -6176,7 +6176,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6190,7 +6190,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6231,7 +6231,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6246,14 +6246,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -6269,7 +6269,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -6296,7 +6296,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -6329,7 +6329,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6343,7 +6343,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6376,7 +6376,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6388,7 +6388,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6396,7 +6396,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -6416,7 +6416,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6431,14 +6431,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -6474,7 +6474,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6489,14 +6489,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -6532,7 +6532,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6547,14 +6547,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         [],
         []
       ]
@@ -6570,7 +6570,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -6597,7 +6597,7 @@
             "tya": "BoundedNat"
           }
         ],
-        "bound": "C",
+        "bound": "E",
         "extension": "arithmetic.int.types",
         "id": "int",
         "t": "Opaque"
@@ -6630,7 +6630,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6642,7 +6642,7 @@
                 "tya": "BoundedNat"
               }
             ],
-            "bound": "C",
+            "bound": "E",
             "extension": "arithmetic.int.types",
             "id": "int",
             "t": "Opaque"
@@ -6650,7 +6650,7 @@
         ],
         "output": [
           {
-            "s": "Simple",
+            "s": "Unit",
             "size": 2,
             "t": "Sum"
           }
@@ -6670,7 +6670,7 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
@@ -6685,14 +6685,14 @@
               "tya": "BoundedNat"
             }
           ],
-          "bound": "C",
+          "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
         }
       ],
       "parent": 56,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },

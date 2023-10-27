@@ -19,7 +19,7 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
   # this --impure is a bit dodgy, it's a consequence of using devenv to produce
   # our shell.
       - run: nix flake check --impure --print-build-logs
@@ -31,13 +31,16 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GUPPY_PAT }}
       - name: Lint nix
         run: nix run --impure --print-build-logs .#lint-nixfmt -- --check
       - name: Lint c++
         run: nix run --impure --print-build-logs .#lint-clang-format
       - name: rust - Check formatting
-        run: nix develop --impure .#no-mlir --command cargo fmt --check
+        run: nix develop --impure .#no-mlir --command cargo fmt --package hugr-mlir --check
 
   build:
     # Ensure nix cache is populated
@@ -51,9 +54,11 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: src
+          submodules: true
+          token: ${{ secrets.GUPPY_PAT }}
       - name: Configure
         run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
       - name: Build

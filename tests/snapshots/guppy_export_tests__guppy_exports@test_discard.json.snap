@@ -5,9 +5,9 @@ input_file: tests/guppy-exports/test_discard.json
 ---
 module {
   hugr.module {
-    func @discard[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) {
-      cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>) -> () {
-      ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] [Copyable] <6 : i64>>):
+    func @discard[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
+      cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> () {
+      ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
         %0 = make_tuple()
         %1 = tag 0 %0 : tuple<> -> <tuple<>>
         switch %1 : !hugr.sum<tuple<>> ^bb1

@@ -121,7 +121,7 @@
         }
       ],
       "parent": 9,
-      "predicate_variants": [
+      "tuple_sum_rows": [
         []
       ]
     },
@@ -174,7 +174,7 @@
       "parent": 1,
       "types": [
         {
-          "s": "Simple",
+          "s": "Unit",
           "size": 1,
           "t": "Sum"
         },
