@@ -69,8 +69,8 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
         if let Some(r) = self.node_to_symbol.get(&k) {
             Ok(*r)
         } else {
-            use hugr::hugr::NodeIndex;
             use hugr::ops::OpType;
+            use hugr::NodeIndex;
             let (ty, mut sym) = match self.hugr.get_optype(k) {
                 &OpType::FuncDecl(hugr::ops::FuncDecl {
                     ref name,
@@ -317,8 +317,8 @@ where
         optype: &hugr::ops::OpType,
         loc: melior::ir::Location<'a>,
     ) -> Result<()> {
-        use hugr::hugr::PortIndex;
         use hugr::ops::OpType;
+        use hugr::PortIndex;
         let args_ports = self.collect_inputs_vec(call_n)?;
         let args = args_ports.into_iter().map(|(_, v)| v).collect_vec();
         let (result_ports, result_types): (Vec<_>, Vec<_>) =
@@ -368,10 +368,10 @@ where
         _sig: &hugr::types::FunctionType,
         loc: Location<'a>,
     ) -> Result<()> {
-        use hugr::hugr::PortIndex;
         use hugr::ops::controlflow::BasicBlock;
         use hugr::ops::OpType;
         use hugr::types::EdgeKind;
+        use hugr::PortIndex;
         let (result_ports, result_types): (Vec<_>, Vec<_>) =
             self.collect_outputs_vec(n)?.into_iter().unzip();
         let inputs = self
@@ -485,7 +485,7 @@ where
     }
 
     fn mk_load_constant(&mut self, lc_n: hugr::Node, loc: Location<'a>) -> Result<()> {
-        use hugr::hugr::PortIndex;
+        use hugr::PortIndex;
         let (result_ports, result_types): (Vec<_>, Vec<_>) =
             self.collect_outputs_vec(lc_n)?.into_iter().unzip();
         let static_index = 0usize;
@@ -514,7 +514,7 @@ where
         external_op: &hugr::ops::custom::ExternalOp,
         loc: Location<'a>,
     ) -> Result<()> {
-        use hugr::hugr::PortIndex;
+        use hugr::PortIndex;
         let inputs = self
             .collect_inputs_vec(co_n)?
             .into_iter()

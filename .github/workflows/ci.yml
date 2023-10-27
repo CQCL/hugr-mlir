@@ -40,7 +40,7 @@ jobs:
       - name: Lint c++
         run: nix run --impure --print-build-logs .#lint-clang-format
       - name: rust - Check formatting
-        run: nix develop --impure .#no-mlir --command cargo fmt --package hugr-mlir --check
+        run: nix develop --impure #no-mlir --command cargo fmt --package hugr-mlir --check
 
   build:
     # Ensure nix cache is populated
@@ -64,7 +64,7 @@ jobs:
       - name: Build
         run: nix develop --impure ./src#checked-mlir --command ninja -C build
       - name: rust - Run clippy
-        run: nix develop --impure ./src#checked-mlir --command cargo clippy --all-targets -- -D warnings
+        run: cd src && nix develop --impure .#checked-mlir --command cargo clippy --all-targets -- -D warnings
       - name: Test
         run: nix develop --impure ./src#checked-mlir --command ninja -C build check
       - name: Install
