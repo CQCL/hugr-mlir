@@ -1,5 +1,10 @@
 add_mlir_library(HugrMLIRAnalysis
   FreeAllocAnalysis.cpp
+  Passes.cpp
+
+  DEPENDS
+  HugrMLIRAnalyisisPassIncGen
+
   LINK_LIBS PUBLIC
   HugrMLIRDialect
 )

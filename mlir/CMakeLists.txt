@@ -54,6 +54,7 @@ set(HUGR_MLIR_TOOLS_DIR "${PROJECT_BINARY_DIR}/bin")
 set(HUGR_MLIR_PYTHON_PACKAGES_DIR "${CMAKE_CURRENT_BINARY_DIR}/python_packages")
 
 add_subdirectory(include/hugr-mlir/IR)
+add_subdirectory(include/hugr-mlir/Analysis)
 add_subdirectory(lib/IR)
 add_subdirectory(lib/CAPI)
 add_subdirectory(lib/Translate)

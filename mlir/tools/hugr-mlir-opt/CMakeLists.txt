@@ -4,6 +4,7 @@ add_executable(hugr-mlir-opt
 target_link_libraries(hugr-mlir-opt
   PRIVATE
   HugrMLIRDialect
+  HugrMLIRAnalysis
   MLIRArithDialect
   MLIRControlFlowDialect
   MLIRLLVMDialect

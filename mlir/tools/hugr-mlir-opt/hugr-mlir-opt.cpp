@@ -1,4 +1,6 @@
 #include "hugr-mlir/IR/HugrDialect.h"
+#include "hugr-mlir/Analysis/Passes.h"
+
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/InitLLVM.h"
 #include "llvm/Support/SourceMgr.h"
@@ -13,6 +15,8 @@
 #include "mlir/Tools/mlir-opt/MlirOptMain.h"
 
 int main(int argc, char **argv) {
+  hugr_mlir::registerHugrAnalysisPasses();
+
   mlir::DialectRegistry registry;
   registry.insert<
       hugr_mlir::HugrDialect, mlir::arith::ArithDialect,

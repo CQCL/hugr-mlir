@@ -7,10 +7,6 @@ list(APPEND _extra_includes ${_extra_includes_mlir})
 message(STATUS "tablegen extra includes: ${_extra_includes}")
 
 # add_mlir_doc puts docs in ${MLIR_BINARY_DIR}/docs
-# add_mlir_doc puts docs in ${MLIR_BINARY_DIR}/docs
-set(MLIR_BINARY_DIR "${PROJECT_BINARY_DIR}")
-
-# add_mlir_doc puts docs in ${MLIR_BINARY_DIR}/docs
 set(MLIR_BINARY_DIR "${PROJECT_BINARY_DIR}")
 
 set(LLVM_TARGET_DEFINITIONS HugrDialect.td)
