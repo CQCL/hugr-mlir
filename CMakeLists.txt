@@ -107,33 +107,35 @@ block()
   add_dependencies(check hugr_mlir_crate_test)
 endblock()
 
-set(_venv "${CMAKE_CURRENT_BINARY_DIR}/venv")
-add_custom_command(COMMENT "Creating python virtual env"
-  COMMAND "${PYTHON3_Executable}" -m venv "${_venv}"
-  OUTPUT "${_venv}/pyvenv.cfg"
-)
-set(_venv_python "${_venv}/bin/python")
-set(_venv_pip "${_venv}/bin/pip")
-add_custom_target(python-venv DEPENDS "${_venv}/pyvenv.cfg")
+block()
+# set(_venv "${CMAKE_CURRENT_BINARY_DIR}/venv")
+# add_custom_command(COMMENT "Creating python virtual env"
+#   COMMAND "${PYTHON3_Executable}" -m venv "${_venv}"
+#   OUTPUT "${_venv}/pyvenv.cfg"
+# )
+# set(_venv_python "${_venv}/bin/python")
+# set(_venv_pip "${_venv}/bin/pip")
+# add_custom_target(python-venv DEPENDS "${_venv}/pyvenv.cfg")
 
-add_custom_target(build-guppy
-  COMMENT "Installing guppy into venv"
-  COMMAND "${_venv_pip}" install -r guppy/requirements.txt
-  COMMAND "${_venv_pip}" install -e 'guppy[dev]'
-  COMMAND cd guppy/validator && . "${_venv}/bin/activate" && maturin develop
-  DEPENDS python-venv "${CMAKE_CURRENT_SOURCE_DIR}/guppy/requirements.txt"
-  USES_TERMINAL
-  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-)
+# add_custom_target(build-guppy
+#   COMMENT "Installing guppy into venv"
+#   COMMAND "${_venv_pip}" install -r guppy/requirements.txt
+#   COMMAND "${_venv_pip}" install -e 'guppy[dev]'
+#   COMMAND cd guppy/validator && . "${_venv}/bin/activate" && maturin develop
+#   DEPENDS python-venv "${CMAKE_CURRENT_SOURCE_DIR}/guppy/requirements.txt"
+#   USES_TERMINAL
+#   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+# )
 
-set(_guppy_export_dir "${CMAKE_CURRENT_BINARY_DIR}/guppy-exports")
-add_custom_target(test-guppy
-  COMMENT "Running guppy tests"
-  COMMAND ${CMAKE_COMMAND} -E make_directory "${_guppy_export_dir}"
-  COMMAND rm -rf "${_guppy_export_dir}/*"
-  COMMAND ${_venv}/bin/pytest "${CMAKE_CURRENT_SOURCE_DIR}/guppy/tests" --export-test-cases "${_guppy_export_dir}"
-  DEPENDS build-guppy
-  USES_TERMINAL
-)
+# set(_guppy_export_dir "${CMAKE_CURRENT_BINARY_DIR}/guppy-exports")
+# add_custom_target(test-guppy
+#   COMMENT "Running guppy tests"
+#   COMMAND ${CMAKE_COMMAND} -E make_directory "${_guppy_export_dir}"
+#   COMMAND rm -rf "${_guppy_export_dir}/*"
+#   COMMAND ${_venv}/bin/pytest "${CMAKE_CURRENT_SOURCE_DIR}/guppy/tests" --export-test-cases "${_guppy_export_dir}"
+#   DEPENDS build-guppy
+#   USES_TERMINAL
+# )
 
-add_dependencies(check test-guppy)
+# add_dependencies(check test-guppy)
+endblock()

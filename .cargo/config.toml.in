@@ -8,7 +8,8 @@ rustflags = "@HUGR_MLIR_CONFIG_RUSTFLAGS@"
 [target.x86_64-unknown-linux-gnu.MLIR]
 rustc-link-search = ["native=$<TARGET_FILE_DIR:HugrMLIR-C>"]
 include_dirs = "$<TARGET_PROPERTY:mlir-headers-interface,INTERFACE_INCLUDE_DIRECTORIES>"
-link_libs="dylib=$<TARGET_FILE_BASE_NAME:HugrMLIR-C>;dylib=stdc++"
+link_libs="dylib=$<TARGET_FILE_BASE_NAME:HugrMLIR-C>"
+config_path = "@LLVM_BINARY_DIR@"
 
 [profile.release]
 debug = @HUGR_MLIR_CONFIG_PROFILE_RELEASE_DEBUG@
