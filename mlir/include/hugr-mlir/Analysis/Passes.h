@@ -1,14 +1,7 @@
 #ifndef HUGR_MLIR_ANALYSIS_PASSES_H
 #define HUGR_MLIR_ANALYSIS_PASSES_H
 
-#include "mlir/Pass/Pass.h"
-
-
-namespace hugr_mlir {
-#define GEN_PASS_DECL_HUGRVERIFYLINEARITYPASS
-#include "hugr-mlir/Analysis/Passes.h.inc"
-}
-
+#include "hugr-mlir/Analysis/VerifyLinearityPass.h"
 
 namespace hugr_mlir {
 

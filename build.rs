@@ -9,7 +9,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .clang_args(cflags.split(' '))
         .header("mlir/include/hugr-mlir-c/Dialects.h")
         .header("mlir/include/hugr-mlir-c/Translate.h")
-        .allowlist_file(".*mlir/include/hugr-mlir-c/(Translate|Dialects).h")
+        .header("mlir/include/hugr-mlir-c/Analysis.h")
+        .allowlist_file("(.*/mlir/include/hugr-mlir-c/((Translate|Dialects|Analysis)\\.h)|.*/hugr-mlir/.*/Passes\\.capi\\.h\\.inc)")
         .allowlist_recursively(false)
         .raw_line("use mlir_sys::*;")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -21,8 +22,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 
-    println!("cargo:rerun-if-changed=mlir/include/hugr-mlir-c/Dialects.h");
-    println!("cargo:rerun-if-changed=mlir/include/hugr-mlir-c/Translate.h");
     println!("cargo:rerun-if-env-changed=DEP_MLIR_INCLUDE_DIRS");
     println!("cargo:rerun-if-env-changed=OUT_DIR");
     println!("cargo:rerun-if-env-changed=CARGO_TARGET_DIR");

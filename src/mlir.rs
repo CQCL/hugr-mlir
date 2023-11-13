@@ -3,6 +3,26 @@ use melior::ir::r#type::TypeLike;
 #[macro_use]
 mod macros;
 
+pub mod hugr_passes {
+    pub fn register_passes() {
+        unsafe {
+            super::hugr::ffi::mlirRegisterHugrAnalysisPasses();
+        }
+    }
+
+    pub fn create_verify_pass() -> melior::pass::Pass {
+        unsafe {
+            melior::pass::Pass::from_raw(super::hugr::ffi::mlirCreateHugrAnalysisHugrVerifyLinearityPass())
+        }
+    }
+
+    pub fn verify_op<'a>(op: &mut melior::ir::Module<'a>) -> crate::Result<()> {
+        let pm = melior::pass::PassManager::new(&op.context());
+        pm.enable_verifier(true);
+        pm.add_pass(create_verify_pass());
+        Ok(pm.run(op)?)
+    }
+}
 /// Generated rust bindings for the definitions in HugrOps.td
 /// This feature of melior is not well exercised, so we may well have to turn
 /// this off

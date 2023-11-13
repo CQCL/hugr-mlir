@@ -740,7 +740,7 @@ pub fn hugr_to_mlir<'c>(
 
 #[cfg(test)]
 mod test {
-    use crate::Result;
+    use crate::{Result, mlir};
     use crate::{mlir::test::test_context, test::example_hugrs};
     use hugr::extension::ExtensionRegistry;
     use rstest::{fixture, rstest};
@@ -749,8 +749,8 @@ mod test {
     fn test_simple_recursion(test_context: melior::Context) -> Result<()> {
         let hugr = example_hugrs::simple_recursion()?;
         let ul = melior::ir::Location::unknown(&test_context);
-        let op = super::hugr_to_mlir(ul, &hugr)?;
-        assert!(op.as_operation().verify());
+        let mut op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(mlir::hugr_passes::verify_op(&mut op).is_ok());
         insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())
     }
@@ -759,8 +759,8 @@ mod test {
     fn test_cfg(test_context: melior::Context) -> Result<()> {
         let hugr = example_hugrs::cfg()?;
         let ul = melior::ir::Location::unknown(&test_context);
-        let op = super::hugr_to_mlir(ul, &hugr)?;
-        assert!(op.as_operation().verify());
+        let mut op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(mlir::hugr_passes::verify_op(&mut op).is_ok());
         insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())
     }
@@ -782,8 +782,8 @@ mod test {
     fn test_loop_with_conditional(test_context: melior::Context) -> Result<()> {
         let hugr = example_hugrs::loop_with_conditional()?;
         let ul = melior::ir::Location::unknown(&test_context);
-        let op = super::hugr_to_mlir(ul, &hugr)?;
-        assert!(op.as_operation().verify());
+        let mut op = super::hugr_to_mlir(ul, &hugr)?;
+        assert!(mlir::hugr_passes::verify_op(&mut op).is_ok());
         insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())
     }

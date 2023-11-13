@@ -1,6 +1,6 @@
 add_mlir_library(HugrMLIRAnalysis
   FreeAllocAnalysis.cpp
-  Passes.cpp
+  VerifyLinearityPass.cpp
 
   DEPENDS
   HugrMLIRAnalyisisPassIncGen
