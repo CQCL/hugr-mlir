@@ -303,7 +303,7 @@ pub mod hugr {
     impl<'c> ModuleOp<'c> {
         pub fn new_with_body(body: melior::ir::Region<'c>, loc: melior::ir::Location<'c>) -> Self {
             ModuleOp(
-                melior::ir::operation::OperationBuilder::new("hugr.module", loc)
+                Self::builder(loc)
                     .add_regions(vec![body])
                     .build(),
             )
@@ -334,7 +334,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             OutputOp(
-                melior::ir::operation::OperationBuilder::new("hugr.output", loc)
+                Self::builder(loc)
                     .add_operands(args)
                     .build(),
             )
@@ -351,7 +351,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             FuncOp(
-                melior::ir::operation::OperationBuilder::new("hugr.func", loc)
+                Self::builder(loc)
                     .add_regions(vec![body])
                     .add_attributes(&[
                         (
@@ -383,7 +383,7 @@ pub mod hugr {
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             CallOp(
-                melior::ir::operation::OperationBuilder::new("hugr.call", loc)
+                Self::builder(loc)
                     .add_attributes(&[(
                         melior::ir::Identifier::new(context, "operand_segment_sizes"),
                         melior::ir::attribute::DenseI32ArrayAttribute::new(
@@ -406,7 +406,7 @@ pub mod hugr {
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             CallOp(
-                melior::ir::operation::OperationBuilder::new("hugr.call", loc)
+                Self::builder(loc)
                     .add_attributes(&[
                         (
                             melior::ir::Identifier::new(loc.context().deref(), "callee_attr"),
@@ -438,7 +438,7 @@ pub mod hugr {
         ) -> Self {
             use itertools::Itertools;
             SwitchOp(
-                melior::ir::operation::OperationBuilder::new("hugr.switch", loc)
+                Self::builder(loc)
                     .add_operands(inputs)
                     .add_successors(
                         successors
@@ -463,7 +463,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             CfgOp(
-                melior::ir::operation::OperationBuilder::new("hugr.cfg", loc)
+                Self::builder(loc)
                     .add_operands(inputs)
                     .add_results(output_types)
                     .add_regions(vec![body])
@@ -485,7 +485,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             MakeTupleOp(
-                melior::ir::operation::OperationBuilder::new("hugr.make_tuple", loc)
+                Self::builder(loc)
                     .add_operands(inputs)
                     .add_results(vec![output_type].as_slice())
                     .build(),
@@ -533,7 +533,7 @@ pub mod hugr {
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             TagOp(
-                melior::ir::operation::OperationBuilder::new("hugr.tag", loc)
+                Self::builder(loc)
                     .add_attributes(&[(
                         melior::ir::Identifier::new(context, "tag"),
                         melior::ir::attribute::IntegerAttribute::new(
@@ -560,7 +560,7 @@ pub mod hugr {
             let context = unsafe { loc.context().to_ref() };
 
             LoadConstantOp(
-                melior::ir::operation::OperationBuilder::new("hugr.load_constant", loc)
+                Self::builder(loc)
                     .add_attributes(&[(
                         melior::ir::Identifier::new(context, "const_ref"),
                         target.into(),
@@ -585,7 +585,7 @@ pub mod hugr {
             let context = unsafe { loc.context().to_ref() };
 
             ExtensionOp(
-                melior::ir::operation::OperationBuilder::new("hugr.ext_op", loc)
+                Self::builder(loc)
                     .add_attributes(&[
                         (
                             melior::ir::Identifier::new(context, "extensions"),
@@ -615,7 +615,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             ConditionalOp(
-                melior::ir::operation::OperationBuilder::new("hugr.conditional", loc)
+                Self::builder(loc)
                     .add_results(result_types)
                     .add_operands(args)
                     .add_regions(cases.into_iter().collect())
@@ -633,7 +633,7 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             UnpackTupleOp(
-                melior::ir::operation::OperationBuilder::new("hugr.unpack_tuple", loc)
+                Self::builder(loc)
                     .add_results(result_types)
                     .add_operands(&[arg])
                     .build(),
@@ -664,7 +664,7 @@ pub mod hugr {
             );
 
             TailLoopOp(
-                melior::ir::operation::OperationBuilder::new("hugr.tailloop", loc)
+                Self::builder(loc)
                     .add_results(outputs_types)
                     .add_results(passthrough_inputs_types.as_slice())
                     .add_operands(inputs)
@@ -709,7 +709,7 @@ pub mod hugr {
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             LiftOp(
-                melior::ir::operation::OperationBuilder::new("hugr.lift", loc)
+                Self::builder(loc)
                     .add_results(outputs_types)
                     .add_operands(inputs)
                     .add_attributes(&[(
