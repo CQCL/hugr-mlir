@@ -1,6 +1,6 @@
 # hugr-mlir
 
-A prototype for integrating (hugr)[https://github.com/CQCL-DEV/hugr] and (mlir)[https://mlir.llvm.org].
+A prototype for integrating (hugr)[https://github.com/CQCL/hugr] and (mlir)[https://mlir.llvm.org].
 
 ## Building and Dependencies
 
