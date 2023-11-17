@@ -24,6 +24,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b46cbb362ab8752921c97e041f5e366ee6297bd428a31275b9fcf1e380f7299"
 
 [[package]]
+name = "annotate-snippets"
+version = "0.9.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ccaf7e9dfbb6ab22c82e473cd1a8a7bd313c19a5b7e40970f3d89ef5a5c9e81e"
+dependencies = [
+ "unicode-width",
+ "yansi-term",
+]
+
+[[package]]
 name = "anstream"
 version = "0.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -113,6 +123,30 @@ version = "0.68.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "726e4313eb6ec35d2730258ad4e15b547ee75d6afaa1361a922e78e59b7d8078"
 dependencies = [
+ "bitflags 2.4.1",
+ "cexpr",
+ "clang-sys",
+ "lazy_static",
+ "lazycell",
+ "log",
+ "peeking_take_while",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "rustc-hash",
+ "shlex",
+ "syn 2.0.38",
+ "which",
+]
+
+[[package]]
+name = "bindgen"
+version = "0.69.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ffcebc3849946a7170a05992aac39da343a90676ab392c51a4280981d6379c2"
+dependencies = [
+ "annotate-snippets",
  "bitflags 2.4.1",
  "cexpr",
  "clang-sys",
@@ -268,7 +302,7 @@ checksum = "c688fc74432808e3eb684cae8830a86be1d66a2bd58e1f248ed0960a590baf6f"
 dependencies = [
  "glob",
  "libc",
- "libloading 0.7.4",
+ "libloading",
 ]
 
 [[package]]
@@ -775,7 +809,7 @@ name = "hugr-mlir"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "bindgen",
+ "bindgen 0.68.1",
  "downcast-rs",
  "insta",
  "itertools 0.11.0",
@@ -909,16 +943,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "libloading"
-version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c571b676ddfc9a8c12f1f3d3085a7b163966a8fd8098a90640953ce5f6170161"
-dependencies = [
- "cfg-if",
- "windows-sys 0.48.0",
-]
-
-[[package]]
 name = "line-wrap"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -958,7 +982,6 @@ checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
 [[package]]
 name = "melior"
 version = "0.11.0"
-source = "git+https://github.com/doug-q/melior?branch=llvm18#08086e0c2715e961b69cda8825fb945be26d56f3"
 dependencies = [
  "criterion",
  "dashmap",
@@ -970,7 +993,6 @@ dependencies = [
 [[package]]
 name = "melior-macro"
 version = "0.5.0"
-source = "git+https://github.com/doug-q/melior?branch=llvm18#08086e0c2715e961b69cda8825fb945be26d56f3"
 dependencies = [
  "comrak",
  "convert_case 0.6.0",
@@ -1015,17 +1037,15 @@ dependencies = [
 [[package]]
 name = "mlir-sys"
 version = "0.2.0"
-source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#f178772ed5965325a464c14f42585988d51e6431"
 dependencies = [
- "bindgen",
- "libloading 0.8.1",
+ "bindgen 0.69.1",
+ "cc",
  "mlir-sys0",
 ]
 
 [[package]]
 name = "mlir-sys0"
 version = "0.2.0"
-source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#f178772ed5965325a464c14f42585988d51e6431"
 
 [[package]]
 name = "nom"
@@ -1321,7 +1341,7 @@ dependencies = [
 [[package]]
 name = "quantinuum-hugr"
 version = "0.1.0"
-source = "git+https://github.com/CQCL-DEV/hugr.git?rev=46d50176c3bb7589ef8349a31d6801d45c3313b9#46d50176c3bb7589ef8349a31d6801d45c3313b9"
+source = "git+https://github.com/CQCL-DEV/hugr.git?rev=aa68c4900df3c146aa98161b2ddb0cbff952a64a#aa68c4900df3c146aa98161b2ddb0cbff952a64a"
 dependencies = [
  "bitvec",
  "cgmath",
@@ -1872,6 +1892,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1dd624098567895118886609431a7c3b8f516e41d30e0643f03d94592a147e36"
 
 [[package]]
+name = "unicode-width"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e51733f11c9c4f72aa0c160008246859e340b00807569a0da0e7a1079b27ba85"
+
+[[package]]
 name = "unicode_categories"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1913,7 +1939,7 @@ version = "0.1.0"
 dependencies = [
  "lazy_static",
  "pyo3",
- "quantinuum-hugr 0.1.0 (git+https://github.com/CQCL-DEV/hugr.git?rev=46d50176c3bb7589ef8349a31d6801d45c3313b9)",
+ "quantinuum-hugr 0.1.0 (git+https://github.com/CQCL-DEV/hugr.git?rev=aa68c4900df3c146aa98161b2ddb0cbff952a64a)",
  "rmp-serde",
 ]
 
@@ -2188,4 +2214,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
+]
+
+[[package]]
+name = "yansi-term"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe5c30ade05e61656247b2e334a031dfd0cc466fadef865bdcdea8d537951bf1"
+dependencies = [
+ "winapi",
 ]

@@ -3,6 +3,8 @@ use std::env;
 use std::vec::Vec;
 
 use crate::hugr_to_mlir::hugr_to_mlir;
+use crate::mlir::emit_error;
+use crate::mlir_to_hugr::mlir_to_hugr;
 use crate::{mlir, Error, Result};
 
 pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
@@ -14,6 +16,7 @@ pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
     let hugr = go(src).map_err(Into::into)?;
     hugr_to_mlir(loc, &hugr)
 }
+
 
 fn translate_hugr_raw_to_mlir(
     raw_src: mlir_sys::MlirStringRef,
@@ -28,17 +31,7 @@ fn translate_hugr_raw_to_mlir(
     match translate_hugr_to_mlir(src.as_bytes(), loc, go) {
         Ok(module) => unsafe { mlir_sys::mlirModuleGetOperation(module.into_raw()) },
         Err(e) => {
-            unsafe {
-                mlir_sys::mlirEmitError(
-                    raw_loc,
-                    std::ffi::CString::new(e.to_string())
-                        .unwrap_or(std::ffi::CString::from_vec_unchecked(
-                            "CString nul error".into(),
-                        ))
-                        .as_bytes_with_nul()
-                        .as_ptr() as *const i8,
-                )
-            };
+            emit_error(loc, e.to_string());
             mlir_sys::MlirOperation {
                 ptr: std::ptr::null_mut(),
             }
@@ -46,8 +39,25 @@ fn translate_hugr_raw_to_mlir(
     }
 }
 
+pub fn translate_mlir_to_hugr<'c, E: Into<crate::Error>>(
+    op: mlir_sys::MlirOperation,
+    go: impl FnOnce(&hugr::Hugr) -> Result<(), E>,
+) -> mlir_sys::MlirLogicalResult {
+    unsafe {
+        let op1 = melior::ir::OperationRef::from_raw(op);
+        if let Err(e) = mlir_to_hugr(&op1).and_then(|x| go(&x).map_err(Into::into)) {
+            emit_error(op1.loc(), e.to_string());
+            mlir_sys::mlirLogicalResultFailure()
+        } else {
+            mlir_sys::mlirLogicalResultSuccess()
+        }
+    }
+}
+
 mod ffi {
-    use crate::mlir;
+    use mlir_sys::MlirStringRef;
+
+    use crate::{mlir, mlir_to_hugr};
 
     pub extern "C" fn translate_hugr_json_to_mlir(
         raw_src: mlir_sys::MlirStringRef,
@@ -64,6 +74,24 @@ mod ffi {
         super::translate_hugr_raw_to_mlir(raw_src, raw_loc, |src| {
             rmp_serde::from_slice(src).map_err(Into::into)
         })
+    }
+
+    pub extern "C" fn translate_mlir_to_hugr_rmp(
+        op: mlir_sys::MlirOperation,
+        emit_context: *const mlir::hugr::ffi::EmitContext
+    ) -> mlir_sys::MlirLogicalResult {
+        super::translate_mlir_to_hugr(op, |x|
+            rmp_serde::to_vec(x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
+        )
+    }
+
+    pub extern "C" fn translate_mlir_to_hugr_json(
+        op: mlir_sys::MlirOperation,
+        emit_context: *const mlir::hugr::ffi::EmitContext
+    ) -> mlir_sys::MlirLogicalResult {
+        super::translate_mlir_to_hugr(op, |x|
+            serde_json::to_vec(x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
+        )
     }
 
     pub extern "C" fn register_translation_dialects(registry: mlir_sys::MlirDialectRegistry) {
@@ -98,6 +126,20 @@ fn translate_main(args: &[String]) -> Result<(), String> {
             melior::StringRef::from("hugr-rmp-to-mlir").to_raw(),
             melior::StringRef::from("hugr to mlir translation").to_raw(),
             Some(ffi::translate_hugr_rmp_to_mlir),
+            Some(ffi::register_translation_dialects),
+        );
+
+        mlir::hugr::ffi::mlirHugrRegisterTranslationFromMLIR(
+            melior::StringRef::from("mlir-to-hugr-json").to_raw(),
+            melior::StringRef::from("mlir to hugr translation").to_raw(),
+            Some(ffi::translate_mlir_to_hugr_json),
+            Some(ffi::register_translation_dialects),
+        );
+
+        mlir::hugr::ffi::mlirHugrRegisterTranslationFromMLIR(
+            melior::StringRef::from("mlir-to-hugr-rmp").to_raw(),
+            melior::StringRef::from("mlir to hugr translation").to_raw(),
+            Some(ffi::translate_mlir_to_hugr_rmp),
             Some(ffi::register_translation_dialects),
         );
     }

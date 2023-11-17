@@ -2,6 +2,7 @@
 use std::fmt;
 
 pub mod hugr_to_mlir;
+pub mod mlir_to_hugr;
 pub mod mlir;
 pub mod translate;
 

@@ -1,7 +1,38 @@
+use std::default;
+
 use melior::ir::r#type::TypeLike;
 
 #[macro_use]
 mod macros;
+
+pub fn emit_error(loc: melior::ir::Location<'_>, str: impl Into<Vec<u8>>) {
+    unsafe {
+        mlir_sys::mlirEmitError(loc.to_raw()
+                                , std::ffi::CString::new(str)
+                                    .unwrap_or(std::ffi::CString::from_vec_unchecked(
+                                        "CString nul error".into(),
+                                    )).as_bytes_with_nul()
+                                    .as_ptr() as *const i8,
+                                )
+    }
+
+}
+
+pub struct EmitContext<'a> {
+    ctx: &'a *const hugr::ffi::EmitContext,
+}
+
+impl<'a> From<&'a *const hugr::ffi::EmitContext> for EmitContext<'a> {
+    fn from(ctx: &'a *const hugr::ffi::EmitContext) -> Self {
+        Self { ctx }
+    }
+}
+
+pub fn emit_stringref(ctx: EmitContext<'_>, str: impl AsRef<[u8]>) {
+    unsafe {
+        hugr::ffi::mlirHugrEmitStringRef(*ctx.ctx, mlir_sys::mlirStringRefCreateFromCString(str.as_ref().as_ptr() as *const i8))
+    }
+}
 
 pub mod hugr_passes {
     pub fn register_passes() {
@@ -267,8 +298,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct ModuleOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(ModuleOp,"hugr.module");
 
     impl<'c> ModuleOp<'c> {
         pub fn new_with_body(body: melior::ir::Region<'c>, loc: melior::ir::Location<'c>) -> Self {
@@ -296,14 +326,7 @@ pub mod hugr {
         }
     }
 
-    impl<'c> From<ModuleOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: ModuleOp<'c>) -> Self {
-            op.0
-        }
-    }
-
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct OutputOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(OutputOp,"hugr.output");
 
     impl<'c> OutputOp<'c> {
         pub fn new<'a>(
@@ -318,14 +341,7 @@ pub mod hugr {
         }
     }
 
-    impl<'c> From<OutputOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: OutputOp<'c>) -> Self {
-            op.0
-        }
-    }
-
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct FuncOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(FuncOp,"hugr.func");
 
     impl<'c> FuncOp<'c> {
         pub fn new(
@@ -355,20 +371,8 @@ pub mod hugr {
         //     self.0.region(0).unwrap().to_owned().first_block().unwrap()
         // }
     }
-    impl<'c> From<FuncOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: FuncOp<'c>) -> Self {
-            op.0
-        }
-    }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct CallOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<CallOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: CallOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(CallOp,"hugr.call");
 
     impl<'c> CallOp<'c> {
         pub fn new_indirect<'a>(
@@ -424,14 +428,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct SwitchOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<SwitchOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: SwitchOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(SwitchOp,"hugr.switch");
 
     impl<'c> SwitchOp<'c> {
         pub fn new(
@@ -455,14 +452,8 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct CfgOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(CfgOp,"hugr.cfg");
 
-    impl<'c> From<CfgOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: CfgOp<'c>) -> Self {
-            op.0
-        }
-    }
 
     impl<'c> CfgOp<'c> {
         pub fn new(
@@ -485,14 +476,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct MakeTupleOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<MakeTupleOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: MakeTupleOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(MakeTupleOp,"hugr.make_tuple");
 
     impl<'c> MakeTupleOp<'c> {
         pub fn new(
@@ -509,14 +493,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct ConstOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<ConstOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: ConstOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(ConstOp,"hugr.const");
 
     impl<'c> ConstOp<'c> {
         pub fn new(
@@ -527,7 +504,7 @@ pub mod hugr {
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
             ConstOp(
-                melior::ir::operation::OperationBuilder::new("hugr.const", loc)
+                Self::builder(loc)
                     .add_attributes(&[
                         (
                             melior::ir::Identifier::new(context, "sym_name"),
@@ -544,14 +521,8 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct TagOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(TagOp,"hugr.tag");
 
-    impl<'c> From<TagOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: TagOp<'c>) -> Self {
-            op.0
-        }
-    }
 
     impl<'c> TagOp<'c> {
         pub fn new(
@@ -578,14 +549,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct LoadConstantOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<LoadConstantOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: LoadConstantOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(LoadConstantOp,"hugr.load_constant");
 
     impl<'c> LoadConstantOp<'c> {
         pub fn new(
@@ -607,14 +571,8 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct ExtensionOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(ExtensionOp, "hugr.ext_op");
 
-    impl<'c> From<ExtensionOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: ExtensionOp<'c>) -> Self {
-            op.0
-        }
-    }
 
     impl<'c> ExtensionOp<'c> {
         pub fn new(
@@ -646,14 +604,8 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct ConditionalOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(ConditionalOp,"hugr.conditional");
 
-    impl<'c> From<ConditionalOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: ConditionalOp<'c>) -> Self {
-            op.0
-        }
-    }
 
     impl<'c> ConditionalOp<'c> {
         pub fn new(
@@ -672,14 +624,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct UnpackTupleOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<UnpackTupleOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: UnpackTupleOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(UnpackTupleOp,"hugr.unpack_tuple");
 
     impl<'c> UnpackTupleOp<'c> {
         pub fn new(
@@ -696,14 +641,7 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct TailLoopOp<'c>(melior::ir::Operation<'c>);
-
-    impl<'c> From<TailLoopOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: TailLoopOp<'c>) -> Self {
-            op.0
-        }
-    }
+    declare_op!(TailLoopOp,"hugr.tailloop");
 
     impl<'c> TailLoopOp<'c> {
         pub fn new(
@@ -759,14 +697,8 @@ pub mod hugr {
         }
     }
 
-    #[derive(Clone, Debug, Eq, PartialEq)]
-    pub struct LiftOp<'c>(melior::ir::Operation<'c>);
+    declare_op!(LiftOp,"hugr.lift");
 
-    impl<'c> From<LiftOp<'c>> for melior::ir::Operation<'c> {
-        fn from(op: LiftOp<'c>) -> Self {
-            op.0
-        }
-    }
 
     impl<'c> LiftOp<'c> {
         pub fn new(

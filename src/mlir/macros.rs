@@ -94,3 +94,39 @@ macro_rules! declare_type {
         }
     };
 }
+
+macro_rules! declare_op {
+    ($name: ident, $opname: expr) => {
+        #[derive(Clone, Debug, Eq, PartialEq)]
+        pub struct $name<'c>(melior::ir::Operation<'c>);
+
+        impl<'c> From<$name<'c>> for melior::ir::Operation<'c> {
+            fn from(op: $name<'c>) -> Self {
+                op.0
+            }
+        }
+
+        impl<'c> TryFrom<melior::ir::Operation<'c>> for $name<'c> {
+            type Error = melior::ir::Operation<'c>;
+            fn try_from(op: melior::ir::Operation<'c>) -> Result<Self,Self::Error> {
+                let ctx = unsafe { op.context().to_ref() };
+                if op.name() == Self::opname(&ctx) {
+                    Ok($name(op))
+                } else {
+                    Err(op)
+                }
+            }
+        }
+
+        impl<'c> $name<'c> {
+            pub fn opname(ctx: &'c melior::Context) -> melior::ir::Identifier<'c> {
+                melior::ir::Identifier::new(ctx, $opname)
+            }
+
+            pub fn builder(loc: melior::ir::Location<'c>) -> melior::ir::operation::OperationBuilder {
+                let ctx = unsafe { loc.context().to_ref() };
+                melior::ir::operation::OperationBuilder::new(Self::opname(ctx).as_string_ref().as_str().unwrap(), loc)
+            }
+        }
+    };
+}
