@@ -23,8 +23,8 @@ pub mod hash;
 // }
 
 fn build_container<'a, 'b>(
-    builder: &mut impl hugr::builder::Container,
-    region: impl IntoIterator<Item = melior::ir::OperationRef<'a, 'b>>,
+    _builder: &mut impl hugr::builder::Container,
+    _region: impl IntoIterator<Item = melior::ir::OperationRef<'a, 'b>>,
 ) -> Result<()>
 where
     'a: 'b,
@@ -40,7 +40,7 @@ fn block_ops<'c, 'b>(
     })
 }
 
-pub fn mlir_to_hugr<'c>(op: &melior::ir::Operation<'c>) -> Result<hugr::Hugr> {
+pub fn mlir_to_hugr(op: &melior::ir::Operation<'_>) -> Result<hugr::Hugr> {
     if let Ok(op1) = TryInto::<&mlir::hugr::ModuleOp>::try_into(op) {
         let mut b = hugr::builder::ModuleBuilder::new();
         build_container(&mut b, block_ops(&op1.body()))?;

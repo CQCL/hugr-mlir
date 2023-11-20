@@ -53,7 +53,7 @@ pub mod hugr_passes {
         }
     }
 
-    pub fn verify_op<'a>(op: &mut melior::ir::Module<'a>) -> crate::Result<()> {
+    pub fn verify_op(op: &mut melior::ir::Module<'_>) -> crate::Result<()> {
         let pm = melior::pass::PassManager::new(&op.context());
         pm.enable_verifier(true);
         pm.add_pass(create_verify_pass());

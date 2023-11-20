@@ -702,12 +702,11 @@ where
                     inputs,
                     loc,
                 },
-            )?
-            .into();
+            )?;
         self.push_operation(node, output_ports, op)
     }
 
-    fn build_dataflow_block<'c>(&self, parent: hugr::Node, block: &Block<'a>) -> Result<()> {
+    fn build_dataflow_block(&self, parent: hugr::Node, block: &Block<'a>) -> Result<()> {
         let ul = melior::ir::Location::unknown(self.context);
         self.build_dataflow_block_term(parent, block, |mut state, inputs, node| {
             let op = self.hugr.get_optype(node).emit(
@@ -719,7 +718,7 @@ where
                     loc: ul,
                 },
             )?;
-            Ok(((), op.into()))
+            Ok(((), op))
         })
     }
 

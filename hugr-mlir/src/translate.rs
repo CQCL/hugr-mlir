@@ -38,7 +38,7 @@ fn translate_hugr_raw_to_mlir(
     }
 }
 
-pub fn translate_mlir_to_hugr<'c, E: Into<crate::Error>>(
+pub fn translate_mlir_to_hugr<E: Into<crate::Error>>(
     op: mlir_sys::MlirOperation,
     go: impl FnOnce(&hugr::Hugr) -> Result<(), E>,
 ) -> mlir_sys::MlirLogicalResult {
