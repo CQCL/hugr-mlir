@@ -33,7 +33,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn llvm_config(llvm_config_path: &str, argument: &str) -> Result<String, Box<dyn std::error::Error>> {
+fn llvm_config(
+    llvm_config_path: &str,
+    argument: &str,
+) -> Result<String, Box<dyn std::error::Error>> {
     let prefix = std::path::Path::new(llvm_config_path).join("bin");
     let call = format!(
         "{} --link-shared {}",
@@ -43,9 +46,14 @@ fn llvm_config(llvm_config_path: &str, argument: &str) -> Result<String, Box<dyn
 
     Ok(std::str::from_utf8(
         &if cfg!(target_os = "windows") {
-            std::process::Command::new("cmd").args(["/C", &call]).output()?
+            std::process::Command::new("cmd")
+                .args(["/C", &call])
+                .output()?
         } else {
-            std::process::Command::new("sh").arg("-c").arg(&call).output()?
+            std::process::Command::new("sh")
+                .arg("-c")
+                .arg(&call)
+                .output()?
         }
         .stdout,
     )?

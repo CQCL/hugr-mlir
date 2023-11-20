@@ -17,7 +17,6 @@ pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
     hugr_to_mlir(loc, &hugr)
 }
 
-
 fn translate_hugr_raw_to_mlir(
     raw_src: mlir_sys::MlirStringRef,
     raw_loc: mlir_sys::MlirLocation,
@@ -78,20 +77,20 @@ mod ffi {
 
     pub extern "C" fn translate_mlir_to_hugr_rmp(
         op: mlir_sys::MlirOperation,
-        emit_context: *const mlir::hugr::ffi::EmitContext
+        emit_context: *const mlir::hugr::ffi::EmitContext,
     ) -> mlir_sys::MlirLogicalResult {
-        super::translate_mlir_to_hugr(op, |x|
+        super::translate_mlir_to_hugr(op, |x| {
             rmp_serde::to_vec(x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
-        )
+        })
     }
 
     pub extern "C" fn translate_mlir_to_hugr_json(
         op: mlir_sys::MlirOperation,
-        emit_context: *const mlir::hugr::ffi::EmitContext
+        emit_context: *const mlir::hugr::ffi::EmitContext,
     ) -> mlir_sys::MlirLogicalResult {
-        super::translate_mlir_to_hugr(op, |x|
+        super::translate_mlir_to_hugr(op, |x| {
             serde_json::to_vec(x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
-        )
+        })
     }
 
     pub extern "C" fn register_translation_dialects(registry: mlir_sys::MlirDialectRegistry) {

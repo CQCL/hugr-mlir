@@ -108,7 +108,7 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
     }
 }
 
-struct MlirData<'a,'b> {
+struct MlirData<'a, 'b> {
     node: hugr::Node,
     result_types: Vec<Type<'a>>,
     inputs: Vec<Value<'a, 'b>>,
@@ -120,7 +120,7 @@ trait EmitMlir {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>>;
 }
 
@@ -129,7 +129,7 @@ impl EmitMlir for hugr::ops::OpType {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::OpType;
         match self {
@@ -139,14 +139,16 @@ impl EmitMlir for hugr::ops::OpType {
             OpType::FuncDefn(ref funcdefn) => funcdefn.emit(state, data).map(Into::into),
             OpType::Module(ref module) => module.emit(state, data).map(Into::into),
             OpType::Call(ref call) => call.emit(state, data).map(Into::into),
-            OpType::CallIndirect(ref callindirect) => callindirect.emit(state, data).map(Into::into),
+            OpType::CallIndirect(ref callindirect) => {
+                callindirect.emit(state, data).map(Into::into)
+            }
             OpType::CFG(ref cfg) => cfg.emit(state, data).map(Into::into),
             OpType::LeafOp(ref leaf) => leaf.emit(state, data).map(Into::into),
             OpType::Const(ref const_) => const_.emit(state, data).map(Into::into),
             OpType::LoadConstant(ref lc) => lc.emit(state, data).map(Into::into),
             OpType::TailLoop(ref tailloop) => tailloop.emit(state, data).map(Into::into),
             OpType::DFG(ref dfg) => dfg.emit(state, data).map(Into::into),
-            _ => todo!()
+            _ => todo!(),
         }
     }
 }
@@ -156,16 +158,21 @@ impl EmitMlir for hugr::ops::DFG {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let block = Block::new(&[]);
         state.build_dataflow_block(data.node, &block)?;
         let body = Region::new();
         body.append_block(block);
-        let context =  unsafe { data.loc.context().to_ref() };
-        Ok(mlir::hugr::DfgOp::new(body, &data.result_types, &data.inputs, extension_set_to_extension_set_attr(context, &self.signature.extension_reqs), data.loc))
+        let context = unsafe { data.loc.context().to_ref() };
+        Ok(mlir::hugr::DfgOp::new(
+            body,
+            &data.result_types,
+            &data.inputs,
+            extension_set_to_extension_set_attr(context, &self.signature.extension_reqs),
+            data.loc,
+        ))
     }
-
 }
 
 impl EmitMlir for hugr::ops::Conditional {
@@ -173,7 +180,7 @@ impl EmitMlir for hugr::ops::Conditional {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let cases = state
             .hugr
@@ -200,7 +207,7 @@ impl EmitMlir for hugr::ops::Output {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         _state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         Ok(mlir::hugr::OutputOp::new(&data.inputs, data.loc))
     }
@@ -211,14 +218,14 @@ impl EmitMlir for hugr::ops::FuncDefn {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let (_, ty, sym) = state.symbols.get_or_alloc(data.node)?;
         let block = Block::new(&[]);
         state.build_dataflow_block(data.node, &block)?;
         let body = Region::new();
         body.append_block(block);
-        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?,data.loc))
+        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?, data.loc))
     }
 }
 
@@ -227,11 +234,11 @@ impl EmitMlir for hugr::ops::FuncDecl {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let (_, ty, sym) = state.symbols.get_or_alloc(data.node)?;
         let body = Region::new();
-        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?,data.loc))
+        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?, data.loc))
     }
 }
 
@@ -240,7 +247,7 @@ impl EmitMlir for hugr::ops::Module {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let body = Region::new();
         let block = Block::new(&[]);
@@ -248,7 +255,7 @@ impl EmitMlir for hugr::ops::Module {
             for c in state.hugr.children(data.node) {
                 state.node_to_op(c, data.loc)?;
             }
-            Ok::<_,crate::Error>(())
+            Ok::<_, crate::Error>(())
         })?;
         body.append_block(block);
         Ok(mlir::hugr::ModuleOp::new_with_body(body, data.loc))
@@ -260,7 +267,7 @@ impl EmitMlir for hugr::ops::Call {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::OpType;
         use hugr::PortIndex;
@@ -284,7 +291,12 @@ impl EmitMlir for hugr::ops::Call {
             .exactly_one()?;
         let (static_edge, _, _) = state.symbols.get_or_alloc(target_n)?;
 
-        Ok(mlir::hugr::CallOp::new(static_edge, &data.inputs, &data.result_types, data.loc))
+        Ok(mlir::hugr::CallOp::new(
+            static_edge,
+            &data.inputs,
+            &data.result_types,
+            data.loc,
+        ))
     }
 }
 
@@ -293,9 +305,14 @@ impl EmitMlir for hugr::ops::CallIndirect {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         _state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
-        Ok(mlir::hugr::CallOp::new_indirect(data.inputs[0], &data.inputs[1..], &data.result_types, data.loc))
+        Ok(mlir::hugr::CallOp::new_indirect(
+            data.inputs[0],
+            &data.inputs[1..],
+            &data.result_types,
+            data.loc,
+        ))
     }
 }
 
@@ -304,7 +321,7 @@ impl EmitMlir for hugr::ops::CFG {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::controlflow::BasicBlock;
         use hugr::ops::OpType;
@@ -320,28 +337,34 @@ impl EmitMlir for hugr::ops::CFG {
             for (dfb_node, block) in node_to_block.iter() {
                 match state.hugr.get_optype(*dfb_node) {
                     optype @ &OpType::BasicBlock(BasicBlock::DFB { .. }) => state
-                        .build_dataflow_block_term(*dfb_node, block.deref(), |state, inputs, _| {
-                            let successors = state
-                                .hugr
-                                .node_outputs(*dfb_node)
-                                .filter(|p| {
-                                    optype.port_kind(*p) == Some(hugr::types::EdgeKind::ControlFlow)
-                                })
-                                .map(|p| {
-                                    Ok(node_to_block[&state
-                                        .hugr
-                                        .linked_ports(*dfb_node, p)
-                                        .collect_vec()
-                                        .into_iter()
-                                        .exactly_one()?
-                                        .0])
-                                })
-                                .collect::<Result<Vec<_>>>()?;
-                            Ok((
-                                (),
-                                mlir::hugr::SwitchOp::new(&inputs, &successors, data.loc).into(),
-                            ))
-                        })?,
+                        .build_dataflow_block_term(
+                            *dfb_node,
+                            block.deref(),
+                            |state, inputs, _| {
+                                let successors = state
+                                    .hugr
+                                    .node_outputs(*dfb_node)
+                                    .filter(|p| {
+                                        optype.port_kind(*p)
+                                            == Some(hugr::types::EdgeKind::ControlFlow)
+                                    })
+                                    .map(|p| {
+                                        Ok(node_to_block[&state
+                                            .hugr
+                                            .linked_ports(*dfb_node, p)
+                                            .collect_vec()
+                                            .into_iter()
+                                            .exactly_one()?
+                                            .0])
+                                    })
+                                    .collect::<Result<Vec<_>>>()?;
+                                Ok((
+                                    (),
+                                    mlir::hugr::SwitchOp::new(&inputs, &successors, data.loc)
+                                        .into(),
+                                ))
+                            },
+                        )?,
                     &OpType::BasicBlock(BasicBlock::Exit { ref cfg_outputs }) => {
                         let args = collect_type_row_vec(state.context, cfg_outputs)?
                             .into_iter()
@@ -353,7 +376,12 @@ impl EmitMlir for hugr::ops::CFG {
                 };
             }
         }
-        Ok(mlir::hugr::CfgOp::new(body, &data.result_types, &data.inputs, data.loc))
+        Ok(mlir::hugr::CfgOp::new(
+            body,
+            &data.result_types,
+            &data.inputs,
+            data.loc,
+        ))
     }
 }
 
@@ -362,17 +390,15 @@ impl EmitMlir for hugr::ops::custom::ExternalOp {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::custom::ExternalOp;
         let name = match self {
             ExternalOp::Extension(ref e) => e.def().name(),
             ExternalOp::Opaque(ref o) => o.name(),
         };
-        let extensions = extension_set_to_extension_set_attr(
-            state.context,
-            &self.signature().extension_reqs,
-        );
+        let extensions =
+            extension_set_to_extension_set_attr(state.context, &self.signature().extension_reqs);
         Ok(mlir::hugr::ExtensionOp::new(
             &data.result_types,
             name,
@@ -388,27 +414,43 @@ impl EmitMlir for hugr::ops::LeafOp {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::LeafOp;
         match self {
             LeafOp::CustomOp(custom) => custom.emit(state, data).map(Into::into),
             LeafOp::MakeTuple { .. } => {
                 assert_eq!(data.result_types.len(), 1);
-                Ok(mlir::hugr::MakeTupleOp::new(data.result_types[0], &data.inputs, data.loc).into())
+                Ok(
+                    mlir::hugr::MakeTupleOp::new(data.result_types[0], &data.inputs, data.loc)
+                        .into(),
+                )
             }
             LeafOp::UnpackTuple { .. } => {
                 assert_eq!(data.inputs.len(), 1);
-                Ok(mlir::hugr::UnpackTupleOp::new(&data.result_types, data.inputs[0], data.loc).into())
+                Ok(
+                    mlir::hugr::UnpackTupleOp::new(&data.result_types, data.inputs[0], data.loc)
+                        .into(),
+                )
             }
             LeafOp::Tag { tag, .. } => {
                 assert_eq!(data.result_types.len(), 1);
-                Ok(mlir::hugr::TagOp::new(data.result_types[0], *tag as u32, &data.inputs, data.loc).into())
+                Ok(mlir::hugr::TagOp::new(
+                    data.result_types[0],
+                    *tag as u32,
+                    &data.inputs,
+                    data.loc,
+                )
+                .into())
             }
-            LeafOp::Lift { new_extension, .. } => {
-                Ok(mlir::hugr::LiftOp::new(&data.result_types, &data.inputs, extension_id_to_extension_attr(state.context, new_extension),data.loc).into())
-            }
-            &_ => panic!("Unimplemented leafop: {:?}", self)
+            LeafOp::Lift { new_extension, .. } => Ok(mlir::hugr::LiftOp::new(
+                &data.result_types,
+                &data.inputs,
+                extension_id_to_extension_attr(state.context, new_extension),
+                data.loc,
+            )
+            .into()),
+            &_ => panic!("Unimplemented leafop: {:?}", self),
         }
     }
 }
@@ -418,7 +460,7 @@ impl EmitMlir for hugr::ops::Const {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         let (_, _, name) = state.symbols.get_or_alloc(data.node)?;
         let ty = hugr_to_mlir_type(state.context, self.const_type())?;
@@ -432,7 +474,7 @@ impl EmitMlir for hugr::ops::LoadConstant {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::PortIndex;
         let static_index = 0usize;
@@ -449,7 +491,11 @@ impl EmitMlir for hugr::ops::LoadConstant {
             .exactly_one()?;
         let (edge, _, _) = state.symbols.get_or_alloc(target_n)?;
         assert_eq!(data.result_types.len(), 1);
-        Ok(mlir::hugr::LoadConstantOp::new(data.result_types[0], edge, data.loc))
+        Ok(mlir::hugr::LoadConstantOp::new(
+            data.result_types[0],
+            edge,
+            data.loc,
+        ))
     }
 }
 
@@ -458,7 +504,7 @@ impl EmitMlir for hugr::ops::TailLoop {
     fn emit<'a, 'b, V: HugrView>(
         &self,
         state: &mut TranslationState<'a, 'b, V>,
-        data: MlirData<'a,'b>
+        data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         assert_eq!(
             data.result_types.len(),
@@ -468,11 +514,29 @@ impl EmitMlir for hugr::ops::TailLoop {
         let outputs_types = &data.result_types[0..self.just_outputs.len()];
         let block = Block::new(&[]);
         state.build_dataflow_block_term(data.node, &block, |mut state, inputs, out_n| {
-            state.hugr.get_optype(out_n).emit(&mut state, MlirData{node: out_n, result_types: vec![], inputs, loc: data.loc}).map(|x|((),x))
+            state
+                .hugr
+                .get_optype(out_n)
+                .emit(
+                    &mut state,
+                    MlirData {
+                        node: out_n,
+                        result_types: vec![],
+                        inputs,
+                        loc: data.loc,
+                    },
+                )
+                .map(|x| ((), x))
         })?;
         let body = Region::new();
         body.append_block(block);
-        Ok(mlir::hugr::TailLoopOp::new(outputs_types, &data.inputs, passthrough_inputs, body, data.loc))
+        Ok(mlir::hugr::TailLoopOp::new(
+            outputs_types,
+            &data.inputs,
+            passthrough_inputs,
+            body,
+            data.loc,
+        ))
     }
 }
 
@@ -574,9 +638,6 @@ where
         Ok(())
     }
 
-
-
-
     fn collect_inputs_vec(
         &self,
         n: hugr::Node,
@@ -627,21 +688,37 @@ where
 
     fn node_to_op(&mut self, node: hugr::Node, loc: Location<'a>) -> Result<()> {
         use hugr::ops::OpType;
-        let (_, inputs): (Vec<_>,Vec<_>) = self.collect_inputs_vec(node)?.into_iter().unzip();
-        let (output_ports, result_types): (Vec<_>,Vec<_>) =  self.collect_outputs_vec(node)?.into_iter().unzip();
-        let op: melior::ir::Operation<'_> = self.hugr.get_optype(node).emit(self, MlirData{ node, result_types, inputs, loc})?.into();
+        let (_, inputs): (Vec<_>, Vec<_>) = self.collect_inputs_vec(node)?.into_iter().unzip();
+        let (output_ports, result_types): (Vec<_>, Vec<_>) =
+            self.collect_outputs_vec(node)?.into_iter().unzip();
+        let op: melior::ir::Operation<'_> = self
+            .hugr
+            .get_optype(node)
+            .emit(
+                self,
+                MlirData {
+                    node,
+                    result_types,
+                    inputs,
+                    loc,
+                },
+            )?
+            .into();
         self.push_operation(node, output_ports, op)
     }
 
-    fn build_dataflow_block<
-        'c,
-    >(&self,
-        parent: hugr::Node,
-        block: &Block<'a>,
-    ) -> Result<()> {
+    fn build_dataflow_block<'c>(&self, parent: hugr::Node, block: &Block<'a>) -> Result<()> {
         let ul = melior::ir::Location::unknown(self.context);
         self.build_dataflow_block_term(parent, block, |mut state, inputs, node| {
-            let op = self.hugr.get_optype(node).emit(&mut state, MlirData{ node, result_types: vec![], inputs: inputs.into_iter().collect_vec(), loc: ul} )?;
+            let op = self.hugr.get_optype(node).emit(
+                &mut state,
+                MlirData {
+                    node,
+                    result_types: vec![],
+                    inputs: inputs.into_iter().collect_vec(),
+                    loc: ul,
+                },
+            )?;
             Ok(((), op.into()))
         })
     }
@@ -649,7 +726,11 @@ where
     fn build_dataflow_block_term<
         'c,
         T,
-        F: FnOnce(TranslationState<'a, 'c, V>, Vec<Value<'a, 'c>>, hugr::Node) -> Result<(T, Operation<'c>)>,
+        F: FnOnce(
+            TranslationState<'a, 'c, V>,
+            Vec<Value<'a, 'c>>,
+            hugr::Node,
+        ) -> Result<(T, Operation<'c>)>,
     >(
         &self,
         parent: hugr::Node,
@@ -718,7 +799,7 @@ pub fn hugr_to_mlir<'c>(
 
 #[cfg(test)]
 mod test {
-    use crate::{Result, mlir};
+    use crate::{mlir, Result};
     use crate::{mlir::test::test_context, test::example_hugrs};
     use hugr::extension::ExtensionRegistry;
     use rstest::{fixture, rstest};

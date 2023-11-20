@@ -7,15 +7,16 @@ mod macros;
 
 pub fn emit_error(loc: melior::ir::Location<'_>, str: impl Into<Vec<u8>>) {
     unsafe {
-        mlir_sys::mlirEmitError(loc.to_raw()
-                                , std::ffi::CString::new(str)
-                                    .unwrap_or(std::ffi::CString::from_vec_unchecked(
-                                        "CString nul error".into(),
-                                    )).as_bytes_with_nul()
-                                    .as_ptr() as *const i8,
-                                )
+        mlir_sys::mlirEmitError(
+            loc.to_raw(),
+            std::ffi::CString::new(str)
+                .unwrap_or(std::ffi::CString::from_vec_unchecked(
+                    "CString nul error".into(),
+                ))
+                .as_bytes_with_nul()
+                .as_ptr() as *const i8,
+        )
     }
-
 }
 
 pub struct EmitContext<'a> {
@@ -30,7 +31,10 @@ impl<'a> From<&'a *const hugr::ffi::EmitContext> for EmitContext<'a> {
 
 pub fn emit_stringref(ctx: EmitContext<'_>, str: impl AsRef<[u8]>) {
     unsafe {
-        hugr::ffi::mlirHugrEmitStringRef(*ctx.ctx, mlir_sys::mlirStringRefCreateFromCString(str.as_ref().as_ptr() as *const i8))
+        hugr::ffi::mlirHugrEmitStringRef(
+            *ctx.ctx,
+            mlir_sys::mlirStringRefCreateFromCString(str.as_ref().as_ptr() as *const i8),
+        )
     }
 }
 
@@ -43,7 +47,9 @@ pub mod hugr_passes {
 
     pub fn create_verify_pass() -> melior::pass::Pass {
         unsafe {
-            melior::pass::Pass::from_raw(super::hugr::ffi::mlirCreateHugrAnalysisHugrVerifyLinearityPass())
+            melior::pass::Pass::from_raw(
+                super::hugr::ffi::mlirCreateHugrAnalysisHugrVerifyLinearityPass(),
+            )
         }
     }
 
@@ -54,7 +60,6 @@ pub mod hugr_passes {
         Ok(pm.run(op)?)
     }
 }
-
 
 /// Generated rust bindings for the definitions in HugrOps.td
 /// This feature of melior is not well exercised, so we may well have to turn
@@ -300,15 +305,11 @@ pub mod hugr {
         }
     }
 
-    declare_op!(ModuleOp,"hugr.module");
+    declare_op!(ModuleOp, "hugr.module");
 
     impl<'c> ModuleOp<'c> {
         pub fn new_with_body(body: melior::ir::Region<'c>, loc: melior::ir::Location<'c>) -> Self {
-            ModuleOp(
-                Self::builder(loc)
-                    .add_regions(vec![body])
-                    .build(),
-            )
+            ModuleOp(Self::builder(loc).add_regions(vec![body]).build())
         }
         pub fn new(loc: melior::ir::Location<'c>) -> Self {
             let body = melior::ir::Region::new();
@@ -328,22 +329,18 @@ pub mod hugr {
         }
     }
 
-    declare_op!(OutputOp,"hugr.output");
+    declare_op!(OutputOp, "hugr.output");
 
     impl<'c> OutputOp<'c> {
         pub fn new<'a>(
             args: &'_ [melior::ir::Value<'c, 'a>],
             loc: melior::ir::Location<'c>,
         ) -> Self {
-            OutputOp(
-                Self::builder(loc)
-                    .add_operands(args)
-                    .build(),
-            )
+            OutputOp(Self::builder(loc).add_operands(args).build())
         }
     }
 
-    declare_op!(FuncOp,"hugr.func");
+    declare_op!(FuncOp, "hugr.func");
 
     impl<'c> FuncOp<'c> {
         pub fn new(
@@ -374,7 +371,7 @@ pub mod hugr {
         // }
     }
 
-    declare_op!(CallOp,"hugr.call");
+    declare_op!(CallOp, "hugr.call");
 
     impl<'c> CallOp<'c> {
         pub fn new_indirect<'a>(
@@ -430,7 +427,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(SwitchOp,"hugr.switch");
+    declare_op!(SwitchOp, "hugr.switch");
 
     impl<'c> SwitchOp<'c> {
         pub fn new(
@@ -454,8 +451,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(CfgOp,"hugr.cfg");
-
+    declare_op!(CfgOp, "hugr.cfg");
 
     impl<'c> CfgOp<'c> {
         pub fn new(
@@ -478,7 +474,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(MakeTupleOp,"hugr.make_tuple");
+    declare_op!(MakeTupleOp, "hugr.make_tuple");
 
     impl<'c> MakeTupleOp<'c> {
         pub fn new(
@@ -495,7 +491,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(ConstOp,"hugr.const");
+    declare_op!(ConstOp, "hugr.const");
 
     impl<'c> ConstOp<'c> {
         pub fn new(
@@ -523,8 +519,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(TagOp,"hugr.tag");
-
+    declare_op!(TagOp, "hugr.tag");
 
     impl<'c> TagOp<'c> {
         pub fn new(
@@ -551,7 +546,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(LoadConstantOp,"hugr.load_constant");
+    declare_op!(LoadConstantOp, "hugr.load_constant");
 
     impl<'c> LoadConstantOp<'c> {
         pub fn new(
@@ -574,7 +569,6 @@ pub mod hugr {
     }
 
     declare_op!(ExtensionOp, "hugr.ext_op");
-
 
     impl<'c> ExtensionOp<'c> {
         pub fn new(
@@ -606,8 +600,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(ConditionalOp,"hugr.conditional");
-
+    declare_op!(ConditionalOp, "hugr.conditional");
 
     impl<'c> ConditionalOp<'c> {
         pub fn new(
@@ -626,7 +619,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(UnpackTupleOp,"hugr.unpack_tuple");
+    declare_op!(UnpackTupleOp, "hugr.unpack_tuple");
 
     impl<'c> UnpackTupleOp<'c> {
         pub fn new(
@@ -643,7 +636,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(TailLoopOp,"hugr.tailloop");
+    declare_op!(TailLoopOp, "hugr.tailloop");
 
     impl<'c> TailLoopOp<'c> {
         pub fn new(
@@ -699,8 +692,7 @@ pub mod hugr {
         }
     }
 
-    declare_op!(LiftOp,"hugr.lift");
-
+    declare_op!(LiftOp, "hugr.lift");
 
     impl<'c> LiftOp<'c> {
         pub fn new(
@@ -740,13 +732,11 @@ pub mod hugr {
                     .add_operands(inputs)
                     .add_attributes(&[(
                         melior::ir::Identifier::new(&loc.context(), "input_extensions"),
-                        input_extensions.into()
+                        input_extensions.into(),
                     )])
                     .build(),
             )
-
         }
-
     }
 }
 

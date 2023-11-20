@@ -107,9 +107,9 @@ macro_rules! declare_op {
             }
         }
 
-        impl<'c,'a> TryFrom<&'a melior::ir::Operation<'c>> for &'a $name<'c> {
+        impl<'c, 'a> TryFrom<&'a melior::ir::Operation<'c>> for &'a $name<'c> {
             type Error = ();
-            fn try_from(op: &'a melior::ir::Operation<'c>) -> Result<Self,Self::Error> {
+            fn try_from(op: &'a melior::ir::Operation<'c>) -> Result<Self, Self::Error> {
                 let ctx = unsafe { op.context().to_ref() };
                 if op.name() == $name::opname(&ctx) {
                     Ok(unsafe { std::mem::transmute(op) })
@@ -124,9 +124,14 @@ macro_rules! declare_op {
                 melior::ir::Identifier::new(ctx, $opname)
             }
 
-            pub fn builder(loc: melior::ir::Location<'c>) -> melior::ir::operation::OperationBuilder {
+            pub fn builder(
+                loc: melior::ir::Location<'c>,
+            ) -> melior::ir::operation::OperationBuilder {
                 let ctx = unsafe { loc.context().to_ref() };
-                melior::ir::operation::OperationBuilder::new(Self::opname(ctx).as_string_ref().as_str().unwrap(), loc)
+                melior::ir::operation::OperationBuilder::new(
+                    Self::opname(ctx).as_string_ref().as_str().unwrap(),
+                    loc,
+                )
             }
         }
     };
