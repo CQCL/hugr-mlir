@@ -32,9 +32,6 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: true
-          token: ${{ secrets.GUPPY_PAT }}
       - name: Lint nix
         run: nix run --impure --print-build-logs .#lint-nixfmt -- --check
       - name: Lint c++
@@ -57,8 +54,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: src
-          submodules: true
-          token: ${{ secrets.GUPPY_PAT }}
       - name: Configure
         run: nix develop --impure ./src#checked-mlir --command cmake -S src -B build -G Ninja -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
       - name: Build
