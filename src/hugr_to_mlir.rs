@@ -204,7 +204,6 @@ impl EmitMlir for hugr::ops::FuncDefn {
         loc: Location<'a>,
     ) -> Result<Self::Op<'a>> {
         let (_, ty, sym) = state.symbols.get_or_alloc(node)?;
-        let hugr = state.hugr;
         let block = Block::new(&[]);
         state.build_dataflow_block(node, &block)?;
         let body = Region::new();

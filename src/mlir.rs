@@ -54,6 +54,8 @@ pub mod hugr_passes {
         Ok(pm.run(op)?)
     }
 }
+
+
 /// Generated rust bindings for the definitions in HugrOps.td
 /// This feature of melior is not well exercised, so we may well have to turn
 /// this off

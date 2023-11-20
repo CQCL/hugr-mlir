@@ -20,6 +20,14 @@ add_mlir_public_c_api_library(HugrMLIRAnalysisCAPI
   HugrMLIRAnalysis
 )
 
+add_mlir_public_c_api_library(HugrMLIRSupportCAPI
+  Support.cpp
+  PARTIAL_SOURCES_INTENDED
+  LINK_LIBS PUBLIC
+  MLIRCAPIIR
+  hugr-mlir-headers-interface
+)
+
 get_property(_capi_libraries GLOBAL PROPERTY MLIR_ALL_LIBS)
 list(FILTER _capi_libraries INCLUDE REGEX "^MLIRCAPI")
 
@@ -31,6 +39,7 @@ add_mlir_aggregate(HugrMLIR-C
   HugrMLIRDialectCAPI
   HugrMLIRTranslateCAPI
   HugrMLIRAnalysisCAPI
+  HugrMLIRSupportCAPI
 )
 set_property(TARGET HugrMLIR-C APPEND PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}")
 set_property(TARGET HugrMLIR-C PROPERTY OUTPUT_NAME "HugrMLIRC")

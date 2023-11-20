@@ -97,6 +97,7 @@ macro_rules! declare_type {
 
 macro_rules! declare_op {
     ($name: ident, $opname: expr) => {
+        #[repr(transparent)]
         #[derive(Clone, Debug, Eq, PartialEq)]
         pub struct $name<'c>(melior::ir::Operation<'c>);
 
@@ -106,14 +107,14 @@ macro_rules! declare_op {
             }
         }
 
-        impl<'c> TryFrom<melior::ir::Operation<'c>> for $name<'c> {
-            type Error = melior::ir::Operation<'c>;
-            fn try_from(op: melior::ir::Operation<'c>) -> Result<Self,Self::Error> {
+        impl<'c,'a> TryFrom<&'a melior::ir::Operation<'c>> for &'a $name<'c> {
+            type Error = ();
+            fn try_from(op: &'a melior::ir::Operation<'c>) -> Result<Self,Self::Error> {
                 let ctx = unsafe { op.context().to_ref() };
-                if op.name() == Self::opname(&ctx) {
-                    Ok($name(op))
+                if op.name() == $name::opname(&ctx) {
+                    Ok(unsafe { std::mem::transmute(op) })
                 } else {
-                    Err(op)
+                    Err(())
                 }
             }
         }
