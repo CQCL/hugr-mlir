@@ -62,4 +62,5 @@ mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
 
 
 [workspace]
-members = ["guppy/validator"]
+# members = ["guppy/validator"]
+members = []

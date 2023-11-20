@@ -145,9 +145,27 @@ impl EmitMlir for hugr::ops::OpType {
             OpType::Const(ref const_) => const_.emit(state, data).map(Into::into),
             OpType::LoadConstant(ref lc) => lc.emit(state, data).map(Into::into),
             OpType::TailLoop(ref tailloop) => tailloop.emit(state, data).map(Into::into),
+            OpType::DFG(ref dfg) => dfg.emit(state, data).map(Into::into),
             _ => todo!()
         }
     }
+}
+
+impl EmitMlir for hugr::ops::DFG {
+    type Op<'a> = mlir::hugr::DfgOp<'a>;
+    fn emit<'a, 'b, V: HugrView>(
+        &self,
+        state: &mut TranslationState<'a, 'b, V>,
+        data: MlirData<'a,'b>
+    ) -> Result<Self::Op<'a>> {
+        let block = Block::new(&[]);
+        state.build_dataflow_block(data.node, &block)?;
+        let body = Region::new();
+        body.append_block(block);
+        let context =  unsafe { data.loc.context().to_ref() };
+        Ok(mlir::hugr::DfgOp::new(body, &data.result_types, &data.inputs, extension_set_to_extension_set_attr(context, &self.signature.extension_reqs), data.loc))
+    }
+
 }
 
 impl EmitMlir for hugr::ops::Conditional {
@@ -704,6 +722,8 @@ mod test {
     use crate::{mlir::test::test_context, test::example_hugrs};
     use hugr::extension::ExtensionRegistry;
     use rstest::{fixture, rstest};
+
+    // TODO test DFG
 
     #[rstest]
     fn test_simple_recursion(test_context: melior::Context) -> Result<()> {

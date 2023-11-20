@@ -722,6 +722,32 @@ pub mod hugr {
             )
         }
     }
+
+    declare_op!(DfgOp, "hugr.dfg");
+
+    impl<'c> DfgOp<'c> {
+        pub fn new(
+            body: melior::ir::Region<'c>,
+            outputs_types: &[melior::ir::Type<'c>],
+            inputs: &[melior::ir::Value<'c, '_>],
+            input_extensions: ExtensionSetAttr<'c>,
+            loc: melior::ir::Location<'c>,
+        ) -> Self {
+            DfgOp(
+                Self::builder(loc)
+                    .add_regions(vec![body])
+                    .add_results(outputs_types)
+                    .add_operands(inputs)
+                    .add_attributes(&[(
+                        melior::ir::Identifier::new(&loc.context(), "input_extensions"),
+                        input_extensions.into()
+                    )])
+                    .build(),
+            )
+
+        }
+
+    }
 }
 
 pub fn get_sum_type<'a>(
