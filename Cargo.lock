@@ -976,6 +976,7 @@ checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
 [[package]]
 name = "melior"
 version = "0.11.0"
+source = "git+https://github.com/doug-q/melior?branch=llvm18#54408e8d1dbeaea39bc278ab26856b9b14cc5e59"
 dependencies = [
  "criterion",
  "dashmap",
@@ -987,6 +988,7 @@ dependencies = [
 [[package]]
 name = "melior-macro"
 version = "0.5.0"
+source = "git+https://github.com/doug-q/melior?branch=llvm18#54408e8d1dbeaea39bc278ab26856b9b14cc5e59"
 dependencies = [
  "comrak",
  "convert_case 0.6.0",
@@ -1031,6 +1033,7 @@ dependencies = [
 [[package]]
 name = "mlir-sys"
 version = "0.2.0"
+source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#2953175054d4aa258a65af22ab84c084aef4d23d"
 dependencies = [
  "bindgen 0.69.1",
  "cc",
@@ -1040,6 +1043,7 @@ dependencies = [
 [[package]]
 name = "mlir-sys0"
 version = "0.2.0"
+source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#2953175054d4aa258a65af22ab84c084aef4d23d"
 
 [[package]]
 name = "nom"
