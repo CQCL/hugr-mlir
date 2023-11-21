@@ -98,7 +98,7 @@
                 in {
                   packages = mlir-inputs ++ lint-inputs
                     ++ pkgs.lib.optional (shell-mlir != null) shell-mlir
-                    ++ [ pkgs.clang-tools ]; # clangd and clang-format
+                    ++ [ pkgs.clang-tools pkgs.llvmPackages_latest.bintools ]; # clangd and clang-format
 
                   languages.cplusplus = { enable = true; };
 
