@@ -9,9 +9,11 @@ extern "C" {
 
 MLIR_DECLARE_CAPI_DIALECT_REGISTRATION(Hugr, hugr);
 
+// TODO Add *{Attr,Type}Get functions for each custom type and attribute
 MLIR_CAPI_EXPORTED MlirAttribute
 mlirHugrTypeConstraintAttrGet(MlirContext, const char* kind);
-MLIR_CAPI_EXPORTED MlirType mlirHugrTestTypeGet(MlirContext);
+MLIR_CAPI_EXPORTED MlirType
+mlirHugrSumTypeGet(MlirContext, int32_t n, MlirType* components);
 
 #ifdef __cplusplus
 }

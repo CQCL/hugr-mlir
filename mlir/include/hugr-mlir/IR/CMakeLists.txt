@@ -10,6 +10,9 @@ message(STATUS "tablegen extra includes: ${_extra_includes}")
 # add_mlir_doc puts docs in ${MLIR_BINARY_DIR}/docs
 set(MLIR_BINARY_DIR "${PROJECT_BINARY_DIR}")
 
+# add_mlir_doc puts docs in ${MLIR_BINARY_DIR}/docs
+set(MLIR_BINARY_DIR "${PROJECT_BINARY_DIR}")
+
 set(LLVM_TARGET_DEFINITIONS HugrDialect.td)
 mlir_tablegen(HugrDialect.h.inc --gen-dialect-decls -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
 mlir_tablegen(HugrDialect.cpp.inc --gen-dialect-defs -dialect=hugr EXTRA_INCLUDES ${_extra_includes})
@@ -33,7 +36,6 @@ mlir_tablegen(HugrEnums.cpp.inc --gen-enum-defs EXTRA_INCLUDES ${_extra_includes
 set(LLVM_TARGET_DEFINITIONS HugrTypeInterfaces.td)
 mlir_tablegen(HugrTypeInterfaces.h.inc -gen-type-interface-decls EXTRA_INCLUDES ${_extra_includes})
 mlir_tablegen(HugrTypeInterfaces.cpp.inc -gen-type-interface-defs EXTRA_INCLUDES ${_extra_includes})
-
 # TODO If we need any AttrInterfaces or OpInterfaces add these with the same pattern
 
 add_public_tablegen_target(HugrMLIRIncGen)

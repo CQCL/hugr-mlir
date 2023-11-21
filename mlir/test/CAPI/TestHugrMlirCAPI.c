@@ -1,5 +1,4 @@
 // RUN: test-hugr-mlir-capi 2>&1 | FileCheck %s
-
 #include <stdio.h>
 #include <string.h>
 
@@ -26,7 +25,7 @@ int main() {
   MlirIdentifier test_attr_id = mlirIdentifierGet(ctx, test_attr_strref);
   attrs[0] = mlirNamedAttributeGet(test_attr_id, test_attr);
 
-  MlirType test_type = mlirHugrTestTypeGet(ctx);
+  MlirType test_type = mlirHugrSumTypeGet(ctx, 0, NULL);
   MlirAttribute test_type_attr = mlirTypeAttrGet(test_type);
   const char* test_type_attr_str = "test_type_attr";
   MlirStringRef test_type_attr_strref =
@@ -51,8 +50,8 @@ int main() {
 
   mlirOperationDump(op);
   // CHECK: hugr.module attributes {
-  // CHECK: test_attr = #hugr.constraint<Linear>,
-  // CHECK: test_type_attr = !hugr.test} {
+  // CHECK: test_attr = #hugr<constraint Linear>,
+  // CHECK: test_type_attr = !hugr.sum<>} {
 
   mlirOperationDestroy(op);
   mlirContextDestroy(ctx);

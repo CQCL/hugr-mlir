@@ -1,3 +1,4 @@
+
 # A target to add all include directories for this project
 
 add_library(hugr-mlir-headers-interface INTERFACE)
@@ -17,7 +18,7 @@ add_subdirectory(include/hugr-mlir/IR)
 add_subdirectory(lib/IR)
 add_subdirectory(lib/CAPI)
 add_subdirectory(tools/hugr-mlir-opt)
-add_subdirectory(tools/hugr-mlir-lsp-server)
 add_subdirectory(tools/hugr-mlir-translate)
+add_subdirectory(tools/hugr-mlir-lsp-server)
 add_subdirectory(python)
 add_subdirectory(test)
