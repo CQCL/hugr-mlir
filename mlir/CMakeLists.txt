@@ -18,8 +18,8 @@ if(MLIR_ENABLE_BINDINGS_PYTHON)
 endif()
 
 if(HUGR_MLIR_SANITIZER)
-  add_compile_options("-fsanitize=${HUGR_MLIR_SANTIZER}")
-  add_link_options("-fsanitize=${HUGR_MLIR_SANTIZER}")
+  add_compile_options("-fsanitize=${HUGR_MLIR_SANITIZER}")
+  add_link_options("-fsanitize=${HUGR_MLIR_SANITIZER}")
 endif()
 
 # llvm doesn't provide targets with interface include directories, so we'll use

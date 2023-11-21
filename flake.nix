@@ -114,12 +114,13 @@
                       [ "rustc" "cargo" "clippy" "rustfmt" "rust-analyzer" ];
                   };
 
-                  languages.cplusplus = { enable = true; };
-
                   env = {
                     CMAKE_PREFIX_PATH =
                       pkgs.lib.concatMapStringsSep ":" toString mlir-inputs;
                     LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+                  } // pkgs.lib.optionalAttrs (shell-mlir != null) {
+                    CC = "${shell-mlir.stdenv.cc}/bin/cc";
+                    CXX = "${shell-mlir.stdenv.cc}/bin/c++";
                   };
 
                   #  workaround https://github.com/cachix/devenv/issues/760
