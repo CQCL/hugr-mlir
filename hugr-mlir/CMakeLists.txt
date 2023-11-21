@@ -66,6 +66,7 @@ add_custom_target(hugr_mlir_crate_test
   DEPENDS "${_cargo_config}" HugrMLIR-C
   COMMAND cargo test ${HUGR_MLIR_CARGO_TEST_FLAGS}
   USES_TERMINAL
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
 add_dependencies(check hugr_mlir_crate_test)
