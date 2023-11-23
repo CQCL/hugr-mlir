@@ -11,6 +11,10 @@ on:
   merge_group:
     types: [checks_requested]
   workflow_dispatch: {}
+
+env:
+  SCCACHE_GHC_ENABLED: "true"
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -43,6 +47,10 @@ jobs:
     # Ensure nix cache is populated
     needs: check
     runs-on: ubuntu-latest
+    env:
+      RUSTC_WRAPPER: "sccache"
+      CMAKE_C_COMPILER_LAUNCHER: "sccache"
+      CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
     strategy:
       matrix:
         build_type: ["Debug", "Release"]
@@ -50,6 +58,7 @@ jobs:
       - name: Install nix
         uses: DeterminateSystems/nix-installer-action@main
       - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: mozilla-actions/sccache-action@v0.0.3
       - name: Checkout
         uses: actions/checkout@v4
         with:
