@@ -100,14 +100,11 @@
                     inherit (config.languages.rust.toolchain) rustc cargo;
                   };
                 in {
-                  packages = mlir-inputs ++ lint-inputs
-                    ++ [
-                      pkgs.clang-tools # clangd and clang-format
-                      pkgs.llvmPackages_latest.bintools # lld
-                      pkgs.rq
-                    ] ++ pkgs.lib.optionals (shell-mlir != null) [
-                      shell-mlir
-                    ];
+                  packages = mlir-inputs ++ lint-inputs ++ [
+                    pkgs.clang-tools # clangd and clang-format
+                    pkgs.llvmPackages_latest.bintools # lld
+                    pkgs.rq
+                  ] ++ pkgs.lib.optionals (shell-mlir != null) [ shell-mlir ];
 
                   languages.rust = {
                     enable = true;
