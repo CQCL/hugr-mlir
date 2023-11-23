@@ -1,13 +1,3 @@
-cmake_minimum_required(VERSION 3.25)
-
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-
-find_package(MLIR REQUIRED CONFIG)
-list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
-
-set(LLVM_EXTERNAL_LIT "${CMAKE_CURRENT_SOURCE_DIR}/../scripts/lit-wrapped.py")
-set(LLVM_LIT_ARGS "-v" CACHE STRING "")
-
 include(AddMLIR)
 include(AddLLVM)
 include(TableGen)

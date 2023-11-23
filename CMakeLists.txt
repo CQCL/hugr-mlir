@@ -23,6 +23,11 @@ set(CMAKE_POSITION_INDEPENDENT_CODE On)
 include(CMakePrintHelpers)
 include(CTest)
 
+find_package(MLIR REQUIRED CONFIG)
+list(APPEND CMAKE_MODULE_PATH ${MLIR_CMAKE_DIR})
+set(LLVM_EXTERNAL_LIT "${CMAKE_CURRENT_SOURCE_DIR}/scripts/lit-wrapped.py")
+set(LLVM_LIT_ARGS "-v" CACHE STRING "")
+
 add_custom_target(check)
 set(_doc_all "")
 if(HUGR_MLIR_INCLUDE_DOCS)
