@@ -8,15 +8,23 @@ A prototype for integrating (hugr)[https://github.com/CQCL-DEV/hugr] and (mlir)[
 * A recent build of LLVM including MLIR
 * A python installation including libraries: TODO
 
-All dependencies are available through nix, to enter a shell with all dependencies available:
+It is not required to use a nix shell to build, cmake will pick up all
+dependencies from it's environment.
+
+To point cmake at your LLVM tree, pass
+`-DMLIR_DIR=$prefix/lib/cmake/mlir` to cmake.
+
+### Nix environment
+
+For convenience, all dependencies are available through nix, to enter a shell with all dependencies available:
 
 ``` sh
-$ nix develop --impure
+$ nix develop --impure --extra-experimental-features "nix-command flakes"
 $ llvm-config --version
 $ mlir-opt --version
 ```
 
-This shell includes a customised LLVM install (see nix/mlir) with MLIR, assertions enabled, and static libraries. CI runs against this install.
+This shell includes a customised LLVM install (see ./nix/mlir) with MLIR, assertions enabled, and static libraries. CI runs against this install. 
 
 Alternatively, you may wish to bring your own LLVM build or install tree(say, `$prefix`), in
 which case you can use `nix develop .#no-mlir`. This shell does include all LLVM
@@ -30,8 +38,15 @@ minutes, depending on your machine) the first time they are used. These builds
 will be cached while `llvm-src` in `flake.lock` and the `mlir` derivation in
 `flake.nix` are unchanged.
 
-It is not required to use a nix shell to build, cmake will pick up all
-dependencies from it's environment.
+#### direnv
+
+[direnv](https://direnv.net/) is a convenient way to configure your shell and editor to transparently use nix provided dependencies.
+
+The following `.envrc` will suffice:
+```sh
+use flake --impure .#
+```
+
 
 ### rust
 
