@@ -1,6 +1,11 @@
 {
   nixConfig = { };
   inputs = {
+    nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+    rr = {
+      url = "github:mozilla/rr";
+      flake = false;
+    };
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05";
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -103,7 +108,18 @@
                   packages = mlir-inputs ++ lint-inputs ++ [
                     pkgs.clang-tools # clangd and clang-format
                     pkgs.llvmPackages_latest.bintools # lld
+                    (let
+                      lldb = pkgs.llvmPackages_latest.lldb;
+                    in pkgs.symlinkJoin {
+                      name = "lldb-doug";
+                      paths = map (x: lldb.${x}) lldb.outputs;
+                      buildInputs = [pkgs.makeWrapper];
+                      postBuild = ''
+                        wrapProgram $out/bin/lldb --set LD_LIBRARY_PATH ${pkgs.llvmPackages_latest.libclang.lib}/lib
+                      '';
+                    })
                     pkgs.rq
+                    (inputs.nixpkgs-master.legacyPackages.${pkgs.system}.rr.overrideAttrs (_: { src = inputs.rr; }))
                   ] ++ pkgs.lib.optionals (shell-mlir != null) [ shell-mlir ];
 
                   languages.rust = {
@@ -116,7 +132,7 @@
                   env = {
                     CMAKE_PREFIX_PATH =
                       pkgs.lib.concatMapStringsSep ":" toString mlir-inputs;
-                    LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
+                    LIBCLANG_PATH = "${pkgs.llvmPackages_latest.libclang.lib}/lib";
                   } // pkgs.lib.optionalAttrs (shell-mlir != null) {
                     CC = "${shell-mlir.stdenv.cc}/bin/cc";
                     CXX = "${shell-mlir.stdenv.cc}/bin/c++";

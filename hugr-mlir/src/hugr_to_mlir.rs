@@ -838,11 +838,30 @@ mod test {
     //     Ok(())
     // }
 
-    #[rstest]
-    fn test_loop_with_conditional(test_context: melior::Context) -> Result<()> {
+    #[test]
+    fn test_loop_with_conditional() -> Result<()> {
+        // let dr = melior::dialect::DialectRegistry::new();
+        let hugr_dh = crate::mlir::hugr::get_hugr_dialect_handle();
+        // hugr_dh.insert_dialect(&dr);
+        let ctx = melior::Context::new();
+        println!("0: {}",ctx.registered_dialect_count());
+        println!("1: {}",ctx.loaded_dialect_count());
+        hugr_dh.load_dialect(&ctx);
+        // ctx.append_dialect_registry(&dr);
+        println!("2: {}",ctx.registered_dialect_count());
+        println!("3: {}",ctx.loaded_dialect_count());
+        ctx.get_or_load_dialect("hugr");
+        println!("4: {}",ctx.registered_dialect_count());
+        println!("5: {}",ctx.loaded_dialect_count());
+
         let hugr = example_hugrs::loop_with_conditional()?;
-        let ul = melior::ir::Location::unknown(&test_context);
+        println!("dougrulz0");
+        let ul = melior::ir::Location::unknown(&ctx);
+        let i = melior::ir::Identifier::new(&ctx,"d");
+        println!("dougrulz1");
+
         let mut op = super::hugr_to_mlir(ul, &hugr)?;
+        println!("dougrulz2");
         assert!(mlir::hugr_passes::verify_op(&mut op).is_ok());
         insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())

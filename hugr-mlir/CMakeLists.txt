@@ -24,11 +24,15 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     list(APPEND HUGR_MLIR_CARGO_TEST_FLAGS "--release")
     string(APPEND _outdir "/release")
 elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    list(APPEND HUGR_MLIR_CARGO_FLAGS "--release")
+    list(APPEND HUGR_MLIR_CARGO_BUILD_FLAGS "--release")
     list(APPEND HUGR_MLIR_CARGO_TEST_FLAGS "--release")
     set(HUGR_MLIR_CONFIG_PROFILE_RELEASE_DEBUG "true")
     string(APPEND _outdir "/release")
 endif ()
+
+# if (HUGR_MLIR_SANITIZER)
+#     string(APPEND HUGR_MLIR_CONFIG_RUSTFLAGS " -Zsanitizer=${HUGR_MLIR_SANITIZER}")
+# endif()
 
 
 configure_file(

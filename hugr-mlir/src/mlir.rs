@@ -349,16 +349,17 @@ pub mod hugr {
             type_: HugrFunctionType<'c>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
             FuncOp(
                 Self::builder(loc)
                     .add_regions(vec![body])
                     .add_attributes(&[
                         (
-                            melior::ir::Identifier::new(name.context().deref(), "sym_name"),
+                            melior::ir::Identifier::new(context, "sym_name"),
                             name.into(),
                         ),
                         (
-                            melior::ir::Identifier::new(name.context().deref(), "function_type"),
+                            melior::ir::Identifier::new(context, "function_type"),
                             melior::ir::attribute::TypeAttribute::new(type_.into()).into(),
                         ),
                     ])
@@ -408,7 +409,7 @@ pub mod hugr {
                 Self::builder(loc)
                     .add_attributes(&[
                         (
-                            melior::ir::Identifier::new(loc.context().deref(), "callee_attr"),
+                            melior::ir::Identifier::new(context, "callee_attr"),
                             callee.into(),
                         ),
                         (
@@ -725,13 +726,14 @@ pub mod hugr {
             input_extensions: ExtensionSetAttr<'c>,
             loc: melior::ir::Location<'c>,
         ) -> Self {
+            let context = unsafe { loc.context().to_ref() };
             DfgOp(
                 Self::builder(loc)
                     .add_regions(vec![body])
                     .add_results(outputs_types)
                     .add_operands(inputs)
                     .add_attributes(&[(
-                        melior::ir::Identifier::new(&loc.context(), "input_extensions"),
+                        melior::ir::Identifier::new(context, "input_extensions"),
                         input_extensions.into(),
                     )])
                     .build(),
@@ -763,6 +765,7 @@ pub mod test {
     #[fixture]
     pub fn test_context() -> melior::Context {
         let dr = melior::dialect::DialectRegistry::new();
+        melior::utility::register_all_dialects(&dr);
         let hugr_dh = super::hugr::get_hugr_dialect_handle();
         hugr_dh.insert_dialect(&dr);
         let ctx = melior::Context::new();
