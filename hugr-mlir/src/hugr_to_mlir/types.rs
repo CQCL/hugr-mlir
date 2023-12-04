@@ -1,3 +1,4 @@
+use crate::mlir::hugr::ffi::mlirHugrTranslateStringRefToMLIRFunction;
 use crate::{mlir, Error, Result};
 use melior::Context;
 use std::borrow::Borrow;
@@ -26,7 +27,7 @@ pub fn hugr_to_mlir_type<'c>(
     ctx: &'c Context,
     type_: &hugr::types::Type,
 ) -> Result<melior::ir::Type<'c>, Error> {
-    use hugr::types::{PrimType, TypeEnum};
+    use hugr::types::{TypeEnum};
     match type_.as_type_enum() {
         TypeEnum::Sum(sum_type) => {
             let mut alts = std::vec::Vec::<_>::new();
@@ -44,25 +45,22 @@ pub fn hugr_to_mlir_type<'c>(
             collect_type_row::<Vec<_>>(ctx, row)?.as_slice(),
         )
         .into()),
-        TypeEnum::Prim(p) => match p {
-            PrimType::Extension(custom_type) => Ok(crate::mlir::hugr::OpaqueType::new(
+        TypeEnum::Extension(ref custom_type) => Ok(crate::mlir::hugr::OpaqueType::new(
                 custom_type.name().as_ref(),
                 extension_id_to_extension_attr(ctx, custom_type.extension()),
                 collect_type_args::<Vec<_>>(ctx, custom_type.args())?,
                 mlir::hugr::TypeConstraintAttr::new(ctx, custom_type.bound()),
-            )
-            .into()),
-            PrimType::Alias(alias_decl) => Ok(mlir::hugr::AliasRefType::new(
+            ) .into()),
+        TypeEnum::Alias(ref alias_decl) => Ok(mlir::hugr::AliasRefType::new(
                 mlir::hugr::ExtensionSetAttr::new(ctx, []),
                 melior::ir::attribute::FlatSymbolRefAttribute::new(ctx, alias_decl.name.as_ref())
                     .into(),
                 mlir::hugr::TypeConstraintAttr::new(ctx, alias_decl.bound),
-            )
-            .into()),
-            PrimType::Function(function_type) => {
-                Ok(hugr_to_mlir_function_type(ctx, function_type)?.into())
-            }
-        },
+            ).into()),
+        TypeEnum::Function(ref function_type)
+            if function_type.params().len() == 0 => Ok(hugr_to_mlir_function_type(ctx, function_type.body())?.into()),
+        TypeEnum::Function(ref function_type) => panic!("unimplemented: TypeEnum::Function with params"),
+        TypeEnum::Variable(size, bound) => panic!("unimplemented: TypeEnum::Variable")
     }
 }
 
@@ -109,9 +107,9 @@ pub fn collect_type_args<'c, 'a, R: FromIterator<melior::ir::Attribute<'c>>>(
             )
             .into()),
             &TypeArg::Opaque { .. } => todo!(),
-            TypeArg::Sequence { args } => Ok(melior::ir::attribute::ArrayAttribute::new(
+            TypeArg::Sequence { ref elems } => Ok(melior::ir::attribute::ArrayAttribute::new(
                 ctx,
-                &collect_type_args::<Vec<_>>(ctx, args)?,
+                &collect_type_args::<Vec<_>>(ctx, elems)?,
             )
             .into()),
             TypeArg::Extensions { es } => Ok(extension_set_to_extension_set_attr(ctx, es).into()),

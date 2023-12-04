@@ -1187,35 +1187,38 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -1252,8 +1255,7 @@
             "id": "int",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1489,8 +1491,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1580,8 +1581,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1670,17 +1670,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 0
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 0
+          }
+        ],
+        "v": "Extension"
       }
     },
     {
@@ -1748,8 +1745,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1898,8 +1894,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1989,8 +1984,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -2065,17 +2059,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 0
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 0
+          }
+        ],
+        "v": "Extension"
       }
     },
     {
@@ -2202,17 +2193,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 1
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 1
+          }
+        ],
+        "v": "Extension"
       }
     },
     {
@@ -2287,8 +2275,7 @@
             "id": "int",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

@@ -1,7 +1,7 @@
 ---
-source: tests/guppy_export_tests.rs
+source: hugr-mlir/tests/guppy_export_tests.rs
 expression: m.as_operation()
-input_file: tests/guppy-exports/test_else_return.json
+input_file: hugr-mlir/tests/guppy-exports/test_else_return.json
 ---
 module {
   hugr.module {
@@ -21,14 +21,13 @@ module {
       ^bb3(%7: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):  // pred: ^bb0
         const @const_20 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 4 : i6
         %8 = load_constant @const_20 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
-        %9 = call @idiv_s_panic  [](!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> %7, %8
+        %9 = ext_op []"idiv_s" %7, %8 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
         %10 = make_tuple()
         %11 = tag 0 %10 : tuple<> -> <tuple<>>
         switch %11, %9 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> ^bb1
       }
       output %0 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
     }
-    func @idiv_s_panic[](!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
   }
 }
 

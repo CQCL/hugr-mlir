@@ -9,8 +9,8 @@ mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
 
 
 
-# [patch."https://github.com/CQCL-DEV/hugr.git"]
-# quantinuum-hugr = { path = "../hugr" }
+[patch."https://github.com/CQCL-DEV/hugr.git"]
+quantinuum-hugr = { path = "../hugr" }
 
 # TODO
 # we have forks of mlir-sys and melior that allow us to override how mlir links,
@@ -22,8 +22,8 @@ mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
 # melior = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
 
 [workspace]
-# members = ["guppy/validator"]
-members = ["hugr-mlir"]
+members = ["guppy/validator","hugr-mlir"]
+# members = ["hugr-mlir"]
 
 [workspace.package]
 

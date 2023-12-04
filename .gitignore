@@ -12,3 +12,4 @@ compile_commands.json
 /__pycache__/
 /_venv/
 /target/
+**/snapshots/*.new

@@ -263,37 +263,40 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "C",
-            "extension": "arithmetic.float.types",
-            "id": "float64",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "C",
-            "extension": "arithmetic.float.types",
-            "id": "float64",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "C",
+              "extension": "arithmetic.float.types",
+              "id": "float64",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "C",
+              "extension": "arithmetic.float.types",
+              "id": "float64",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -332,8 +335,7 @@
             "id": "float64",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -369,8 +371,7 @@
             "id": "float64",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -408,8 +409,7 @@
             "id": "float64",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

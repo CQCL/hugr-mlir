@@ -13,7 +13,6 @@ pub fn hugr_to_mlir_value<'c>(
 ) -> Result<melior::ir::Attribute<'c>> {
     use downcast_rs::Downcast;
     use hugr::types::TypeEnum;
-    use hugr::values::PrimValue;
     use hugr::values::Value;
     match value {
         Value::Tuple { vs } => {
@@ -37,9 +36,7 @@ pub fn hugr_to_mlir_value<'c>(
             )
             .into())
         }
-        &Value::Prim {
-            val: PrimValue::Extension { ref c },
-        } => {
+        &Value::Extension {ref c } => {
             if let Some(i) =
                 c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>()
             {

@@ -654,67 +654,70 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -724,39 +727,42 @@
       "op": "FuncDecl",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -766,39 +772,42 @@
       "op": "FuncDecl",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -867,8 +876,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -908,93 +916,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
-      }
-    },
-    {
-      "input_extensions": [],
-      "lop": "MakeTuple",
-      "op": "LeafOp",
-      "parent": 1,
-      "tys": [
-        {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        },
-        {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        }
-      ]
-    },
-    {
-      "input_extensions": [],
-      "lop": "UnpackTuple",
-      "op": "LeafOp",
-      "parent": 1,
-      "tys": [
-        {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        },
-        {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        }
-      ]
-    },
-    {
-      "input_extensions": [],
-      "op": "Call",
-      "parent": 1,
-      "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1078,8 +1000,91 @@
             "id": "qubit",
             "t": "Opaque"
           }
+        ]
+      }
+    },
+    {
+      "input_extensions": [],
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": [],
+      "op": "Call",
+      "parent": 1,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
         ],
-        "t": "G"
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ]
       }
     },
     {

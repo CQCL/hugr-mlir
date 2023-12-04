@@ -25,7 +25,9 @@ use types::*;
 pub mod value;
 use value::*;
 
-type Scope<'a, 'b> = HashMap<(hugr::Node, hugr::Port), Value<'a, 'b>>;
+use hugr::ops::dataflow::DataflowOpTrait;
+
+type Scope<'a, 'b> = HashMap<(hugr::Node, hugr::OutgoingPort), Value<'a, 'b>>;
 type ScopeItem<'a, 'b> = <Scope<'a, 'b> as IntoIterator>::Item;
 
 type SymbolItem<'a> = (
@@ -79,8 +81,8 @@ impl<'a, V: HugrView> Symboliser<'a, V> {
                 | &OpType::FuncDefn(hugr::ops::FuncDefn {
                     ref name,
                     ref signature,
-                }) => {
-                    let ty = hugr_to_mlir_function_type(self.context, signature)?.into();
+                }) if signature.params().len() == 0 => {
+                    let ty = hugr_to_mlir_function_type(self.context, signature.body())?.into();
                     Ok((ty, name.to_string()))
                 }
                 OpType::Const(const_) => {
@@ -591,7 +593,7 @@ where
     fn push_block<'c, F, T>(
         &self,
         block: &'c Block<'a>,
-        block_args: impl IntoIterator<Item = (hugr::Node, hugr::Port)>,
+        block_args: impl IntoIterator<Item = (hugr::Node, hugr::OutgoingPort)>,
         f: F,
     ) -> T
     where
@@ -616,7 +618,7 @@ where
         f(state)
     }
 
-    fn lookup_nodeport(&'_ self, n: hugr::Node, p: hugr::Port) -> Value<'a, 'b> {
+    fn lookup_nodeport(&'_ self, n: hugr::Node, p: hugr::OutgoingPort) -> Value<'a, 'b> {
         *self
             .scope
             .get(&(n, p))
@@ -626,7 +628,7 @@ where
     fn push_operation(
         &mut self,
         n: hugr::Node,
-        result_ports: impl IntoIterator<Item = hugr::Port>,
+        result_ports: impl IntoIterator<Item = hugr::OutgoingPort>,
         op: impl Into<Operation<'a>>,
     ) -> Result<()> {
         let op_ref = self.block.append_operation(op.into());
@@ -641,39 +643,29 @@ where
     fn collect_inputs_vec(
         &self,
         n: hugr::Node,
-    ) -> Result<Vec<(hugr::Port, melior::ir::Value<'a, 'b>)>> {
+    ) -> Result<Vec<(hugr::IncomingPort, melior::ir::Value<'a, 'b>)>> {
         self.collect_inputs::<Vec<_>>(n)
     }
 
-    fn collect_inputs<R: FromIterator<(hugr::Port, melior::ir::Value<'a, 'b>)>>(
+    fn collect_inputs<R: FromIterator<(hugr::IncomingPort, melior::ir::Value<'a, 'b>)>>(
         &self,
         n: hugr::Node,
     ) -> Result<R> {
         let optype = self.hugr.get_optype(n);
         self.hugr
             .node_inputs(n)
-            .filter_map(|p| match optype.port_kind(p) {
-                Some(EdgeKind::Value { .. }) => Some(
-                    match self
-                        .hugr
-                        .linked_ports(n, p)
-                        .collect::<std::vec::Vec<_>>()
-                        .as_slice()
-                    {
-                        [(m, x)] => Ok((p, self.lookup_nodeport(*m, *x))),
-                        _ => Err(anyhow!("Not a unique link to input port")),
-                    },
-                ),
-                _ => None,
+            .filter_map(|in_p| match optype.port_kind(in_p) {
+                Some(EdgeKind::Value { .. }) => self.hugr.single_linked_output(n, in_p).map(|(m, out_p)| Ok((in_p, self.lookup_nodeport(m,out_p)))),
+                _ => None
             })
             .collect()
     }
 
-    fn collect_outputs_vec(&self, n: hugr::Node) -> Result<Vec<(hugr::Port, Type<'a>)>> {
+    fn collect_outputs_vec(&self, n: hugr::Node) -> Result<Vec<(hugr::OutgoingPort, Type<'a>)>> {
         self.collect_outputs::<Vec<_>>(n)
     }
 
-    fn collect_outputs<R: FromIterator<(hugr::Port, Type<'a>)>>(&self, n: hugr::Node) -> Result<R> {
+    fn collect_outputs<R: FromIterator<(hugr::OutgoingPort, Type<'a>)>>(&self, n: hugr::Node) -> Result<R> {
         let optype = self.hugr.get_optype(n);
         self.hugr
             .node_outputs(n)
@@ -755,7 +747,7 @@ where
                 _ => None,
             })
             .map(|(p, ref t)| Ok((p, hugr_to_mlir_type(self.context, t)?, ul)))
-            .collect::<Result<Vec<(hugr::Port,melior::ir::Type<'a>, melior::ir::Location<'a>)>,Error>>()?;
+            .collect::<Result<Vec<(hugr::OutgoingPort,melior::ir::Type<'a>, melior::ir::Location<'a>)>,Error>>()?;
         for (_, t, l) in block_arg_port_type_loc.iter() {
             block.add_argument(*t, *l);
         }

@@ -373,15 +373,18 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "extension_reqs": [],
-          "input": [],
-          "output": [
-            {
-              "s": "Unit",
-              "size": 2,
-              "t": "Sum"
-            }
-          ],
+          "body": {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Unit",
+                "size": 2,
+                "t": "Sum"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -425,15 +428,18 @@
       "block": "Exit",
       "cfg_outputs": [
         {
-          "extension_reqs": [],
-          "input": [],
-          "output": [
-            {
-              "s": "Unit",
-              "size": 2,
-              "t": "Sum"
-            }
-          ],
+          "body": {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Unit",
+                "size": 2,
+                "t": "Sum"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -530,15 +536,18 @@
           "t": "Sum"
         },
         {
-          "extension_reqs": [],
-          "input": [],
-          "output": [
-            {
-              "s": "Unit",
-              "size": 2,
-              "t": "Sum"
-            }
-          ],
+          "body": {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Unit",
+                "size": 2,
+                "t": "Sum"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -549,15 +558,18 @@
       "parent": 20,
       "types": [
         {
-          "extension_reqs": [],
-          "input": [],
-          "output": [
-            {
-              "s": "Unit",
-              "size": 2,
-              "t": "Sum"
-            }
-          ],
+          "body": {
+            "extension_reqs": [],
+            "input": [],
+            "output": [
+              {
+                "s": "Unit",
+                "size": 2,
+                "t": "Sum"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -597,15 +609,18 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -615,22 +630,28 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "extension_reqs": [],
-            "input": [],
-            "output": [
-              {
-                "s": "Unit",
-                "size": 2,
-                "t": "Sum"
-              }
-            ],
-            "t": "G"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "body": {
+                "extension_reqs": [],
+                "input": [],
+                "output": [
+                  {
+                    "s": "Unit",
+                    "size": 2,
+                    "t": "Sum"
+                  }
+                ]
+              },
+              "params": [],
+              "t": "G"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -640,15 +661,18 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -665,8 +689,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -726,32 +749,37 @@
         "input": [],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [],
-            "output": [
-              {
-                "s": "Unit",
-                "size": 2,
-                "t": "Sum"
-              }
-            ],
+            "body": {
+              "extension_reqs": [],
+              "input": [],
+              "output": [
+                {
+                  "s": "Unit",
+                  "size": 2,
+                  "t": "Sum"
+                }
+              ]
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
       "datatype": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       },
       "input_extensions": [],
@@ -791,8 +819,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -804,19 +831,21 @@
         "input": [],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [],
-            "output": [
-              {
-                "s": "Unit",
-                "size": 2,
-                "t": "Sum"
-              }
-            ],
+            "body": {
+              "extension_reqs": [],
+              "input": [],
+              "output": [
+                {
+                  "s": "Unit",
+                  "size": 2,
+                  "t": "Sum"
+                }
+              ]
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -832,8 +861,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

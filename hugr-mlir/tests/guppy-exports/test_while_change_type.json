@@ -416,9 +416,12 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": []
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -429,8 +432,7 @@
       "signature": {
         "extension_reqs": [],
         "input": [],
-        "output": [],
-        "t": "G"
+        "output": []
       }
     },
     {
@@ -450,17 +452,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 42
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 42
+          }
+        ],
+        "v": "Extension"
       }
     },
     {

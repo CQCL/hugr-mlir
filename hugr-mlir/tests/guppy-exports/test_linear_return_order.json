@@ -267,30 +267,33 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          },
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -322,8 +325,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -359,8 +361,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

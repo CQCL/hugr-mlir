@@ -873,33 +873,36 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          },
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            },
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -934,8 +937,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -955,17 +957,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 0
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 0
+          }
+        ],
+        "v": "Extension"
       }
     },
     {
@@ -1033,8 +1032,7 @@
             "size": 2,
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1148,8 +1146,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1218,8 +1215,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1447,8 +1443,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1517,8 +1512,7 @@
             "s": "General",
             "t": "Sum"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

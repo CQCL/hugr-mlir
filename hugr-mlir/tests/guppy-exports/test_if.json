@@ -450,23 +450,26 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -476,17 +479,20 @@
       "op": "FuncDecl",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "args": [],
-            "bound": "A",
-            "extension": "prelude",
-            "id": "qubit",
-            "t": "Opaque"
-          }
-        ],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -511,8 +517,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -550,8 +555,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -582,8 +586,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -641,8 +644,7 @@
             "id": "qubit",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {

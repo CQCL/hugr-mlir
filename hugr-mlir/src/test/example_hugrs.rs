@@ -25,11 +25,11 @@ pub fn simple_recursion() -> Result<Hugr, BuildError> {
 
     let f_id = module_builder.declare(
         "main",
-        FunctionType::new(type_row![NAT], type_row![NAT]).pure(),
+        FunctionType::new(type_row![NAT], type_row![NAT]).into(),
     )?;
 
     let mut f_build = module_builder.define_declaration(&f_id)?;
-    let call = f_build.call(&f_id, f_build.input_wires())?;
+    let call = f_build.call(&f_id, &[],f_build.input_wires(),&hugr::extension::prelude::PRELUDE_REGISTRY)?;
 
     f_build.finish_with_outputs(call.outputs())?;
     module_builder.finish_prelude_hugr().map_err(|x| x.into())
@@ -64,7 +64,7 @@ fn build_basic_cfg<T: AsMut<Hugr> + AsRef<Hugr>>(
 pub fn cfg() -> std::result::Result<Hugr, BuildError> {
     let mut module_builder = ModuleBuilder::new();
     let mut func_builder = module_builder
-        .define_function("main", FunctionType::new(vec![NAT], type_row![NAT]).pure())?;
+        .define_function("main", FunctionType::new(vec![NAT], type_row![NAT]).into())?;
     let _f_id = {
         let [int] = func_builder.input_wires_arr();
 
@@ -99,21 +99,33 @@ pub fn basic_loop() -> Result<Hugr> {
 }
 
 pub fn loop_with_conditional() -> Result<Hugr> {
+    use hugr::ops;
     let mut module_builder = ModuleBuilder::new();
     let mut fbuild = module_builder.define_function(
         "main",
         FunctionType::new(type_row![BIT], type_row![NAT])
-            .with_input_extensions(ExtensionSet::singleton(&PRELUDE_ID)),
+            .with_extension_delta(&ExtensionSet::singleton(&PRELUDE_ID))
+            .into(),
     )?;
     let _fdef = {
-        let [b1] = fbuild.input_wires_arr();
+        let [b1] = fbuild
+            .add_dataflow_op(
+                ops::LeafOp::Lift {
+                    type_row: type_row![BIT],
+                    new_extension: PRELUDE_ID,
+                },
+                fbuild.input_wires(),
+            )?
+            .outputs_arr();
         let loop_id = {
-            let mut loop_b = fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
+            let mut loop_b =
+                fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
             let signature = loop_b.loop_signature()?.clone();
             let const_val = Const::true_val();
-            let const_wire = loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
+            let const_wire =
+                loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
             let lift_node = loop_b.add_dataflow_op(
-                hugr::ops::LeafOp::Lift {
+                ops::LeafOp::Lift {
                     type_row: vec![const_val.const_type().clone()].into(),
                     new_extension: PRELUDE_ID,
                 },
@@ -122,10 +134,9 @@ pub fn loop_with_conditional() -> Result<Hugr> {
             let [const_wire] = lift_node.outputs_arr();
             let [b1] = loop_b.input_wires_arr();
             let conditional_id = {
-                let predicate_inputs = vec![type_row![]; 2];
                 let output_row = loop_b.internal_output_row()?;
                 let mut conditional_b = loop_b.conditional_builder(
-                    (predicate_inputs, const_wire),
+                    ([type_row![], type_row![]], const_wire),
                     vec![(BIT, b1)],
                     output_row,
                     ExtensionSet::new(),
@@ -153,5 +164,58 @@ pub fn loop_with_conditional() -> Result<Hugr> {
         };
         fbuild.finish_with_outputs(loop_id.outputs())?
     };
+    // let mut fbuild = module_builder.define_function(
+    //     "main",
+    //     FunctionType::new(type_row![BIT], type_row![NAT])
+    //                 .with_extension_delta(&ExtensionSet::singleton(&PRELUDE_ID)).into(),
+    // )?;
+    // let _fdef = {
+    //     let [b1] = fbuild.input_wires_arr();
+    //     let loop_id = {
+    //         let mut loop_b = fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
+    //         let signature = loop_b.loop_signature()?.clone();
+    //         let const_val = Const::true_val();
+    //         let const_wire = loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
+    //         let lift_node = loop_b.add_dataflow_op(
+    //             hugr::ops::LeafOp::Lift {
+    //                 type_row: vec![const_val.const_type().clone()].into(),
+    //                 new_extension: PRELUDE_ID,
+    //             },
+    //             [const_wire],
+    //         )?;
+    //         let [const_wire] = lift_node.outputs_arr();
+    //         let [b1] = loop_b.input_wires_arr();
+    //         let conditional_id = {
+    //             let predicate_inputs = vec![type_row![]; 2];
+    //             let output_row = loop_b.internal_output_row()?;
+    //             let mut conditional_b = loop_b.conditional_builder(
+    //                 (predicate_inputs, const_wire),
+    //                 vec![(BIT, b1)],
+    //                 output_row,
+    //                 ExtensionSet::new(),
+    //             )?;
+
+    //             let mut branch_0 = conditional_b.case_builder(0)?;
+    //             let [b1] = branch_0.input_wires_arr();
+
+    //             let continue_wire = branch_0.make_continue(signature.clone(), [b1])?;
+    //             branch_0.finish_with_outputs([continue_wire])?;
+
+    //             let mut branch_1 = conditional_b.case_builder(1)?;
+    //             let [_b1] = branch_1.input_wires_arr();
+
+    //             let wire = branch_1.add_load_const(
+    //                 ConstUsize::new(2).into(),
+    //                 ExtensionSet::singleton(&PRELUDE_ID),
+    //             )?;
+    //             let break_wire = branch_1.make_break(signature, [wire])?;
+    //             branch_1.finish_with_outputs([break_wire])?;
+
+    //             conditional_b.finish_sub_container()?
+    //         };
+    //         loop_b.finish_with_outputs(conditional_id.out_wire(0), [])?
+    //     };
+    //     fbuild.finish_with_outputs(loop_id.outputs())?
+    // };
     module_builder.finish_prelude_hugr().map_err(Into::into)
 }

@@ -142,9 +142,12 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [],
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": []
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -155,8 +158,7 @@
       "signature": {
         "extension_reqs": [],
         "input": [],
-        "output": [],
-        "t": "G"
+        "output": []
       }
     },
     {

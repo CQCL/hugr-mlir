@@ -405,15 +405,18 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "s": "Unit",
-            "size": 2,
-            "t": "Sum"
-          }
-        ],
-        "output": [],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -430,8 +433,7 @@
             "t": "Sum"
           }
         ],
-        "output": [],
-        "t": "G"
+        "output": []
       }
     },
     {
@@ -463,17 +465,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 5
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 5
+          }
+        ],
+        "v": "Extension"
       }
     },
     {

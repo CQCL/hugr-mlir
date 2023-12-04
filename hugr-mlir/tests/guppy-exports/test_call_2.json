@@ -438,22 +438,25 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [],
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": []
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -470,42 +473,48 @@
       "op": "BasicBlock",
       "other_outputs": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [
-            {
-              "extension_reqs": [],
-              "input": [
-                {
-                  "args": [
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": [
+              {
+                "body": {
+                  "extension_reqs": [],
+                  "input": [
                     {
-                      "n": 6,
-                      "tya": "BoundedNat"
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
                     }
                   ],
-                  "bound": "E",
-                  "extension": "arithmetic.int.types",
-                  "id": "int",
-                  "t": "Opaque"
-                }
-              ],
-              "output": [],
-              "t": "G"
-            }
-          ],
+                  "output": []
+                },
+                "params": [],
+                "t": "G"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -543,22 +552,25 @@
       "block": "Exit",
       "cfg_outputs": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [],
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": []
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -570,42 +582,48 @@
       "block": "Exit",
       "cfg_outputs": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [
-            {
-              "extension_reqs": [],
-              "input": [
-                {
-                  "args": [
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": [
+              {
+                "body": {
+                  "extension_reqs": [],
+                  "input": [
                     {
-                      "n": 6,
-                      "tya": "BoundedNat"
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
                     }
                   ],
-                  "bound": "E",
-                  "extension": "arithmetic.int.types",
-                  "id": "int",
-                  "t": "Opaque"
-                }
-              ],
-              "output": [],
-              "t": "G"
-            }
-          ],
+                  "output": []
+                },
+                "params": [],
+                "t": "G"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ],
@@ -719,22 +737,25 @@
           "t": "Sum"
         },
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [],
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": []
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -745,22 +766,25 @@
       "parent": 19,
       "types": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [],
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": []
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -776,42 +800,48 @@
           "t": "Sum"
         },
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [
-            {
-              "extension_reqs": [],
-              "input": [
-                {
-                  "args": [
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": [
+              {
+                "body": {
+                  "extension_reqs": [],
+                  "input": [
                     {
-                      "n": 6,
-                      "tya": "BoundedNat"
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
                     }
                   ],
-                  "bound": "E",
-                  "extension": "arithmetic.int.types",
-                  "id": "int",
-                  "t": "Opaque"
-                }
-              ],
-              "output": [],
-              "t": "G"
-            }
-          ],
+                  "output": []
+                },
+                "params": [],
+                "t": "G"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -822,42 +852,48 @@
       "parent": 20,
       "types": [
         {
-          "extension_reqs": [],
-          "input": [
-            {
-              "args": [
-                {
-                  "n": 6,
-                  "tya": "BoundedNat"
-                }
-              ],
-              "bound": "E",
-              "extension": "arithmetic.int.types",
-              "id": "int",
-              "t": "Opaque"
-            }
-          ],
-          "output": [
-            {
-              "extension_reqs": [],
-              "input": [
-                {
-                  "args": [
+          "body": {
+            "extension_reqs": [],
+            "input": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              }
+            ],
+            "output": [
+              {
+                "body": {
+                  "extension_reqs": [],
+                  "input": [
                     {
-                      "n": 6,
-                      "tya": "BoundedNat"
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
                     }
                   ],
-                  "bound": "E",
-                  "extension": "arithmetic.int.types",
-                  "id": "int",
-                  "t": "Opaque"
-                }
-              ],
-              "output": [],
-              "t": "G"
-            }
-          ],
+                  "output": []
+                },
+                "params": [],
+                "t": "G"
+              }
+            ]
+          },
+          "params": [],
           "t": "G"
         }
       ]
@@ -886,72 +922,25 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [],
-            "t": "G"
-          }
-        ],
-        "t": "G"
-      }
-    },
-    {
-      "input_extensions": [],
-      "name": "foo",
-      "op": "FuncDefn",
-      "parent": 0,
-      "signature": {
-        "extension_reqs": [],
-        "input": [],
-        "output": [
-          {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [
-              {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "body": {
                 "extension_reqs": [],
                 "input": [
                   {
@@ -967,13 +956,75 @@
                     "t": "Opaque"
                   }
                 ],
-                "output": [],
-                "t": "G"
-              }
-            ],
-            "t": "G"
-          }
-        ],
+                "output": []
+              },
+              "params": [],
+              "t": "G"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": [],
+      "name": "foo",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "body": {
+                "extension_reqs": [],
+                "input": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  }
+                ],
+                "output": [
+                  {
+                    "body": {
+                      "extension_reqs": [],
+                      "input": [
+                        {
+                          "args": [
+                            {
+                              "n": 6,
+                              "tya": "BoundedNat"
+                            }
+                          ],
+                          "bound": "E",
+                          "extension": "arithmetic.int.types",
+                          "id": "int",
+                          "t": "Opaque"
+                        }
+                      ],
+                      "output": []
+                    },
+                    "params": [],
+                    "t": "G"
+                  }
+                ]
+              },
+              "params": [],
+              "t": "G"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -983,22 +1034,25 @@
       "op": "FuncDefn",
       "parent": 0,
       "signature": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
-        "output": [],
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
         "t": "G"
       }
     },
@@ -1024,26 +1078,28 @@
         ],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [],
+            "body": {
+              "extension_reqs": [],
+              "input": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                }
+              ],
+              "output": []
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1063,17 +1119,14 @@
         "t": "Opaque"
       },
       "value": {
-        "v": "Prim",
-        "val": {
-          "c": [
-            {
-              "c": "ConstIntS",
-              "log_width": 6,
-              "value": 1
-            }
-          ],
-          "pv": "Extension"
-        }
+        "c": [
+          {
+            "c": "ConstIntS",
+            "log_width": 6,
+            "value": 1
+          }
+        ],
+        "v": "Extension"
       }
     },
     {
@@ -1148,8 +1201,7 @@
             "id": "int",
             "t": "Opaque"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1174,26 +1226,28 @@
         ],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [],
+            "body": {
+              "extension_reqs": [],
+              "input": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                }
+              ],
+              "output": []
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1225,23 +1279,74 @@
         "input": [],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [
-              {
+            "body": {
+              "extension_reqs": [],
+              "input": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                }
+              ],
+              "output": [
+                {
+                  "body": {
+                    "extension_reqs": [],
+                    "input": [
+                      {
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "output": []
+                  },
+                  "params": [],
+                  "t": "G"
+                }
+              ]
+            },
+            "params": [],
+            "t": "G"
+          }
+        ]
+      }
+    },
+    {
+      "datatype": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "body": {
                 "extension_reqs": [],
                 "input": [
                   {
@@ -1257,54 +1362,14 @@
                     "t": "Opaque"
                   }
                 ],
-                "output": [],
-                "t": "G"
-              }
-            ],
-            "t": "G"
-          }
-        ],
-        "t": "G"
-      }
-    },
-    {
-      "datatype": {
-        "extension_reqs": [],
-        "input": [
-          {
-            "args": [
-              {
-                "n": 6,
-                "tya": "BoundedNat"
-              }
-            ],
-            "bound": "E",
-            "extension": "arithmetic.int.types",
-            "id": "int",
-            "t": "Opaque"
-          }
-        ],
-        "output": [
-          {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [],
-            "t": "G"
-          }
-        ],
+                "output": []
+              },
+              "params": [],
+              "t": "G"
+            }
+          ]
+        },
+        "params": [],
         "t": "G"
       },
       "input_extensions": [],
@@ -1351,8 +1416,7 @@
             "t": "Opaque"
           }
         ],
-        "output": [],
-        "t": "G"
+        "output": []
       }
     },
     {
@@ -1364,46 +1428,51 @@
         "input": [],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [
-              {
-                "extension_reqs": [],
-                "input": [
-                  {
-                    "args": [
+            "body": {
+              "extension_reqs": [],
+              "input": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                }
+              ],
+              "output": [
+                {
+                  "body": {
+                    "extension_reqs": [],
+                    "input": [
                       {
-                        "n": 6,
-                        "tya": "BoundedNat"
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
                       }
                     ],
-                    "bound": "E",
-                    "extension": "arithmetic.int.types",
-                    "id": "int",
-                    "t": "Opaque"
-                  }
-                ],
-                "output": [],
-                "t": "G"
-              }
-            ],
+                    "output": []
+                  },
+                  "params": [],
+                  "t": "G"
+                }
+              ]
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1428,26 +1497,28 @@
         ],
         "output": [
           {
-            "extension_reqs": [],
-            "input": [
-              {
-                "args": [
-                  {
-                    "n": 6,
-                    "tya": "BoundedNat"
-                  }
-                ],
-                "bound": "E",
-                "extension": "arithmetic.int.types",
-                "id": "int",
-                "t": "Opaque"
-              }
-            ],
-            "output": [],
+            "body": {
+              "extension_reqs": [],
+              "input": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                }
+              ],
+              "output": []
+            },
+            "params": [],
             "t": "G"
           }
-        ],
-        "t": "G"
+        ]
       }
     },
     {
@@ -1470,8 +1541,7 @@
             "t": "Opaque"
           }
         ],
-        "output": [],
-        "t": "G"
+        "output": []
       }
     },
     {
