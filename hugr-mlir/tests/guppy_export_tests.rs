@@ -1,4 +1,5 @@
 use rstest::{fixture, rstest};
+use std::fs;
 
 use hugr_mlir::Result;
 
@@ -15,18 +16,18 @@ pub fn test_context() -> melior::Context {
 
 #[rstest]
 fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
+    use hugr_mlir::{hugr_to_mlir::hugr_to_mlir,mlir_to_hugr::mlir_to_hugr};
     insta::glob!("guppy-exports", "*.json", |path| {
-        use std::fs;
-        let src = fs::read(path).unwrap();
+        let bytes = fs::read(path).unwrap();
         let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);
-        let m = hugr_mlir::translate::translate_hugr_to_mlir(&src, ul, |bytes| {
-            serde_json::from_slice::<hugr::Hugr>(bytes)
-        })
-        .unwrap();
-        let o = m.as_operation();
-        println!("{o}");
-        assert!(m.as_operation().verify());
-        insta::assert_display_snapshot!(m.as_operation());
+        let hugr = serde_json::from_slice::<hugr::Hugr>(&bytes).unwrap();
+        let mlir_mod = hugr_to_mlir(ul, &hugr).unwrap();
+        assert!(mlir_mod.as_operation().verify());
+        insta::assert_display_snapshot!(mlir_mod.as_operation());
+
+        // let hugr2 = mlir_to_hugr(&mlir_mod.as_operation()).unwrap();
+        // let mlir_mod2 = hugr_to_mlir(ul, &hugr2).unwrap();
+        // assert_eq!(mlir_mod2.as_operation(), mlir_mod.as_operation());
     });
     Ok(())
 }
