@@ -10,8 +10,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .header("../mlir/include/hugr-mlir-c/Support.h")
         .header("../mlir/include/hugr-mlir-c/Dialects.h")
         .header("../mlir/include/hugr-mlir-c/Translate.h")
+        .header("../mlir/include/hugr-mlir-c/Transforms.h")
         .header("../mlir/include/hugr-mlir-c/Analysis.h")
-        .allowlist_file("(.*/mlir/include/hugr-mlir-c/((Translate|Dialects|Analysis|Support)\\.h)|.*/hugr-mlir/.*/Passes\\.capi\\.h\\.inc)")
+        .allowlist_file("(.*/mlir/include/hugr-mlir-c/((Translate|Dialects|Analysis|Transforms|Support)\\.h)|.*/hugr-mlir/.*/Passes\\.capi\\.h\\.inc)")
         .allowlist_recursively(false)
         .raw_line("use mlir_sys::*;")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -26,6 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=../mlir/include/hugr-mlir-c/Dialects.h");
     println!("cargo:rerun-if-changed=../mlir/include/hugr-mlir-c/Translate.h");
     println!("cargo:rerun-if-changed=../mlir/include/hugr-mlir-c/Analysis.h");
+    println!("cargo:rerun-if-changed=../mlir/include/hugr-mlir-c/Transforms.h");
     println!("cargo:rerun-if-changed=../mlir/include/hugr-mlir-c/Support.h");
     println!("cargo:rerun-if-env-changed=DEP_MLIR_INCLUDE_DIRS");
     println!("cargo:rerun-if-env-changed=CARGO_TARGET_DIR");
