@@ -9,6 +9,9 @@
 #define GET_OP_CLASSES
 #include "hugr-mlir/IR/HugrOps.cpp.inc"
 
+#include "llvm/Support/Debug.h"
+#define DEBUG_TYPE "hugr-ops"
+
 /////////////////////////////////////////////////////////////////////////////
 //  FuncOp
 /////////////////////////////////////////////////////////////////////////////
@@ -188,9 +191,10 @@ mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
        (!callee_attr && callee_value_type && callee_value)) &&
       "callee is attribute xor valur");
 
-  if (parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
+  if (func_type.getArgumentTypes().size() > 0 && parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
     return mlir::failure();
   }
+
   llvm::copy(func_type.getArgumentTypes(), std::back_inserter(inputTypes));
   llvm::copy(func_type.getResultTypes(), std::back_inserter(outputTypes));
   return mlir::success();
