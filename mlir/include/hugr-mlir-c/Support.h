@@ -19,5 +19,4 @@ MLIR_CAPI_EXPORTED unsigned mlirValueHash(MlirValue);
 }
 #endif
 
-
 #endif

@@ -15,9 +15,8 @@ struct EmitContext;
 MLIR_CAPI_EXPORTED
 void mlirHugrEmitStringRef(struct EmitContext const*, MlirStringRef);
 
-typedef MlirLogicalResult (*mlirHugrTranslateFromMLIRFunction) (
-    MlirOperation, struct EmitContext const*
-);
+typedef MlirLogicalResult (*mlirHugrTranslateFromMLIRFunction)(
+    MlirOperation, struct EmitContext const*);
 typedef void (*mlirHugrDialectRegistrationFunction)(MlirDialectRegistry);
 
 MLIR_CAPI_EXPORTED
@@ -29,8 +28,7 @@ void mlirHugrRegisterTranslationToMLIR(
 MLIR_CAPI_EXPORTED
 void mlirHugrRegisterTranslationFromMLIR(
     MlirStringRef name, MlirStringRef description,
-    mlirHugrTranslateFromMLIRFunction,
-    mlirHugrDialectRegistrationFunction);
+    mlirHugrTranslateFromMLIRFunction, mlirHugrDialectRegistrationFunction);
 
 MLIR_CAPI_EXPORTED
 int mlirHugrTranslateMain(int argc, char const* const* argv);

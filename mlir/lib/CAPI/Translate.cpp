@@ -45,7 +45,8 @@ struct EmitContext {
   std::reference_wrapper<llvm::raw_ostream> ostream;
 };
 
-void mlirHugrEmitStringRef(struct EmitContext const* emit_context, MlirStringRef str) {
+void mlirHugrEmitStringRef(
+    struct EmitContext const* emit_context, MlirStringRef str) {
   emit_context->ostream.get() << unwrap(str);
 }
 
@@ -53,7 +54,6 @@ void mlirHugrRegisterTranslationFromMLIR(
     MlirStringRef name, MlirStringRef description,
     mlirHugrTranslateFromMLIRFunction translate_fun,
     mlirHugrDialectRegistrationFunction dialect_registration_fun) {
-
   std::string name_str = unwrap(name).str();
   std::string description_str = unwrap(description).str();
 
@@ -62,8 +62,8 @@ void mlirHugrRegisterTranslationFromMLIR(
       [=](mlir::Operation* op, llvm::raw_ostream& os) -> mlir::LogicalResult {
         EmitContext ctx{os};
         return unwrap(translate_fun(wrap(op), &ctx));
-      },[=](mlir::DialectRegistry& registry) {
+      },
+      [=](mlir::DialectRegistry& registry) {
         dialect_registration_fun(wrap(&registry));
-      }
-  );
+      });
 }

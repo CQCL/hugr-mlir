@@ -9,7 +9,6 @@ namespace hugr_mlir {
 #define GEN_PASS_REGISTRATION
 #include "hugr-mlir/Analysis/Passes.h.inc"
 
-} // namespace mlir
-
+}  // namespace hugr_mlir
 
 #endif

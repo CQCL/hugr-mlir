@@ -1,4 +1,5 @@
 #include "hugr-mlir-c/Analysis.h"
+
 #include "hugr-mlir/Analysis/Passes.h"
 #include "mlir/CAPI/Pass.h"
 

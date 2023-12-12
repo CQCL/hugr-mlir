@@ -22,8 +22,10 @@ include "mlir/Interfaces/SideEffectInterfaces.td"
 def LinearityResource : Resource<"hugr_mlir::LinearityResource">;
 
 def HugrTypeMemoryEffectsTrait : NativeOpTrait<"HugrTypeMemoryEffectsTrait">;
-
 def HugrMemoryOp : TraitList<[MemoryEffectsOpInterface, HugrTypeMemoryEffectsTrait]>;
+
+def HugrSymbolUserTrait : NativeOpTrait<"HugrSymbolUserTrait">;
+def HugrSymbolUserOp : TraitList<[SymbolUserOpInterface, HugrSymbolUserTrait]>;
 
 def DataflowGraphRegion : Region<
     CPred<"hugr_mlir::isDataflowGraphRegion($_self)">,
@@ -72,6 +74,7 @@ def Hugr_FuncOp : Hugr_Op<"func",
   , FunctionOpInterface
   , Symbol, SingleBlock
   , OpAsmOpInterface
+  , HugrSymbolUserOp
   ]> {
     let summary = "Hugr FuncDefn/FuncDecl op";
     let hasCustomAssemblyFormat = 1;
@@ -105,15 +108,14 @@ def Hugr_FuncOp : Hugr_Op<"func",
 }
 
 def Hugr_TypeAliasOp : Hugr_Op<"type_alias",
-    [Symbol]> {
+    [Symbol, HugrSymbolUserOp]> {
     let summary = "A Hugr AliasDefn or AliasDecl node";
     let assemblyFormat = "($sym_visibility^)? $extensions``$sym_name``(`,`$constraint^)? (`=` $aliasee^)? attr-dict";
     let description = [{
         A `type_alias` op represents an `AliasDefn` node if and only id `aliasee` is present.
         Otherwise it represents an `AliasDecl` node.
 
-        TODO: Require that aleasee implements `HugrTypeInterface`. Drop the
-        extensions and constraint arguments and get these from aliasee.
+        TODO: Require that aleasee implements `HugrTypeInterface`
     }];
 
     let arguments = (ins
@@ -124,6 +126,7 @@ def Hugr_TypeAliasOp : Hugr_Op<"type_alias",
         DefaultValuedAttr<Hugr_TypeConstraintAttr, "TypeConstraint::Equatable">:$constraint
     );
 
+    let hasVerifier = 1;
     let extraClassDeclaration = [{
         bool isDeclaration() { return getAliasee().has_value(); }
     }];
@@ -142,6 +145,7 @@ def Hugr_TailLoopOp : Hugr_Op<"tailloop",
     , AttrSizedOperandSegments, AttrSizedResultSegments
     , HugrMemoryOp
     , OpAsmOpInterface
+    , HugrSymbolUserOp
     ]> {
     let summary = "Hugr TailLoop op";
     let assemblyFormat = "$predicate_type (`(`$inputs^`:`type($inputs)`)`)? (`passthrough` `(`$passthrough_inputs^`:`type($passthrough_inputs)`)`)?custom<TailLoopOpOutputTypes>(ref(type($passthrough_inputs)),type($outputs),type($passthrough_outputs)) attr-dict-with-keyword ($body^)?";
@@ -170,7 +174,9 @@ def Hugr_TailLoopOp : Hugr_Op<"tailloop",
 
 def Hugr_ConditionalOp : Hugr_Op<"conditional",
     [ HugrMemoryOp
-    , OpAsmOpInterface ]> {
+    , OpAsmOpInterface
+    , HugrSymbolUserOp
+    ]> {
     let summary = "Hugr Conditional op";
     let assemblyFormat = "`(`operands`:`type(operands)`)` `->`type($outputs) attr-dict-with-keyword $cases";
     let description = [{
@@ -211,7 +217,7 @@ def Hugr_ConditionalOp : Hugr_Op<"conditional",
 }
 
 def Hugr_LiftOp : Hugr_Op<"lift",
-  [ HugrMemoryOp, Pure ]> {
+  [ HugrMemoryOp, HugrSymbolUserOp, Pure ]> {
     let summary = "A Hugr Lift op";
     let assemblyFormat = "$extensions $inputs`:` functional-type($inputs,$outputs) attr-dict";
     let description = [{
@@ -235,26 +241,26 @@ def Hugr_LiftOp : Hugr_Op<"lift",
     );
 }
 
-def Hugr_LiftGraphOp : Hugr_Op<"lift_graph",
-    [Pure]> {
-    let summary = "A Hugr LiftGraph op";
-    let assemblyFormat = "$extensions $input `:` type($input) `->` type($output) attr-dict";
-    let description = [{
-        TODO how is this represented in hugr?
-
-        TODO Implement InferTypeOpInterface
-              => We will be able to omit the type of output in the assembly format
-
-        TODO Verify that the types match up
-    }];
-    let arguments = (ins
-        Hugr_ExtensionSetAttr:$extensions,
-        Hugr_FunctionType:$input
-    );
-    let results = (outs
-        Hugr_FunctionType:$output
-    );
-}
+// def Hugr_LiftGraphOp : Hugr_Op<"lift_graph",
+//   [Pure]> {
+//   let summary = "A Hugr LiftGraph op";
+//   let assemblyFormat = "$extensions $input `:` type($input) `->` type($output) attr-dict";
+//   let description = [{
+//       TODO how is this represented in hugr?
+//
+//       TODO Implement InferTypeOpInterface
+//             => We will be able to omit the type of output in the assembly format
+//
+//       TODO Verify that the types match up
+//   }];
+//   let arguments = (ins
+//       Hugr_ExtensionSetAttr:$extensions,
+//       Hugr_FunctionType:$input
+//   );
+//   let results = (outs
+//       Hugr_FunctionType:$output
+//   );
+// }
 
 def FuncStaticEdgeAttr : Attr<CPred<"llvm::isa<hugr_mlir::FunctionType>(llvm::cast<mlir::TypedAttr>($_self).getType())">, "a static edge to a function"> {
     let baseAttr = Hugr_StaticEdgeAttr;
@@ -269,6 +275,7 @@ def Hugr_CallOp : Hugr_Op<"call",
   // RangedTypesMatchWith<"inputs match function type", "callee", "inputs", "llvm::cast<FunctionType>($_self).getArgumentTypes()">
   // , RangedTypesMatchWith<"outputs match function type", "callee", "outputs", "llvm::cast<FunctionType>($_self).getResultTypes()">
   , HugrMemoryOp
+  , HugrSymbolUserOp
   // , InferTypeOpInterface
   ]> {
     let summary = "A Hugr Call op";
@@ -301,7 +308,8 @@ def Hugr_CallOp : Hugr_Op<"call",
 }
 
 def Hugr_OutputOp : Hugr_Op<"output",
-  [Terminator,ReturnLike, HugrTypeMemoryEffectsTrait]> {
+  [Terminator,ReturnLike, HugrMemoryOp
+  , HugrSymbolUserOp ]> {
     let summary = "A Hugr ouput node";
     let assemblyFormat = "($outputs^ `:` type($outputs))? attr-dict";
     let description = [{
@@ -315,7 +323,7 @@ def Hugr_OutputOp : Hugr_Op<"output",
 }
 
 def Hugr_CfgOp : Hugr_Op<"cfg",
-    [ OpAsmOpInterface, HugrMemoryOp
+    [ OpAsmOpInterface, HugrMemoryOp, HugrSymbolUserOp
     // TODO RegionBranchOpInterface ,
     ]
     > {
@@ -343,7 +351,7 @@ def Hugr_CfgOp : Hugr_Op<"cfg",
     }];
 }
 
-def Hugr_SwitchOp : Hugr_Op<"switch", [Terminator]> {
+def Hugr_SwitchOp : Hugr_Op<"switch", [HugrMemoryOp, HugrSymbolUserOp, Terminator]> {
     let summary = "A branching terminator for hugr.cfg body regions";
     let assemblyFormat = "operands`:` type(operands) $destinations attr-dict";
     let description = "TODO";
@@ -360,7 +368,7 @@ def Hugr_SwitchOp : Hugr_Op<"switch", [Terminator]> {
 def Hugr_DfgOp : Hugr_Op<"dfg",
     [ SingleBlock
     , OpAsmOpInterface
-    , HugrMemoryOp
+    , HugrMemoryOp, HugrSymbolUserOp
     ]> {
     let summary = "A Hugr DFG";
     let assemblyFormat = "(`input` `extensions` $input_extensions^)? $inputs `:` functional-type($inputs, $outputs) attr-dict-with-keyword( $body^)?";
@@ -388,7 +396,7 @@ def Hugr_DfgOp : Hugr_Op<"dfg",
 
 
 def Hugr_ExtensionOp : Hugr_Op<"ext_op",
-    [HugrMemoryOp]> {
+    [HugrMemoryOp, HugrSymbolUserOp]> {
     let summary = "A node representing an arbitrary extension op node in Hugr.";
     let assemblyFormat = "$extensions``$hugr_opname $args `:` functional-type($args,$results) attr-dict";
     let description = [{
@@ -431,7 +439,7 @@ def Hugr_PanicOp : Hugr_Op<"panic",
 }
 
 def Hugr_ConstOp : Hugr_Op<"const",
-    [Symbol]> {
+    [Symbol, HugrSymbolUserOp]> {
     let summary = "A Hugr Const node";
     let assemblyFormat = "$sym_name `:` $type (`=` $value^)? attr-dict";
     let description = [{
@@ -451,7 +459,7 @@ def Hugr_ConstOp : Hugr_Op<"const",
 def Hugr_LoadConstantOp : Hugr_Op<"load_constant",
     [ ConstantLike
     , DeclareOpInterfaceMethods<InferTypeOpInterface>
-    // SymbolUserOpInterface
+    , HugrSymbolUserOp
     ]> {
     let summary = "A Hugr LoadConstant node";
     let assemblyFormat = "custom<StaticEdge>($const_ref) attr-dict";
@@ -477,6 +485,7 @@ def Hugr_MakeTupleOp : Hugr_Op<"make_tuple",
     [ Pure
     , DeclareOpInterfaceMethods<InferTypeOpInterface>
     , HugrMemoryOp
+    , HugrSymbolUserOp
     ]> {
     let summary = "A Hugr LeafOp::MakeTuple node";
     let assemblyFormat = "`(`($inputs^ `:` type($inputs))?`)` attr-dict";
@@ -498,6 +507,7 @@ def Hugr_UnpackTupleOp : Hugr_Op<"unpack_tuple",
     [ Pure
     , DeclareOpInterfaceMethods<InferTypeOpInterface>
     , HugrMemoryOp
+    , HugrSymbolUserOp
     ]> {
     let summary = "A Hugr LeafOp::UnpackTuple node";
     let assemblyFormat = "$input `:` type($input) attr-dict";
@@ -517,7 +527,9 @@ def Hugr_UnpackTupleOp : Hugr_Op<"unpack_tuple",
 }
 
 def Hugr_TagOp : Hugr_Op<"tag",
-    [ Pure, HugrMemoryOp ]> {
+    [ Pure, HugrMemoryOp
+    , HugrSymbolUserOp
+    ]> {
     let summary = "A Hugr LeafOp::Tag node";
     let assemblyFormat = "$tag $input `:` type($input) `->` type($output) attr-dict";
     let description = [{
@@ -539,6 +551,7 @@ def Hugr_TagOp : Hugr_Op<"tag",
 def Hugr_IdentityOp : Hugr_Op<"identity",
     [ HugrMemoryOp
     , SameOperandsAndResultType
+    , HugrSymbolUserOp
     ]> {
     let summary = "A Hugr Identity op";
     let assemblyFormat = "$inputs `:` type($inputs) attr-dict";

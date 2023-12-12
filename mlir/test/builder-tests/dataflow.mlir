@@ -5,15 +5,15 @@
 
 hugr.module @nested_identity {
   type_alias ["quantum"]@qb, Linear
-  func @main[](%i: index, %qb0: !hugr.ref<[]@qb,Linear>) -> (index, !hugr.ref<[]@qb,Linear>) {
-    %qb1 = ext_op ["quantum"] "H"  %qb0 : (!hugr.ref<[]@qb,Linear>) -> (!hugr.ref<[]@qb,Linear>)
+  func @main[](%i: index, %qb0: !hugr.ref<["quantum"]@qb,Linear>) -> (index, !hugr.ref<["quantum"]@qb,Linear>) {
+    %qb1 = ext_op ["quantum"] "H"  %qb0 : (!hugr.ref<["quantum"]@qb,Linear>) -> (!hugr.ref<["quantum"]@qb,Linear>)
 
     %j = dfg %i : (index) -> index  {
     ^bb0(%a: index):
        output %a : index
     }
 
-    output %j, %qb1 : index, !hugr.ref<[]@qb,Linear>
+    output %j, %qb1 : index, !hugr.ref<["quantum"]@qb,Linear>
   }
 }
 

@@ -20,7 +20,12 @@ def HugrTypeInterface : TypeInterface<"HugrTypeInterface"> {
             }], "hugr_mlir::ExtensionSetAttr", "getExtensions", (ins)>,
         InterfaceMethod<[{
                 TODO Description,
-            }], "hugr_mlir::TypeConstraint", "getConstraint", (ins)>
+            }], "hugr_mlir::TypeConstraint", "getConstraint", (ins)>,
+        InterfaceMethod<[{
+                TODO Description,
+            }], "hugr_mlir::TypeConstraintAttr", "getConstraintAttr", (ins), "", [{
+                return hugr_mlir::TypeConstraintAttr::get($_type.getContext(), llvm::cast<HugrTypeInterface>($_type).getConstraint());
+            }]>
     ];
 }
 

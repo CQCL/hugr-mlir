@@ -6,6 +6,6 @@
 namespace hugr_mlir {
 #define GEN_PASS_DECL_LOWERHUGRPASS
 #include "hugr-mlir/Analysis/Passes.h.inc"
-}
+}  // namespace hugr_mlir
 
-#endif // HUGR_MLIR_LOWER_HUGR_PASS_H
+#endif  // HUGR_MLIR_LOWER_HUGR_PASS_H

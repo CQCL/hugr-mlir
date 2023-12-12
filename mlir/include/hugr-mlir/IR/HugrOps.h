@@ -22,8 +22,13 @@ void getHugrTypeMemoryEffects(
     mlir::Operation *,
     llvm::SmallVectorImpl<
         mlir::SideEffects::EffectInstance<mlir::MemoryEffects::Effect>> &);
+
 bool isDataflowGraphRegion(mlir::Region &);
+
 bool isControlFlowGraphRegion(mlir::Region &);
+
+mlir::LogicalResult verifyHugrSymbolUserOpInterface(
+    mlir::SymbolUserOpInterface, mlir::SymbolTableCollection &);
 
 }  // namespace hugr_mlir
 
@@ -32,9 +37,22 @@ namespace mlir::OpTrait {
 template <typename ConcreteOp>
 struct HugrTypeMemoryEffectsTrait
     : TraitBase<ConcreteOp, HugrTypeMemoryEffectsTrait> {
-  void getEffects(llvm::SmallVectorImpl<mlir::SideEffects::EffectInstance<
-                      mlir::MemoryEffects::Effect>> &effects) {
+  void getEffects(
+      llvm::SmallVectorImpl<SideEffects::EffectInstance<MemoryEffects::Effect>>
+          &effects) {
     return hugr_mlir::getHugrTypeMemoryEffects(this->getOperation(), effects);
+  }
+};
+
+template <typename ConcreteOp>
+struct HugrSymbolUserTrait : TraitBase<ConcreteOp, HugrSymbolUserTrait> {
+  LogicalResult verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
+    return hugr_mlir::verifyHugrSymbolUserOpInterface(
+        llvm::cast<SymbolUserOpInterface>(this->getOperation()), symbolTable);
+  }
+
+  static LogicalResult verifyTrait(Operation *op) {
+    return success(llvm::isa_and_present<SymbolUserOpInterface>(*op));
   }
 };
 

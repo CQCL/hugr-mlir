@@ -6,7 +6,6 @@
 namespace hugr_mlir {
 #define GEN_PASS_DECL_HUGRVERIFYLINEARITYPASS
 #include "hugr-mlir/Analysis/Passes.h.inc"
-}
+}  // namespace hugr_mlir
 
-
-#endif // HUGR_MLIR_ANALYSIS_VERIFY_LINEARITY_PASS
+#endif  // HUGR_MLIR_ANALYSIS_VERIFY_LINEARITY_PASS

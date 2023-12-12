@@ -1,6 +1,7 @@
 #include "hugr-mlir/IR/HugrOps.h"
 
 #include "hugr-mlir/IR/HugrDialect.h"
+#include "llvm/ADT/TypeSwitch.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/Interfaces/FunctionImplementation.h"
@@ -514,6 +515,34 @@ mlir::LogicalResult hugr_mlir::DfgOp::verifyRegions() {
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// TypeAliasOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::TypeAliasOp::verify() {
+  // TODO
+  // If aliasee: Verify aliasee HugrTypeInterface
+  // If aliasee: Verify aliasee constraints and extensions match op
+  if (auto aliasee = getAliaseeAttr()) {
+    auto t = llvm::dyn_cast<HugrTypeInterface>(aliasee.getValue());
+    if (!t) {
+      return mlir::emitError(getLoc())
+             << "aliasee is not HugrTypeInterface: " << aliasee.getValue();
+    }
+    if (t.getExtensions() != getExtensions()) {
+      return mlir::emitError(getLoc())
+             << "Extensions to not match aliasee: expected "
+             << t.getExtensions() << " found " << getExtensions();
+    }
+    if (t.getConstraint() != getConstraint()) {
+      return mlir::emitError(getLoc())
+             << "Constraint to not match aliasee: expected "
+             << t.getConstraintAttr() << " found " << getConstraintAttr();
+    }
+  }
+
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Miscilaneous free functions
 /////////////////////////////////////////////////////////////////////////////
 void hugr_mlir::getHugrTypeMemoryEffects(
@@ -564,6 +593,152 @@ bool hugr_mlir::isControlFlowGraphRegion(mlir::Region& region) {
     }
   }
   return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//  verifyHugrSymbolUserOpInterface
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
+    mlir::SymbolUserOpInterface op, mlir::SymbolTableCollection& stc) {
+  // struct WorkItem {
+  //   std::string name;
+  //   Operation* symbol_table;
+  //   Attribute attr;
+  // };
+
+  mlir::OpBuilder builder(op->getContext());
+
+  // might be null, which is fine so long as we have no references
+  mlir::Operation* this_op_symbol_table =
+      op->getParentWithTrait<mlir::OpTrait::SymbolTable>();
+
+  auto getOpOrParentWithSymbolTable = [](mlir::Operation* op) {
+    return op->hasTrait<mlir::OpTrait::SymbolTable>()
+               ? op
+               : op->getParentWithTrait<mlir::OpTrait::SymbolTable>();
+  };
+
+  std::optional<mlir::InFlightDiagnostic> mb_ifd;
+  auto get_ifd = [&]() -> mlir::InFlightDiagnostic& {
+    if (!mb_ifd) {
+      mb_ifd.emplace(mlir::emitError(op->getLoc()));
+    }
+    return *mb_ifd;
+  };
+
+  llvm::SmallVector<std::tuple<mlir::NamedAttribute, mlir::Operation*>>
+      worklist;
+  llvm::transform(op->getAttrs(), std::back_inserter(worklist), [&](auto x) {
+    return std::make_tuple(x, this_op_symbol_table);
+  });
+  for (auto& r : op->getRegions()) {
+    for (auto const& [i, b] : llvm::enumerate(r.getBlocks())) {
+      llvm::transform(
+          b.getArguments(), std::back_inserter(worklist), [&](auto x) {
+            std::string s;
+            {
+              llvm::raw_string_ostream os(s);
+              os << "r[" << r.getRegionNumber() << "]b[" << i << "]_"
+                 << x.getArgNumber();
+            }
+            return std::make_tuple(
+                mlir::NamedAttribute(
+                    builder.getStringAttr(s), mlir::TypeAttr::get(x.getType())),
+                this_op_symbol_table);
+          });
+    }
+  }
+  llvm::transform(
+      llvm::enumerate(op->getOperands()), std::back_inserter(worklist),
+      [&](auto x) {
+        auto [i, operand] = x;
+        std::string s;
+        {
+          llvm::raw_string_ostream os(s);
+          os << "operand_" << i;
+        }
+        mlir::Operation* symbol_table =
+            llvm::TypeSwitch<mlir::Value, mlir::Operation*>(operand)
+                .Case([&](mlir::BlockArgument ba) -> mlir::Operation* {
+                  return getOpOrParentWithSymbolTable(
+                      ba.getOwner()->getParentOp());
+                })
+                .Case([&](mlir::OpResult& res) -> mlir::Operation* {
+                  return getOpOrParentWithSymbolTable(res.getOwner());
+                })
+                .Default([](mlir::Value) -> mlir::Operation* {
+                  assert(false && "unknown value subclass");
+                });
+        return std::make_tuple(
+            mlir::NamedAttribute(
+                builder.getStringAttr(s),
+                mlir::TypeAttr::get(operand.getType())),
+            symbol_table);
+      });
+
+  llvm::transform(
+      llvm::enumerate(op->getResults()), std::back_inserter(worklist),
+      [&](auto x) {
+        auto [i, res] = x;
+        std::string s;
+        {
+          llvm::raw_string_ostream os(s);
+          os << "result_" << i;
+        }
+        return std::make_tuple(
+            mlir::NamedAttribute(
+                builder.getStringAttr(s), mlir::TypeAttr::get(res.getType())),
+            this_op_symbol_table);
+      });
+
+  for (auto const& [named_attr, symbol_table] : worklist) {
+    llvm::DenseSet<hugr_mlir::AliasRefType> ref_types;
+
+    mlir::AttrTypeWalker walker;
+    walker.addWalk([&](hugr_mlir::AliasRefType ref) { ref_types.insert(ref); });
+    walker.walk(named_attr.getValue());
+
+    if (ref_types.empty()) {
+      continue;
+    }
+    if (!symbol_table) {
+      get_ifd() << "No symbol table";  // << ref.getRef();
+      break;
+    }
+    for (auto ref : ref_types) {
+      mlir::Operation* o = stc.lookupSymbolIn(symbol_table, ref.getRef());
+      if (!o) {
+        get_ifd() << "Unknown symbol: " << ref.getRef();
+        break;
+      }
+      auto alias_op = llvm::dyn_cast<hugr_mlir::TypeAliasOp>(o);
+      if (!alias_op) {
+        auto& ifd = get_ifd() << "Alias references non-hugr.type_alias op";
+        ifd.attachNote(o->getLoc()) << o;
+        break;
+      }
+
+      if (alias_op.getExtensionsAttr() != ref.getExtensions()) {
+        auto& ifd = get_ifd() << "Alias has wrong extensions: expected "
+                              << alias_op.getExtensionsAttr() << " for " << ref;
+        ifd.attachNote(alias_op.getLoc())
+            << "symbol table:" << alias_op->getName();
+        break;
+      }
+      if (alias_op.getConstraint() != ref.getConstraint()) {
+        auto& ifd = get_ifd() << "Alias has wrong constraint: expected "
+                              << alias_op.getConstraintAttr() << " for " << ref;
+        ifd.attachNote(alias_op.getLoc())
+            << "symbol table:" << alias_op->getName();
+        break;
+      }
+    }
+    if (mb_ifd) {
+      return mlir::failure();
+    }
+  }
+
+  return mlir::success();
 }
 
 void hugr_mlir::HugrDialect::registerOps() {
