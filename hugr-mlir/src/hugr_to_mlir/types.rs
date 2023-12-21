@@ -27,7 +27,7 @@ pub fn hugr_to_mlir_type<'c>(
     ctx: &'c Context,
     type_: &hugr::types::Type,
 ) -> Result<melior::ir::Type<'c>, Error> {
-    use hugr::types::{TypeEnum};
+    use hugr::types::TypeEnum;
     match type_.as_type_enum() {
         TypeEnum::Sum(sum_type) => {
             let mut alts = std::vec::Vec::<_>::new();
@@ -46,21 +46,26 @@ pub fn hugr_to_mlir_type<'c>(
         )
         .into()),
         TypeEnum::Extension(ref custom_type) => Ok(crate::mlir::hugr::OpaqueType::new(
-                custom_type.name().as_ref(),
-                extension_id_to_extension_attr(ctx, custom_type.extension()),
-                collect_type_args::<Vec<_>>(ctx, custom_type.args())?,
-                mlir::hugr::TypeConstraintAttr::new(ctx, custom_type.bound()),
-            ) .into()),
+            custom_type.name().as_ref(),
+            extension_id_to_extension_attr(ctx, custom_type.extension()),
+            collect_type_args::<Vec<_>>(ctx, custom_type.args())?,
+            mlir::hugr::TypeConstraintAttr::new(ctx, custom_type.bound()),
+        )
+        .into()),
         TypeEnum::Alias(ref alias_decl) => Ok(mlir::hugr::AliasRefType::new(
-                mlir::hugr::ExtensionSetAttr::new(ctx, []),
-                melior::ir::attribute::FlatSymbolRefAttribute::new(ctx, alias_decl.name.as_ref())
-                    .into(),
-                mlir::hugr::TypeConstraintAttr::new(ctx, alias_decl.bound),
-            ).into()),
-        TypeEnum::Function(ref function_type)
-            if function_type.params().len() == 0 => Ok(hugr_to_mlir_function_type(ctx, function_type.body())?.into()),
-        TypeEnum::Function(ref function_type) => panic!("unimplemented: TypeEnum::Function with params"),
-        TypeEnum::Variable(size, bound) => panic!("unimplemented: TypeEnum::Variable")
+            mlir::hugr::ExtensionSetAttr::new(ctx, []),
+            melior::ir::attribute::FlatSymbolRefAttribute::new(ctx, alias_decl.name.as_ref())
+                .into(),
+            mlir::hugr::TypeConstraintAttr::new(ctx, alias_decl.bound),
+        )
+        .into()),
+        TypeEnum::Function(ref function_type) if function_type.params().len() == 0 => {
+            Ok(hugr_to_mlir_function_type(ctx, function_type.body())?.into())
+        }
+        TypeEnum::Function(ref function_type) => {
+            panic!("unimplemented: TypeEnum::Function with params")
+        }
+        TypeEnum::Variable(size, bound) => panic!("unimplemented: TypeEnum::Variable"),
     }
 }
 

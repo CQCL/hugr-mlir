@@ -486,6 +486,7 @@ def Hugr_MakeTupleOp : Hugr_Op<"make_tuple",
     , DeclareOpInterfaceMethods<InferTypeOpInterface>
     , HugrMemoryOp
     , HugrSymbolUserOp
+    // , InferTypeOpInterface
     ]> {
     let summary = "A Hugr LeafOp::MakeTuple node";
     let assemblyFormat = "`(`($inputs^ `:` type($inputs))?`)` attr-dict";
@@ -524,11 +525,13 @@ def Hugr_UnpackTupleOp : Hugr_Op<"unpack_tuple",
     );
 
     let hasVerifier = 1;
+
 }
 
 def Hugr_TagOp : Hugr_Op<"tag",
     [ Pure, HugrMemoryOp
     , HugrSymbolUserOp
+    // , InferTypeOpInterface
     ]> {
     let summary = "A Hugr LeafOp::Tag node";
     let assemblyFormat = "$tag $input `:` type($input) `->` type($output) attr-dict";
@@ -539,14 +542,70 @@ def Hugr_TagOp : Hugr_Op<"tag",
     }];
 
     let arguments = (ins
-        I32Attr:$tag,
+        IndexAttr:$tag,
         HugrTypeInterface:$input
     );
 
     let results = (outs
         Hugr_SumType:$output
     );
+
+    let hasVerifier = 1;
+
+    let builders = [
+        OpBuilder<(ins "mlir::Type":$type, "mlir::Value":$input, "unsigned":$tag), [{
+          $_state.addTypes(type);
+          $_state.addOperands(input);
+          $_state.getOrAddProperties<Properties>().tag = $_builder.getIndexAttr(tag);
+        }]>
+    ];
 }
+
+def Hugr_ReadTagOp : Hugr_Op<"read_tag",
+   [ Pure, HugrMemoryOp, HugrSymbolUserOp ]> {
+    let summary = "An implementation op to read the tag of a sum";
+    let assemblyFormat = "$input `:` type($input) attr-dict";
+    let description = [{
+        TODO
+    }];
+
+    let arguments = (ins
+        Hugr_SumType:$input
+    );
+
+    let results = (outs
+        Index:$output
+    );
+}
+
+def Hugr_ReadVariantOp : Hugr_Op<"read_variant",
+   [ Pure, HugrMemoryOp, HugrSymbolUserOp,
+   DeclareOpInterfaceMethods<InferTypeOpInterface>
+   ]> {
+    let summary = "An implementation op to read the tag of a sum";
+    let assemblyFormat = "$tag $input `:` type($input) attr-dict";
+    let description = [{
+        TODO
+    }];
+
+    let arguments = (ins
+        IndexAttr:$tag,
+        Hugr_SumType:$input
+    );
+
+    let results = (outs
+        HugrTypeInterface:$output
+    );
+
+    let builders = [
+        OpBuilder<(ins "mlir::Type":$type, "::mlir::Value":$input, "unsigned":$tag), [{
+          $_state.addTypes(type);
+          $_state.addOperands(input);
+          $_state.getOrAddProperties<Properties>().tag = $_builder.getIndexAttr(tag);
+        }]>
+    ];
+}
+
 
 def Hugr_IdentityOp : Hugr_Op<"identity",
     [ HugrMemoryOp

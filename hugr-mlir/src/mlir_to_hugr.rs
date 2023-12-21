@@ -33,7 +33,6 @@ pub mod hash;
 
 // }
 
-
 // impl<'a,'b,B: 'b + hugr::Builder::Container> TranslationState<'a,'b,B> {
 //     fn new(builder: B) -> Self {
 //         Self {

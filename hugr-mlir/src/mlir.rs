@@ -534,10 +534,11 @@ pub mod hugr {
                 Self::builder(loc)
                     .add_attributes(&[(
                         melior::ir::Identifier::new(context, "tag"),
-                        melior::ir::attribute::IntegerAttribute::new(
-                            tag as i64,
-                            melior::ir::r#type::IntegerType::new(context, 32).into(),
-                        )
+                        melior::ir::attribute::IntegerAttribute::new(tag as i64, unsafe {
+                            melior::ir::r#type::Type::from_raw(mlir_sys::mlirIndexTypeGet(
+                                context.to_raw(),
+                            ))
+                        })
                         .into(),
                     )])
                     .add_results(&[result_type])

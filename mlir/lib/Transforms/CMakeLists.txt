@@ -6,4 +6,7 @@ add_mlir_library(HugrMLIRTransforms
 
   LINK_LIBS PUBLIC
   HugrMLIRDialect
+  MLIRRewrite
+  MLIRTransforms
+  MLIRIndexDialect
 )

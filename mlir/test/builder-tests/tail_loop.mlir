@@ -7,8 +7,9 @@ hugr.module @basic_loop {
         %i, %j = tailloop !hugr.sum<!unit,tuple<index>> passthrough (%x : !bool) -> (index) {
         ^bb0():
         %a = arith.constant 1 : index
-        %b = tag 1 %a : index -> <!unit,tuple<index>>
-        output %b : !hugr.sum<!unit,tuple<index>>
+        %b = make_tuple (%a : index)
+        %c = tag 1 %b : tuple<index> -> <!unit,tuple<index>>
+        output %c : !hugr.sum<!unit,tuple<index>>
         }
         output %i, %j : index, !bool
     }

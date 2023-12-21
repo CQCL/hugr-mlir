@@ -19,10 +19,15 @@ pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
 }
 
 pub fn translate_mlir_to_hugr<'c, E: Into<crate::Error>>(
-    src: &melior::ir::Operation<'c>
+    src: &melior::ir::Operation<'c>,
 ) -> Result<hugr::Hugr> where
 {
-    mlir_to_hugr(src.try_into().map_err(|_| anyhow!("translate_mlir_to_hugr: expected hugr.module found {:?}", src.name()))?)
+    mlir_to_hugr(src.try_into().map_err(|_| {
+        anyhow!(
+            "translate_mlir_to_hugr: expected hugr.module found {:?}",
+            src.name()
+        )
+    })?)
 }
 
 fn translate_hugr_raw_to_mlir(
@@ -48,11 +53,9 @@ fn translate_hugr_raw_to_mlir(
 
 fn translate_mlir_to_hugr_raw<E: Into<crate::Error>>(
     op: mlir_sys::MlirOperation,
-    go: impl FnOnce(hugr::Hugr) -> Result<(),E>,
+    go: impl FnOnce(hugr::Hugr) -> Result<(), E>,
 ) -> mlir_sys::MlirLogicalResult {
-    let op1 = unsafe {
-        melior::ir::OperationRef::from_raw(op)
-    };
+    let op1 = unsafe { melior::ir::OperationRef::from_raw(op) };
     match translate_mlir_to_hugr::<E>(&op1).and_then(|x| go(x).map_err(Into::into)) {
         Ok(()) => unsafe { mlir_sys::mlirLogicalResultSuccess() },
         Err(e) => {
@@ -88,14 +91,18 @@ mod ffi {
         op: mlir_sys::MlirOperation,
         emit_context: *const mlir::hugr::ffi::EmitContext,
     ) -> mlir_sys::MlirLogicalResult {
-        translate_mlir_to_hugr_raw(op, |x| rmp_serde::to_vec(&x).map(|y| mlir::emit_stringref((&emit_context).into(), y)))
+        translate_mlir_to_hugr_raw(op, |x| {
+            rmp_serde::to_vec(&x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
+        })
     }
 
     pub extern "C" fn translate_mlir_to_hugr_json(
         op: mlir_sys::MlirOperation,
         emit_context: *const mlir::hugr::ffi::EmitContext,
     ) -> mlir_sys::MlirLogicalResult {
-        translate_mlir_to_hugr_raw(op, |x| serde_json::to_vec(&x).map(|y| mlir::emit_stringref((&emit_context).into(), y)))
+        translate_mlir_to_hugr_raw(op, |x| {
+            serde_json::to_vec(&x).map(|y| mlir::emit_stringref((&emit_context).into(), y))
+        })
     }
 
     pub extern "C" fn register_translation_dialects(registry: mlir_sys::MlirDialectRegistry) {

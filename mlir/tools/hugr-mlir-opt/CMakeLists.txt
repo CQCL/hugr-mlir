@@ -6,6 +6,7 @@ target_link_libraries(hugr-mlir-opt
   HugrMLIRDialect
   HugrMLIRAnalysis
   HugrMLIRTransforms
+  HugrMLIRConversion
   MLIRArithDialect
   MLIRControlFlowDialect
   MLIRLLVMDialect

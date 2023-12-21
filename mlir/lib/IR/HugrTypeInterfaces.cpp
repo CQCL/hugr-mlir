@@ -82,7 +82,7 @@ struct OpaqueHugrTypeInterfaceModel
     return ExtensionSetAttr::get(t.getContext());
   }
   TypeConstraint getConstraint(mlir::Type t) const {
-    return llvm::cast<AliasRefType>(t).getConstraint();
+    return llvm::cast<OpaqueType>(t).getConstraint();
   }
 };
 

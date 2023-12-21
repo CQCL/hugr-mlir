@@ -27,6 +27,13 @@ add_mlir_public_c_api_library(HugrMLIRTransformsCAPI
   HugrMLIRTransforms
 )
 
+add_mlir_public_c_api_library(HugrMLIRConversionCAPI
+  Conversion.cpp
+  PARTIAL_SOURCES_INTENDED
+  LINK_LIBS PUBLIC
+  HugrMLIRConversion
+)
+
 add_mlir_public_c_api_library(HugrMLIRSupportCAPI
   Support.cpp
   PARTIAL_SOURCES_INTENDED
@@ -48,6 +55,7 @@ add_mlir_aggregate(HugrMLIR-C
   HugrMLIRTranslateCAPI
   HugrMLIRAnalysisCAPI
   HugrMLIRTransformsCAPI
+  HugrMLIRConversionCAPI
   HugrMLIRSupportCAPI
 )
 set_property(TARGET HugrMLIR-C APPEND PROPERTY INSTALL_RPATH "${LLVM_LIBRARY_DIR}")

@@ -11,7 +11,7 @@ option(HUGR_MLIR_INCLUDE_DOCS "Build docs as part of ALL target")
 
 project(hugr-mlir LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 # generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS On)
 # We will generate shared libraries by linking to static libraries, so ensure

@@ -1,20 +1,27 @@
-
-#ifndef HUGR_MLIR_TRANSFORMS_PASSES
-#define HUGR_MLIR_TRANSFORMS_PASSES
+#ifndef HUGR_MLIR_TRANSFORMS_PASSES_TD
+#define HUGR_MLIR_TRANSFORMS_PASSES_TD
 
 include "mlir/Pass/PassBase.td"
+include "mlir/Rewrite/PassUtil.td"
 
 //===----------------------------------------------------------------------===//
 // ToLLVM
 //===----------------------------------------------------------------------===//
 
-def LowerHugrPass : Pass<"hugr-lower"> {
+def LowerHugrPass : Pass<"lower-hugr"> {
   let summary = "TODO";
   let description = [{
   TODO
   }];
 
-  let options = [
+  let options = RewritePassUtils.options # [
+      Option<"hugrVerify", "hugr-verify", "bool", "false", "Do additional, potentially expensive, verification">
+  ];
+
+  let dependentDialects = [
+    "mlir::func::FuncDialect",
+    "mlir::cf::ControlFlowDialect",
+    "mlir::index::IndexDialect",
   ];
 }
 

@@ -36,7 +36,7 @@ pub fn hugr_to_mlir_value<'c>(
             )
             .into())
         }
-        &Value::Extension {ref c } => {
+        &Value::Extension { ref c } => {
             if let Some(i) =
                 c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>()
             {

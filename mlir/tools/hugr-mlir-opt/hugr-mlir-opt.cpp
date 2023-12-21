@@ -1,4 +1,5 @@
 #include "hugr-mlir/Analysis/Passes.h"
+#include "hugr-mlir/Conversion/Passes.h"
 #include "hugr-mlir/IR/HugrDialect.h"
 #include "hugr-mlir/Transforms/Passes.h"
 #include "llvm/Support/CommandLine.h"
@@ -17,6 +18,7 @@
 int main(int argc, char **argv) {
   hugr_mlir::registerHugrAnalysisPasses();
   hugr_mlir::registerHugrTransformsPasses();
+  hugr_mlir::registerHugrConversionPasses();
 
   mlir::DialectRegistry registry;
   registry.insert<

@@ -655,8 +655,11 @@ where
         self.hugr
             .node_inputs(n)
             .filter_map(|in_p| match optype.port_kind(in_p) {
-                Some(EdgeKind::Value { .. }) => self.hugr.single_linked_output(n, in_p).map(|(m, out_p)| Ok((in_p, self.lookup_nodeport(m,out_p)))),
-                _ => None
+                Some(EdgeKind::Value { .. }) => self
+                    .hugr
+                    .single_linked_output(n, in_p)
+                    .map(|(m, out_p)| Ok((in_p, self.lookup_nodeport(m, out_p)))),
+                _ => None,
             })
             .collect()
     }
@@ -665,7 +668,10 @@ where
         self.collect_outputs::<Vec<_>>(n)
     }
 
-    fn collect_outputs<R: FromIterator<(hugr::OutgoingPort, Type<'a>)>>(&self, n: hugr::Node) -> Result<R> {
+    fn collect_outputs<R: FromIterator<(hugr::OutgoingPort, Type<'a>)>>(
+        &self,
+        n: hugr::Node,
+    ) -> Result<R> {
         let optype = self.hugr.get_optype(n);
         self.hugr
             .node_outputs(n)
@@ -683,18 +689,15 @@ where
         let (_, inputs): (Vec<_>, Vec<_>) = self.collect_inputs_vec(node)?.into_iter().unzip();
         let (output_ports, result_types): (Vec<_>, Vec<_>) =
             self.collect_outputs_vec(node)?.into_iter().unzip();
-        let op: melior::ir::Operation<'_> = self
-            .hugr
-            .get_optype(node)
-            .emit(
-                self,
-                MlirData {
-                    node,
-                    result_types,
-                    inputs,
-                    loc,
-                },
-            )?;
+        let op: melior::ir::Operation<'_> = self.hugr.get_optype(node).emit(
+            self,
+            MlirData {
+                node,
+                result_types,
+                inputs,
+                loc,
+            },
+        )?;
         self.push_operation(node, output_ports, op)
     }
 
@@ -747,7 +750,14 @@ where
                 _ => None,
             })
             .map(|(p, ref t)| Ok((p, hugr_to_mlir_type(self.context, t)?, ul)))
-            .collect::<Result<Vec<(hugr::OutgoingPort,melior::ir::Type<'a>, melior::ir::Location<'a>)>,Error>>()?;
+            .collect::<Result<
+                Vec<(
+                    hugr::OutgoingPort,
+                    melior::ir::Type<'a>,
+                    melior::ir::Location<'a>,
+                )>,
+                Error,
+            >>()?;
         for (_, t, l) in block_arg_port_type_loc.iter() {
             block.add_argument(*t, *l);
         }
@@ -836,20 +846,20 @@ mod test {
         let hugr_dh = crate::mlir::hugr::get_hugr_dialect_handle();
         // hugr_dh.insert_dialect(&dr);
         let ctx = melior::Context::new();
-        println!("0: {}",ctx.registered_dialect_count());
-        println!("1: {}",ctx.loaded_dialect_count());
+        println!("0: {}", ctx.registered_dialect_count());
+        println!("1: {}", ctx.loaded_dialect_count());
         hugr_dh.load_dialect(&ctx);
         // ctx.append_dialect_registry(&dr);
-        println!("2: {}",ctx.registered_dialect_count());
-        println!("3: {}",ctx.loaded_dialect_count());
+        println!("2: {}", ctx.registered_dialect_count());
+        println!("3: {}", ctx.loaded_dialect_count());
         ctx.get_or_load_dialect("hugr");
-        println!("4: {}",ctx.registered_dialect_count());
-        println!("5: {}",ctx.loaded_dialect_count());
+        println!("4: {}", ctx.registered_dialect_count());
+        println!("5: {}", ctx.loaded_dialect_count());
 
         let hugr = example_hugrs::loop_with_conditional()?;
         println!("dougrulz0");
         let ul = melior::ir::Location::unknown(&ctx);
-        let i = melior::ir::Identifier::new(&ctx,"d");
+        let i = melior::ir::Identifier::new(&ctx, "d");
         println!("dougrulz1");
 
         let mut op = super::hugr_to_mlir(ul, &hugr)?;

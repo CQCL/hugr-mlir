@@ -1,0 +1,15 @@
+#ifndef HUGR_MLIR_CONVERSION_PASSES_H
+#define HUGR_MLIR_CONVERSION_PASSES_H
+
+#include "hugr-mlir/Conversion/ConvertHugrPass.h"
+#include "mlir/Pass/Pass.h"
+
+namespace hugr_mlir {
+
+/// Generate the code for registering conversion passes.
+#define GEN_PASS_REGISTRATION
+#include "hugr-mlir/Conversion/Passes.h.inc"
+
+}  // namespace hugr_mlir
+
+#endif

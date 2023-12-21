@@ -29,7 +29,12 @@ pub fn simple_recursion() -> Result<Hugr, BuildError> {
     )?;
 
     let mut f_build = module_builder.define_declaration(&f_id)?;
-    let call = f_build.call(&f_id, &[],f_build.input_wires(),&hugr::extension::prelude::PRELUDE_REGISTRY)?;
+    let call = f_build.call(
+        &f_id,
+        &[],
+        f_build.input_wires(),
+        &hugr::extension::prelude::PRELUDE_REGISTRY,
+    )?;
 
     f_build.finish_with_outputs(call.outputs())?;
     module_builder.finish_prelude_hugr().map_err(|x| x.into())
@@ -118,12 +123,10 @@ pub fn loop_with_conditional() -> Result<Hugr> {
             )?
             .outputs_arr();
         let loop_id = {
-            let mut loop_b =
-                fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
+            let mut loop_b = fbuild.tail_loop_builder(vec![(BIT, b1)], vec![], type_row![NAT])?;
             let signature = loop_b.loop_signature()?.clone();
             let const_val = Const::true_val();
-            let const_wire =
-                loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
+            let const_wire = loop_b.add_load_const(Const::true_val(), ExtensionSet::new())?;
             let lift_node = loop_b.add_dataflow_op(
                 ops::LeafOp::Lift {
                     type_row: vec![const_val.const_type().clone()].into(),

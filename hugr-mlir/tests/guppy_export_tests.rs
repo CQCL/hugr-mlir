@@ -16,7 +16,7 @@ pub fn test_context() -> melior::Context {
 
 #[rstest]
 fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
-    use hugr_mlir::{hugr_to_mlir::hugr_to_mlir,mlir_to_hugr::mlir_to_hugr};
+    use hugr_mlir::{hugr_to_mlir::hugr_to_mlir, mlir_to_hugr::mlir_to_hugr};
     insta::glob!("guppy-exports", "*.json", |path| {
         let bytes = fs::read(path).unwrap();
         let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);

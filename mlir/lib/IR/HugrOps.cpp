@@ -8,7 +8,6 @@
 
 #define GET_OP_CLASSES
 #include "hugr-mlir/IR/HugrOps.cpp.inc"
-
 #include "llvm/Support/Debug.h"
 #define DEBUG_TYPE "hugr-ops"
 
@@ -191,7 +190,8 @@ mlir::ParseResult hugr_mlir::parseCallInputsOutputs(
        (!callee_attr && callee_value_type && callee_value)) &&
       "callee is attribute xor valur");
 
-  if (func_type.getArgumentTypes().size() > 0 && parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
+  if (func_type.getArgumentTypes().size() > 0 &&
+      parser.parseOperandList(inputs, func_type.getArgumentTypes().size())) {
     return mlir::failure();
   }
 
@@ -543,6 +543,42 @@ mlir::LogicalResult hugr_mlir::TypeAliasOp::verify() {
     }
   }
 
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// TagOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::TagOp::verify() {
+  auto st = getOutput().getType();
+  auto t = getTag().getSExtValue();
+  if (t < 0 || t >= st.numAlts()) {
+    return emitOpError("Tag out of bounds: ") << t;
+  }
+  if (getInput().getType() != st.getTypes()[t]) {
+    return emitOpError("Input type doesn't match output type");
+  }
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// ReadVariantOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::ReadVariantOp::inferReturnTypes(
+    mlir::MLIRContext* context, std::optional<mlir::Location>,
+    mlir::ValueRange operands, mlir::DictionaryAttr attrs,
+    mlir::OpaqueProperties props, mlir::RegionRange regions,
+    llvm::SmallVectorImpl<mlir::Type>& result_types) {
+  ReadVariantOp::Adaptor adaptor(operands, attrs, props, regions);
+  auto st = llvm::dyn_cast<SumType>(adaptor.getInput().getType());
+  if (!st) {
+    return mlir::failure();
+  }
+  auto t = adaptor.getTag().getSExtValue();
+  if (t < 0 || t >= st.numAlts()) {
+    return mlir::failure();
+  }
+  result_types.push_back(st.getAltType(t));
   return mlir::success();
 }
 
