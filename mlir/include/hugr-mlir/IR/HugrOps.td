@@ -502,6 +502,7 @@ def Hugr_MakeTupleOp : Hugr_Op<"make_tuple",
     );
 
     let hasVerifier = 1;
+    let hasFolder = 1;
 }
 
 def Hugr_UnpackTupleOp : Hugr_Op<"unpack_tuple",
@@ -525,7 +526,7 @@ def Hugr_UnpackTupleOp : Hugr_Op<"unpack_tuple",
     );
 
     let hasVerifier = 1;
-
+    let hasFolder = 1;
 }
 
 def Hugr_TagOp : Hugr_Op<"tag",
@@ -551,6 +552,7 @@ def Hugr_TagOp : Hugr_Op<"tag",
     );
 
     let hasVerifier = 1;
+    let hasFolder = 1;
 
     let builders = [
         OpBuilder<(ins "mlir::Type":$type, "mlir::Value":$input, "unsigned":$tag), [{
@@ -576,6 +578,8 @@ def Hugr_ReadTagOp : Hugr_Op<"read_tag",
     let results = (outs
         Index:$output
     );
+
+    let hasFolder = 1;
 }
 
 def Hugr_ReadVariantOp : Hugr_Op<"read_variant",
@@ -604,6 +608,8 @@ def Hugr_ReadVariantOp : Hugr_Op<"read_variant",
           $_state.getOrAddProperties<Properties>().tag = $_builder.getIndexAttr(tag);
         }]>
     ];
+
+    let hasFolder = 1;
 }
 
 

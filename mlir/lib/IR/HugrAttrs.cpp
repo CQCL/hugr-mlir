@@ -65,6 +65,16 @@ auto hugr_mlir::SumAttr::getSumType() -> SumType {
   return llvm::cast<SumType>(getType());
 }
 
+mlir::IntegerAttr hugr_mlir::SumAttr::getTagAttr() {
+  return mlir::IntegerAttr::get(mlir::IndexType::get(getContext()), getTag());
+}
+
+mlir::TupleType hugr_mlir::TupleAttr::getType() {
+  mlir::SmallVector<mlir::Type> ts;
+  llvm::transform(getValues(), std::back_inserter(ts), [](auto x) { return x.getType(); });
+  return mlir::TupleType::get(getContext(), ts);
+}
+
 void hugr_mlir::HugrDialect::registerAttrs() {
   addAttributes<
 #define GET_ATTRDEF_LIST

@@ -61,7 +61,8 @@ def Hugr_Dialect : Dialect {
     let useDefaultAttributePrinterParser = 1;
 
     let dependentDialects = [
-        "mlir::cf::ControlFlowDialect"
+        "mlir::cf::ControlFlowDialect",
+        "mlir::ub::UBDialect",
     ];
 }
 

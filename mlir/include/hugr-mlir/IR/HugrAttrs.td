@@ -128,6 +128,7 @@ def Hugr_SumAttr : Hugr_Attr<"Sum", "sum",
     ];
     let extraClassDeclaration = [{
         hugr_mlir::SumType getSumType();
+        mlir::IntegerAttr getTagAttr();
     }];
 }
 
@@ -140,6 +141,23 @@ def Hugr_TypeConstraintAttr : Hugr_EnumAttr<Hugr_TypeConstraintEnum, "constraint
     let extraClassDeclaration = [{
         TypeConstraintAttr intersection(TypeConstraintAttr);
     }];
+}
+
+def Hugr_TupleAttr : Hugr_Attr<"Tuple", "tuple", [TypedAttrInterface]> {
+  let summary = "A constant value for a tuple";
+  let description = "TODO";
+  let assemblyFormat = "`<`$values`>`";
+  let parameters = (ins
+      OptionalArrayRefParameter<"mlir::TypedAttr","values">:$values
+  );
+  // let builders = [
+  //  AttrBuilder<(ins "CArg<"mlir::TypedAttr","{}">:$values), [{
+  //    return $_get(type.getContext(), type, type.getTypes());
+  //  }]>
+  // ];
+  let extraClassDeclaration = [{
+    mlir::TupleType getType();
+  }];
 }
 
 #endif

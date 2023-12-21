@@ -3,6 +3,7 @@
 #include "hugr-mlir/IR/HugrDialect.h"
 #include "llvm/ADT/TypeSwitch.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
+#include "mlir/Dialect/UB/IR/UBOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/Interfaces/FunctionImplementation.h"
 
@@ -385,6 +386,18 @@ mlir::LogicalResult hugr_mlir::MakeTupleOp::inferReturnTypes(
   return mlir::success();
 }
 
+mlir::OpFoldResult hugr_mlir::MakeTupleOp::fold(FoldAdaptor adaptor) {
+  auto mb_poison = llvm::find_if(adaptor.getInputs(), [](auto a) { return llvm::isa_and_present<mlir::ub::PoisonAttrInterface>(a); });
+  if(mb_poison != adaptor.getInputs().end()) {
+    return *mb_poison;
+  } else if(llvm::all_of(adaptor.getInputs(), [](auto a) { return llvm::isa_and_present<mlir::TypedAttr>(a); })) {
+    mlir::SmallVector<mlir::TypedAttr> as;
+    llvm::transform(adaptor.getInputs(), std::back_inserter(as), [](auto a) { return llvm::dyn_cast<mlir::TypedAttr>(a); });
+    return hugr_mlir::TupleAttr::get(getContext(), as);
+  }
+  return nullptr;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //  UnpackTupleOp
 /////////////////////////////////////////////////////////////////////////////
@@ -413,6 +426,21 @@ mlir::LogicalResult hugr_mlir::UnpackTupleOp::inferReturnTypes(
     return mlir::failure();
   }
   return mlir::success();
+}
+
+mlir::LogicalResult hugr_mlir::UnpackTupleOp::fold(FoldAdaptor adaptor, ::llvm::SmallVectorImpl< ::mlir::OpFoldResult> &results) {
+  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+    for(auto i = 0; i < getNumResults(); ++i) {
+      results.push_back(poison);
+    }
+    return mlir::success();
+  } else if(auto v = llvm::dyn_cast_if_present<hugr_mlir::TupleAttr>(adaptor.getInput())) {
+    if(v.getValues().size() == getNumResults()) {
+      llvm::copy(v.getValues(), std::back_inserter(results));
+      return mlir::success();
+    }
+  }
+  return mlir::failure();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -561,6 +589,15 @@ mlir::LogicalResult hugr_mlir::TagOp::verify() {
   return mlir::success();
 }
 
+mlir::OpFoldResult hugr_mlir::TagOp::fold(FoldAdaptor adaptor) {
+  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+    return poison;
+  } else if (auto v = llvm::dyn_cast_if_present<mlir::TypedAttr>(adaptor.getInput())) {
+    return hugr_mlir::SumAttr::get(getResult().getType(), adaptor.getTag().getZExtValue(), v);
+  }
+  return nullptr;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // ReadVariantOp
 /////////////////////////////////////////////////////////////////////////////
@@ -582,6 +619,30 @@ mlir::LogicalResult hugr_mlir::ReadVariantOp::inferReturnTypes(
   return mlir::success();
 }
 
+mlir::OpFoldResult hugr_mlir::ReadVariantOp::fold(FoldAdaptor adaptor) {
+  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+    return poison;
+  } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
+    if(getTag() == attr.getTag()) {
+      return attr;
+    }
+    return mlir::ub::PoisonAttr::get(getContext());
+  }
+  return nullptr;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// ReadTagOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::OpFoldResult hugr_mlir::ReadTagOp::fold(FoldAdaptor adaptor) {
+  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+    return poison;
+  } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
+    return attr.getTagAttr();
+  }
+
+  return nullptr;
+}
 /////////////////////////////////////////////////////////////////////////////
 // Miscilaneous free functions
 /////////////////////////////////////////////////////////////////////////////
