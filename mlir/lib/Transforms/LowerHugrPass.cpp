@@ -8,6 +8,7 @@
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/Index/IR/IndexDialect.h"
 #include "mlir/Dialect/Index/IR/IndexOps.h"
+#include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Rewrite/FrozenRewritePatternSet.h"
 #include "mlir/Transforms/DialectConversion.h"
@@ -22,6 +23,10 @@ namespace hugr_mlir {
 namespace {
 
 using namespace mlir;
+
+// struct LowerHugrTypeConverter : TypeConverter {
+//     LowerHugrTypeConverter();
+// };
 
 struct LowerHugrPass : hugr_mlir::impl::LowerHugrPassBase<LowerHugrPass> {
   using LowerHugrPassBase::LowerHugrPassBase;
@@ -56,7 +61,20 @@ struct LowerSwitch : OpRewritePattern<hugr_mlir::SwitchOp> {
       hugr_mlir::SwitchOp, PatternRewriter&) const override;
 };
 
+struct LowerCall : OpRewritePattern<hugr_mlir::CallOp> {
+  using OpRewritePattern::OpRewritePattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::CallOp, PatternRewriter&) const override;
+};
+
 }  // namespace
+
+// LowerHugrTypeConverter::LowerHugrTypeConverter() : TypeConverter() {
+//     addConversion([](hugr_mlir::FunctionType t) -> std::optional<Type> {
+//         return t.getFunctionType();
+//     });
+
+// }
 
 mlir::LogicalResult LowerHugrFuncToFunc::matchAndRewrite(
     hugr_mlir::FuncOp op, PatternRewriter& rw) const {
@@ -161,7 +179,7 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
   SmallVector<Block*> case_destinations{op.getDestinations()};
   SmallVector<SmallVector<Value>> case_operands;
 
-  auto tag = rw.createOrFold<index::CastSOp>(
+  auto tag = rw.createOrFold<index::CastUOp>(
       loc, rw.getI32Type(), rw.createOrFold<hugr_mlir::ReadTagOp>(loc, pred));
 
   for (auto [i, t] : llvm::enumerate(
@@ -190,9 +208,21 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
   return success();
 }
 
+mlir::LogicalResult LowerCall::matchAndRewrite(hugr_mlir::CallOp op, PatternRewriter & rw) const {
+    if(auto callee = op.getCalleeAttrAttr()) {
+        rw.replaceOpWithNewOp<func::CallOp>(op, callee.getRef(), op.getResultTypes(), op.getInputs());
+    } // else if (auto callee = op.getCalleeValue()){
+    //     rw.replaceOpWithNewOp<func::CallIndirectOp>(op, callee, op.getResultTypes(), op.getInputs());
+    // }
+
+    else { return failure(); }
+
+    return success();
+}
+
 mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
   RewritePatternSet ps(context);
-  ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerSwitch>(context);
+  ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerSwitch, LowerCall>(context);
 
   patterns =
       FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
@@ -202,27 +232,20 @@ mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
 void LowerHugrPass::runOnOperation() {
   auto op = getOperation();
   auto context = &getContext();
-  GreedyRewriteConfig cfg;
-  cfg.useTopDownTraversal = true;
-  cfg.enableRegionSimplification = true;
-  bool changed = false;
-  if (failed(applyPatternsAndFoldGreedily(op, patterns, cfg, &changed))) {
-    emitError(op->getLoc(), "LowerHugrPass: Failed to apply patterns");
-    return signalPassFailure();
-  }
-
-  if (hugrVerify) {
-    ConversionTarget target(*context);
-    target.addIllegalOp<
+  ConversionTarget target(*context);
+  target.addLegalDialect<hugr_mlir::HugrDialect, func::FuncDialect,cf::ControlFlowDialect,scf::SCFDialect,index::IndexDialect>();
+  target.addIllegalOp<
         hugr_mlir::FuncOp, hugr_mlir::CfgOp, hugr_mlir::DfgOp,
         hugr_mlir::TailLoopOp, hugr_mlir::ConditionalOp, hugr_mlir::OutputOp,
         hugr_mlir::SwitchOp>();
-    if (failed(applyPartialConversion(op, target, {}))) {
-      emitError(op->getLoc(), "Failed to convert all ops");
-      return signalPassFailure();
-    }
-  }
-  if (!changed) {
-    markAllAnalysesPreserved();
+
+  target.addDynamicallyLegalOp<hugr_mlir::CallOp>([](hugr_mlir::CallOp op) -> bool {
+      return !!op.getCalleeValue();
+  });
+
+  bool changed = false;
+  if (failed(applyPartialConversion(op, target, patterns))) {
+    emitError(op->getLoc(), "LowerHugrPass: Failed to apply patterns");
+    return signalPassFailure();
   }
 }

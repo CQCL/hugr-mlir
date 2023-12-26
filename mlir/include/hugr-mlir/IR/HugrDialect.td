@@ -59,10 +59,12 @@ def Hugr_Dialect : Dialect {
 
     let useDefaultTypePrinterParser = 1;
     let useDefaultAttributePrinterParser = 1;
+    let hasConstantMaterializer = 1;
 
     let dependentDialects = [
         "mlir::cf::ControlFlowDialect",
         "mlir::ub::UBDialect",
+        "mlir::arith::ArithDialect",
     ];
 }
 

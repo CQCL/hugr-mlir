@@ -19,8 +19,10 @@ def LowerHugrPass : Pass<"lower-hugr"> {
   ];
 
   let dependentDialects = [
+    "hugr_mlir::HugrDialect",
     "mlir::func::FuncDialect",
     "mlir::cf::ControlFlowDialect",
+    "mlir::scf::SCFDialect",
     "mlir::index::IndexDialect",
   ];
 }

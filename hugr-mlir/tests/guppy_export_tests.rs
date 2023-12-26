@@ -1,3 +1,4 @@
+use insta::with_settings;
 use rstest::{fixture, rstest};
 use std::fs;
 
@@ -22,6 +23,7 @@ fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
         let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);
         let hugr = serde_json::from_slice::<hugr::Hugr>(&bytes).unwrap();
         let mlir_mod = hugr_to_mlir(ul, &hugr).unwrap();
+        println!("{:?}", path);
         assert!(mlir_mod.as_operation().verify());
         insta::assert_display_snapshot!(mlir_mod.as_operation());
 

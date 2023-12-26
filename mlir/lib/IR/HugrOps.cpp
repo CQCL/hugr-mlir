@@ -259,6 +259,28 @@ hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
   }
 }
 
+mlir::LogicalResult hugr_mlir::CallOp::verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
+  if(mlir::failed(verifyHugrSymbolUserOpInterface(llvm::cast<mlir::SymbolUserOpInterface>(getOperation()), symbolTable))) {
+    return mlir::failure();
+  }
+  if(auto callee = getCalleeAttrAttr()) {
+    auto from_st = symbolTable.lookupNearestSymbolFrom(getOperation(), callee.getRef());
+    if(!from_st) {
+      return emitOpError("Unknown symbol: ") << callee;
+    }
+    auto func_op = llvm::dyn_cast<FuncOp>(from_st);
+    if(!func_op) {
+      return emitOpError("Symbol References op of type: ") << from_st->getName() << ", expected " << FuncOp::getOperationName();
+    }
+
+    if(func_op.getFunctionType() != callee.getType()) {
+      return emitOpError("Callee has type: ") << func_op.getFunctionType() << ", expected: " << callee.getType();
+    }
+  }
+
+  return mlir::success();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //  LoadConstantOp
 /////////////////////////////////////////////////////////////////////////////
@@ -624,7 +646,7 @@ mlir::OpFoldResult hugr_mlir::ReadVariantOp::fold(FoldAdaptor adaptor) {
     return poison;
   } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
     if(getTag() == attr.getTag()) {
-      return attr;
+      return attr.getValue();
     }
     return mlir::ub::PoisonAttr::get(getContext());
   }
@@ -639,10 +661,26 @@ mlir::OpFoldResult hugr_mlir::ReadTagOp::fold(FoldAdaptor adaptor) {
     return poison;
   } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
     return attr.getTagAttr();
+  } else if(getInput().getType().numAlts() == 1) {
+    return mlir::IntegerAttr::get(mlir::IndexType::get(getContext()), 0);
   }
 
   return nullptr;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// ConstantOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::ConstantOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+  ConstantOpAdaptor adaptor(operands, attributes, properties, regions);
+  inferredReturnTypes.push_back(adaptor.getValue().getType());
+  return mlir::success();
+}
+
+mlir::OpFoldResult hugr_mlir::ConstantOp::fold(FoldAdaptor adaptor) {
+  return adaptor.getValue();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Miscilaneous free functions
 /////////////////////////////////////////////////////////////////////////////
@@ -695,6 +733,7 @@ bool hugr_mlir::isControlFlowGraphRegion(mlir::Region& region) {
   }
   return true;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 //  verifyHugrSymbolUserOpInterface

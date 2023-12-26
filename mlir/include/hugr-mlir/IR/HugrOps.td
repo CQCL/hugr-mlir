@@ -275,7 +275,7 @@ def Hugr_CallOp : Hugr_Op<"call",
   // RangedTypesMatchWith<"inputs match function type", "callee", "inputs", "llvm::cast<FunctionType>($_self).getArgumentTypes()">
   // , RangedTypesMatchWith<"outputs match function type", "callee", "outputs", "llvm::cast<FunctionType>($_self).getResultTypes()">
   , HugrMemoryOp
-  , HugrSymbolUserOp
+  , DeclareOpInterfaceMethods<SymbolUserOpInterface>
   // , InferTypeOpInterface
   ]> {
     let summary = "A Hugr Call op";
@@ -479,6 +479,22 @@ def Hugr_LoadConstantOp : Hugr_Op<"load_constant",
     let results = (outs
         HugrTypeInterface:$result
     );
+}
+
+def ConstantAttr : AnyAttrOf<[Hugr_SumAttr,Hugr_TupleAttr],"argument of hugr.constant", "::mlir::TypedAttr", "llvm::cast<::mlir::TypedAttr>($_self)"> {
+
+}
+
+def Hugr_ConstantOp : Hugr_Op<"constant",
+    [ ConstantLike, DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
+    let summary = "TODO";
+    let description = "TODO";
+    let assemblyFormat = "$value attr-dict";
+    let arguments = (ins
+       ConstantAttr:$value
+    );
+    let results = (outs AnyType:$output);
+    let hasFolder = 1;
 }
 
 def Hugr_MakeTupleOp : Hugr_Op<"make_tuple",

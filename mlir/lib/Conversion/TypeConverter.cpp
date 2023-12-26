@@ -99,9 +99,10 @@ mlir::FailureOr<mlir::SmallVector<mlir::Value>> HugrTypeConverter::materializeTa
     auto mb_partition = partitionTupleType(tt);
     if(failed(mb_partition) || mb_partition->getConvertedTypes() != ts) { return failure(); }
 
-    auto unpack = rw.create<hugr_mlir::UnpackTupleOp>(loc, ts, src);
+    SmallVector<Value> unpack_results;
+    rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpack_results, loc, ts, src);
     SmallVector<Value> results;
-    for(auto [i, v]: llvm::enumerate(unpack.getOutputs())) {
+    for(auto [i, v]: llvm::enumerate(unpack_results)) {
         if(this->isLegal(v.getType())) {
             results.push_back(v);
         } else if(auto mb_vs = this->materializeTargetConversion(rw, loc, mb_partition->getConvertedTypes(i), v)) {

@@ -14,6 +14,8 @@ add_mlir_dialect_library(HugrMLIRDialect
   MLIRInferTypeOpInterface
   MLIRFunctionInterfaces
   MLIRControlFlowDialect
+  MLIRArithDialect
+  MLIRUBDialect
 )
 target_link_libraries(HugrMLIRDialect
   PUBLIC hugr-mlir-headers-interface

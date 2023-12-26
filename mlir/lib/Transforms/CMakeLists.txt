@@ -9,4 +9,7 @@ add_mlir_library(HugrMLIRTransforms
   MLIRRewrite
   MLIRTransforms
   MLIRIndexDialect
+  MLIRFuncDialect
+  MLIRSCFDialect
+  MLIRControlFlowDialect
 )

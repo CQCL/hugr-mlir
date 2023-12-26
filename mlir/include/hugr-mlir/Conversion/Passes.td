@@ -14,6 +14,7 @@ def ConvertHugrPass : Pass<"convert-hugr"> {
   ];
 
   let dependentDialects = [
+    "::hugr_mlir::HugrDialect",
     "::mlir::func::FuncDialect",
     "::mlir::scf::SCFDialect",
     "::mlir::cf::ControlFlowDialect",
