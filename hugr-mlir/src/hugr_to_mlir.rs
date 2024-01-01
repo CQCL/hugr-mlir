@@ -1,8 +1,8 @@
 use anyhow::anyhow;
-use hugr::ops::OpTrait;
+use hugr::ops::{OpTrait, OpType};
 use itertools::{zip_eq, Itertools};
 use melior::ir::attribute::FlatSymbolRefAttribute;
-use melior::ir::{BlockRef, Type};
+use melior::ir::{BlockRef, Type, ValueLike};
 use std::borrow::{BorrowMut, Cow};
 use std::iter::{empty, zip};
 use std::ops::Deref;
@@ -16,7 +16,7 @@ use melior::{
 use std::collections::{HashMap, HashSet};
 use std::vec::Vec;
 
-use crate::mlir::hugr::StaticEdgeAttr;
+use crate::mlir::hugr::{StaticEdgeAttr, DfgOp};
 use crate::{mlir, Error, Result};
 
 pub mod types;
@@ -758,30 +758,66 @@ where
                 )>,
                 Error,
             >>()?;
+
+        let dfg_block = Block::new(&[]);
         for (_, t, l) in block_arg_port_type_loc.iter() {
             block.add_argument(*t, *l);
+            dfg_block.add_argument(*t, *l);
         }
-        let t = {
+        {
             let it = block_arg_port_type_loc
                 .into_iter()
                 .map(|(p, _, _)| (i, p))
                 .collect_vec();
+            let it_ref = &it;
 
-            self.clone().push_block(block, it, |mut state| {
-                for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
-                    state.node_to_op(c, ul)?;
+            self.push_block(block, it_ref.iter().copied(), move |state| {
+                // let scoped_defs = {
+                //     let defs = self.hugr.children(parent).filter(|x| match self.hugr.get_optype(*x) {
+                //         OpType::FuncDefn(_) => true,
+                //         OpType::FuncDecl(_) => true,
+                //         OpType::AliasDefn(_) => true,
+                //         OpType::AliasDecl(_) => true,
+                //         _ => false
+                //     }).collect::<HashSet<_>>();
+                //     for c in &defs {
+                //         state.node_to_op(*c, ul)?;
+                //     }
+                //     defs
+                // };
+                // let scoped_defs_ref = &scoped_defs;
+
+
+                // let dfg_body = Region::new();
+                // let dfg_br = dfg_body.append_block(dfg_block);
+                let output_tys = state.push_block(&dfg_block, it_ref.iter().copied(), move |mut state| {
+                    for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
+                        state.node_to_op(c, ul)?;
+                    }
+                    let output_args = state
+                        .collect_inputs_vec(o)?
+                        .into_iter()
+                        .map(|(_, v)| v)
+                        .collect_vec();
+                    state.block.append_operation(mlir::hugr::OutputOp::new(&output_args, ul).into());
+                    Ok::<_, Error>(output_args.iter().map(|x| x.r#type()).collect_vec())
+                })?;
+                let mut dfg_args = Vec::new();
+                for i in 0..state.block.argument_count() { dfg_args.push(state.block.argument(i).unwrap().into()) }
+
+                let dfg_body = Region::new();
+                dfg_body.append_block(dfg_block);
+                let dfg_op = block.append_operation(mlir::hugr::DfgOp::new(dfg_body, &output_tys, &dfg_args, mlir::hugr::ExtensionSetAttr::new(state.context, []), ul).into());
+                let mut dfg_results = Vec::<Value<'a,'c>>::new();
+                for r in unsafe {dfg_op.to_ref()}.results() {
+                    dfg_results.push(r.into());
                 }
-                let inputs = state
-                    .collect_inputs_vec(o)?
-                    .into_iter()
-                    .map(|(_, v)| v)
-                    .collect_vec();
-                let (t, op) = mk_terminator(state, inputs, o)?;
+
+                let (t, op) = mk_terminator(state, dfg_results, o)?;
                 block.append_operation(op);
-                Ok::<_, Error>(t)
-            })?
-        };
-        Ok(t)
+                Ok(t)
+            })
+        }
     }
 }
 

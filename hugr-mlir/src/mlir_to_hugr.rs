@@ -63,7 +63,7 @@ pub mod hash;
 //     })
 // }
 
-pub fn mlir_to_hugr(op: &mlir::hugr::ModuleOp<'_>) -> Result<hugr::Hugr> {
+pub fn mlir_to_hugr(_op: &mlir::hugr::ModuleOp<'_>) -> Result<hugr::Hugr> {
     // let mut state = TranslationState::new();
     // if let Ok(op1) = TryInto::<&mlir::hugr::ModuleOp>::try_into(op) {
     //     let mut b = hugr::builder::ModuleBuilder::new();

@@ -62,10 +62,10 @@ pub fn hugr_to_mlir_type<'c>(
         TypeEnum::Function(ref function_type) if function_type.params().len() == 0 => {
             Ok(hugr_to_mlir_function_type(ctx, function_type.body())?.into())
         }
-        TypeEnum::Function(ref function_type) => {
+        TypeEnum::Function(ref _function_type) => {
             panic!("unimplemented: TypeEnum::Function with params")
         }
-        TypeEnum::Variable(size, bound) => panic!("unimplemented: TypeEnum::Variable"),
+        TypeEnum::Variable(_size, _bound) => panic!("unimplemented: TypeEnum::Variable"),
     }
 }
 

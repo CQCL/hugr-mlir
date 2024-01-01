@@ -1,29 +1,37 @@
 ---
-source: tests/guppy_export_tests.rs
-expression: m.as_operation()
-input_file: tests/guppy-exports/test_interleave.json
+source: hugr-mlir/tests/guppy_export_tests.rs
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_interleave.json
 ---
 module {
   hugr.module {
     func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg1: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg2: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg3: !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
-      %0:4 = cfg %arg0, %arg1, %arg2, %arg3 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+      %0:4 = dfg input extensions [] %arg0, %arg1, %arg2, %arg3 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
       ^bb0(%arg4: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg5: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg6: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg7: !hugr<opaque "qubit"["prelude"] [Linear]>):
-        %1:2 = call @f  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %arg4, %arg5
-        %2 = make_tuple(%1#0, %1#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
-        %3:2 = unpack_tuple %2 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
-        %4:2 = call @f  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %arg6, %arg7
-        %5 = make_tuple(%4#0, %4#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
-        %6:2 = unpack_tuple %5 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
-        %7:2 = call @g  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %3#1, %6#0
-        %8 = make_tuple(%7#0, %7#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
-        %9:2 = unpack_tuple %8 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
-        %10 = make_tuple(%3#0, %9#0, %9#1, %6#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
-        %11:4 = unpack_tuple %10 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
-        %12 = make_tuple()
-        %13 = tag 0 %12 : tuple<> -> <tuple<>>
-        switch %13, %11#0, %11#1, %11#2, %11#3 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb1
-      ^bb1(%14: !hugr<opaque "qubit"["prelude"] [Linear]>, %15: !hugr<opaque "qubit"["prelude"] [Linear]>, %16: !hugr<opaque "qubit"["prelude"] [Linear]>, %17: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb0
-        output %14, %15, %16, %17 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
+        %1:4 = cfg %arg4, %arg5, %arg6, %arg7 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+        ^bb0(%arg8: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg9: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg10: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg11: !hugr<opaque "qubit"["prelude"] [Linear]>):
+          %2:5 = dfg input extensions [] %arg8, %arg9, %arg10, %arg11 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+          ^bb0(%arg12: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg13: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg14: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg15: !hugr<opaque "qubit"["prelude"] [Linear]>):
+            %7:2 = call @f  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %arg12, %arg13
+            %8 = make_tuple(%7#0, %7#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
+            %9:2 = unpack_tuple %8 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
+            %10:2 = call @f  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %arg14, %arg15
+            %11 = make_tuple(%10#0, %10#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
+            %12:2 = unpack_tuple %11 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
+            %13:2 = call @g  [](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) %9#1, %12#0
+            %14 = make_tuple(%13#0, %13#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
+            %15:2 = unpack_tuple %14 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
+            %16 = make_tuple(%9#0, %15#0, %15#1, %12#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
+            %17:4 = unpack_tuple %16 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>>
+            %18 = make_tuple()
+            %19 = tag 0 %18 : tuple<> -> <tuple<>>
+            output %19, %17#0, %17#1, %17#2, %17#3 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
+          }
+          switch %2#0, %2#1, %2#2, %2#3, %2#4 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb1
+        ^bb1(%3: !hugr<opaque "qubit"["prelude"] [Linear]>, %4: !hugr<opaque "qubit"["prelude"] [Linear]>, %5: !hugr<opaque "qubit"["prelude"] [Linear]>, %6: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb0
+          output %3, %4, %5, %6 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
+        }
+        output %1#0, %1#1, %1#2, %1#3 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
       }
       output %0#0, %0#1, %0#2, %0#3 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
     }

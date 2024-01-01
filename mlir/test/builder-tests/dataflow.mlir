@@ -64,22 +64,22 @@ hugr.module @simple_inter_graph_edge {
 
 hugr.module @lift_node {
   func @main ["A","B","C"](%in : index) -> index {
-    %out = dfg %in : (index) -> !hugr.ext<["A","B","C"]index> {
+    %out = dfg %in : (index) -> index {
     ^bb0(%i : index):
-      %add_ab = dfg %i : (index) -> !hugr.ext<["A","B"]index> {
+      %add_ab = dfg %i : (index) -> index {
       ^bb1(%j : index):
-        %lift_a = lift ["A"] %j :  (index) -> !hugr.ext<["A"]index>
-        %lift_b = lift ["B"] %lift_a : (!hugr.ext<["A"]index>) -> !hugr.ext<["A","B"]index>
-        output %lift_b : !hugr.ext<["A","B"]index>
+        %lift_a = lift ["A"] %j :  (index) -> index
+        %lift_b = lift ["B"] %lift_a : (index) -> index
+        output %lift_b : index
       }
-      %add_c = dfg input extensions ["A","B"] %add_ab : (!hugr.ext<["A","B"]index>)-> !hugr.ext<["A","B","C"]index> {
+      %add_c = dfg input extensions ["A","B"] %add_ab : (index)-> index {
       ^bb2(%k : index):
-        %lift_c = lift ["C"] %k : (index) -> !hugr.ext<["C"]index>
-        output %lift_c : !hugr.ext<["C"]index>
+        %lift_c = lift ["C"] %k : (index) -> index
+        output %lift_c : index
       }
-      output %add_c : !hugr.ext<["A","B","C"]index>
+      output %add_c : index
     }
-    output %out : !hugr.ext<["A","B","C"]index>
+    output %out : index
   }
 }
 

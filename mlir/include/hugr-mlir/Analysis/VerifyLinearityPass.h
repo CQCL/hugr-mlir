@@ -8,4 +8,22 @@ namespace hugr_mlir {
 #include "hugr-mlir/Analysis/Passes.h.inc"
 }  // namespace hugr_mlir
 
+namespace mlir {
+    class DataFlowSolver;
+}
+
+namespace hugr_mlir {
+
+struct VerifyLinearityAnalysis {
+    using BlockSet_t = std::optional<mlir::DenseSet<mlir::Block*>>;
+    VerifyLinearityAnalysis(mlir::Operation*,mlir::AnalysisManager&);
+    mlir::LogicalResult initialise();
+    BlockSet_t const& getPreds(mlir::Operation*);
+private:
+    std::unique_ptr<mlir::DataFlowSolver> solver;
+    mlir::Operation* top;
+};
+
+}
+
 #endif  // HUGR_MLIR_ANALYSIS_VERIFY_LINEARITY_PASS

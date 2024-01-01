@@ -1,46 +1,74 @@
 ---
-source: tests/guppy_export_tests.rs
-expression: m.as_operation()
-input_file: tests/guppy-exports/test_while.json
+source: hugr-mlir/tests/guppy_export_tests.rs
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_while.json
 ---
 module {
   hugr.module {
     func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
-      %0 = cfg %arg0, %arg1 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
+      %0 = dfg input extensions [] %arg0, %arg1 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
       ^bb0(%arg2: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-        %1 = make_tuple()
-        %2 = tag 0 %1 : tuple<> -> <tuple<>>
-        switch %2, %arg3, %arg2 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb2
-      ^bb1(%3: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb4
-        output %3 : !hugr<opaque "qubit"["prelude"] [Linear]>
-      ^bb2(%4: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %5: !hugr<opaque "qubit"["prelude"] [Linear]>):  // 2 preds: ^bb0, ^bb3
-        const @const_22 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 0 : i6
-        %6 = load_constant @const_22 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
-        %7 = ext_op []"igt_s" %4, %6 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
-        %8 = make_tuple(%4 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>)
-        %9 = make_tuple()
-        %10 = conditional(%7, %8, %9 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>) -> !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>> {
-        ^bb0(%arg4: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg5: tuple<>):
-          %21 = tag 0 %arg4 : tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>> -> <tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
-          output %21 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
-        }, {
-        ^bb0(%arg4: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg5: tuple<>):
-          %21 = tag 1 %arg5 : tuple<> -> <tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
-          output %21 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+        %1 = cfg %arg2, %arg3 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
+        ^bb0(%arg4: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg5: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
+          %2:3 = dfg input extensions [] %arg4, %arg5 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+          ^bb0(%arg6: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg7: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
+            %12 = make_tuple()
+            %13 = tag 0 %12 : tuple<> -> <tuple<>>
+            output %13, %arg7, %arg6 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>
+          }
+          switch %2#0, %2#1, %2#2 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb2
+        ^bb1(%3: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb4
+          output %3 : !hugr<opaque "qubit"["prelude"] [Linear]>
+        ^bb2(%4: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %5: !hugr<opaque "qubit"["prelude"] [Linear]>):  // 2 preds: ^bb0, ^bb3
+          %6:2 = dfg input extensions [] %4, %5 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+          ^bb0(%arg6: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg7: !hugr<opaque "qubit"["prelude"] [Linear]>):
+            const @const_22 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 0 : i6
+            %12 = load_constant @const_22 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+            %13 = ext_op []"igt_s" %arg6, %12 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>, tuple<>>
+            %14 = make_tuple(%arg6 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>)
+            %15 = make_tuple()
+            %16 = conditional(%13, %14, %15 : !hugr.sum<tuple<>, tuple<>>, tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>) -> !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>> {
+            ^bb0(%arg8: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg9: tuple<>):
+              %17 = dfg input extensions [] %arg8, %arg9 : (tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>) -> !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>> {
+              ^bb0(%arg10: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg11: tuple<>):
+                %18 = tag 0 %arg10 : tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>> -> <tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+                output %18 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+              }
+              output %17 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+            }, {
+            ^bb0(%arg8: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg9: tuple<>):
+              %17 = dfg input extensions [] %arg8, %arg9 : (tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>) -> !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>> {
+              ^bb0(%arg10: tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, %arg11: tuple<>):
+                %18 = tag 1 %arg11 : tuple<> -> <tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+                output %18 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+              }
+              output %17 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>
+            }
+            output %16, %arg7 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>
+          }
+          switch %6#0, %6#1 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb3, ^bb4
+        ^bb3(%7: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %8: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb2
+          %9:3 = dfg input extensions [] %7, %8 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+          ^bb0(%arg6: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg7: !hugr<opaque "qubit"["prelude"] [Linear]>):
+            const @const_33 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 1 : i6
+            %12 = load_constant @const_33 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+            %13 = ext_op []"isub" %arg6, %12 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+            %14 = ext_op []"H" %arg7 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]>
+            %15 = make_tuple()
+            %16 = tag 0 %15 : tuple<> -> <tuple<>>
+            output %16, %13, %14 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>
+          }
+          switch %9#0, %9#1, %9#2 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb2
+        ^bb4(%10: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb2
+          %11:2 = dfg input extensions [] %10 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
+          ^bb0(%arg6: !hugr<opaque "qubit"["prelude"] [Linear]>):
+            %12 = make_tuple()
+            %13 = tag 0 %12 : tuple<> -> <tuple<>>
+            output %13, %arg6 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]>
+          }
+          switch %11#0, %11#1 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb1
         }
-        switch %10, %5 : !hugr.sum<tuple<!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>>, tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb3, ^bb4
-      ^bb3(%11: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %12: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb2
-        const @const_33 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> = 1 : i6
-        %13 = load_constant @const_33 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
-        %14 = ext_op []"isub" %11, %13 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
-        %15 = ext_op []"H" %12 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]>
-        %16 = make_tuple()
-        %17 = tag 0 %16 : tuple<> -> <tuple<>>
-        switch %17, %14, %15 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb2
-      ^bb4(%18: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb2
-        %19 = make_tuple()
-        %20 = tag 0 %19 : tuple<> -> <tuple<>>
-        switch %20, %18 : !hugr.sum<tuple<>>, !hugr<opaque "qubit"["prelude"] [Linear]> ^bb1
+        output %1 : !hugr<opaque "qubit"["prelude"] [Linear]>
       }
       output %0 : !hugr<opaque "qubit"["prelude"] [Linear]>
     }

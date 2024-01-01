@@ -90,6 +90,7 @@ def Hugr_FuncOp : Hugr_Op<"func",
     }];
 
     let arguments = (ins
+        Variadic<HugrTypeInterface>:$captures,
         SymbolNameAttr:$sym_name,
         DefaultValuedStrAttr<StrAttr,"private">:$sym_visibility,
         TypeAttrOf<Hugr_FunctionType>:$function_type,
@@ -104,6 +105,10 @@ def Hugr_FuncOp : Hugr_Op<"func",
         static mlir::StringRef getDefaultDialect() { return "hugr"; }
 
         ExtensionSetAttr getExtensionSet() { return getFunctionType().getExtensions(); }
+        mlir::LogicalResult verifyBody();
+
+
+
     }];
 }
 
@@ -369,6 +374,7 @@ def Hugr_DfgOp : Hugr_Op<"dfg",
     [ SingleBlock
     , OpAsmOpInterface
     , HugrMemoryOp, HugrSymbolUserOp
+    , SymbolTable
     ]> {
     let summary = "A Hugr DFG";
     let assemblyFormat = "(`input` `extensions` $input_extensions^)? $inputs `:` functional-type($inputs, $outputs) attr-dict-with-keyword( $body^)?";

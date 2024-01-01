@@ -22,8 +22,12 @@ hugr.module @simple_alias {
 
 hugr.module @local_def {
   func @main[](%x: index) -> index {
-    func @local[](index) -> index
-    %y = call @local [](index) -> index %x
+    %y = dfg %x : (index) -> index {
+    ^bb0(%x1: index):
+      func @local[](index) -> index
+      %y = call @local [](index) -> index %x1
+      output %y : index
+    }
     output %y : index
   }
 }

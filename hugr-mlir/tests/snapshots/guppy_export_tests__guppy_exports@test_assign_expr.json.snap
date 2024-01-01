@@ -1,18 +1,26 @@
 ---
-source: tests/guppy_export_tests.rs
-expression: m.as_operation()
-input_file: tests/guppy-exports/test_assign_expr.json
+source: hugr-mlir/tests/guppy_export_tests.rs
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_assign_expr.json
 ---
 module {
   hugr.module {
     func @foo[](%arg0: !hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
-      %0 = cfg %arg0 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
+      %0 = dfg input extensions [] %arg0 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
       ^bb0(%arg1: !hugr.sum<tuple<>, tuple<>>):
-        %1 = make_tuple()
-        %2 = tag 0 %1 : tuple<> -> <tuple<>>
-        switch %2, %arg1 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
-      ^bb1(%3: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
-        output %3 : !hugr.sum<tuple<>, tuple<>>
+        %1 = cfg %arg1 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>> {
+        ^bb0(%arg2: !hugr.sum<tuple<>, tuple<>>):
+          %2:2 = dfg input extensions [] %arg2 : (!hugr.sum<tuple<>, tuple<>>) -> (!hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>>) {
+          ^bb0(%arg3: !hugr.sum<tuple<>, tuple<>>):
+            %4 = make_tuple()
+            %5 = tag 0 %4 : tuple<> -> <tuple<>>
+            output %5, %arg3 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>>
+          }
+          switch %2#0, %2#1 : !hugr.sum<tuple<>>, !hugr.sum<tuple<>, tuple<>> ^bb1
+        ^bb1(%3: !hugr.sum<tuple<>, tuple<>>):  // pred: ^bb0
+          output %3 : !hugr.sum<tuple<>, tuple<>>
+        }
+        output %1 : !hugr.sum<tuple<>, tuple<>>
       }
       output %0 : !hugr.sum<tuple<>, tuple<>>
     }

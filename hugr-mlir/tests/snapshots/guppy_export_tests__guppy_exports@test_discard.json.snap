@@ -1,17 +1,25 @@
 ---
-source: tests/guppy_export_tests.rs
-expression: m.as_operation()
-input_file: tests/guppy-exports/test_discard.json
+source: hugr-mlir/tests/guppy_export_tests.rs
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_discard.json
 ---
 module {
   hugr.module {
     func @discard[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
-      cfg %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> () {
+      dfg input extensions [] %arg0 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> () {
       ^bb0(%arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-        %0 = make_tuple()
-        %1 = tag 0 %0 : tuple<> -> <tuple<>>
-        switch %1 : !hugr.sum<tuple<>> ^bb1
-      ^bb1:  // pred: ^bb0
+        cfg %arg1 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> () {
+        ^bb0(%arg2: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
+          %0 = dfg input extensions [] %arg2 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr.sum<tuple<>> {
+          ^bb0(%arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
+            %1 = make_tuple()
+            %2 = tag 0 %1 : tuple<> -> <tuple<>>
+            output %2 : !hugr.sum<tuple<>>
+          }
+          switch %0 : !hugr.sum<tuple<>> ^bb1
+        ^bb1:  // pred: ^bb0
+          output
+        }
         output
       }
       output

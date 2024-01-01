@@ -25,6 +25,31 @@ mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getArgumentTypes() {
 
 mlir::Region* hugr_mlir::FuncOp::getCallableRegion() { return &getBody(); }
 
+mlir::LogicalResult hugr_mlir::FuncOp::verifyBody() {
+  using namespace mlir;
+  if (isExternal())
+    return success();
+  SmallVector<Type> fnInputTypes{getCaptures().getTypes()};
+  llvm::copy(getArgumentTypes(), std::back_inserter(fnInputTypes));
+  Block &entryBlock = getBody().front();
+
+  unsigned numArguments = fnInputTypes.size();
+  if (entryBlock.getNumArguments() != numArguments)
+    return emitOpError("entry block must have ")
+          << numArguments << " arguments to match function captures and signature";
+
+  for (unsigned i = 0, e = fnInputTypes.size(); i != e; ++i) {
+    Type argType = entryBlock.getArgument(i).getType();
+    if (fnInputTypes[i] != argType) {
+      return emitOpError("type of entry block argument #")
+            << i << '(' << argType
+            << ") must match the type of the corresponding argument in "
+            << "function signature(" << fnInputTypes[i] << ')';
+    }
+  }
+
+  return success();
+}
 // Adapted from mlir/lib/IR/FunctionImplementation.cpp
 mlir::ParseResult hugr_mlir::FuncOp::parse(
     mlir::OpAsmParser& parser, mlir::OperationState& result) {
@@ -40,6 +65,7 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
 
   ExtensionSetAttr extensions;
   mlir::StringAttr name_attr;
+  mlir::SmallVector<mlir::OpAsmParser::UnresolvedOperand> captures;
   mlir::SmallVector<mlir::OpAsmParser::Argument> args;
   mlir::SmallVector<mlir::Type> result_types;
   mlir::SmallVector<mlir::DictionaryAttr> result_attrs;
@@ -47,6 +73,10 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
   bool is_variadic;
   if (parser.parseSymbolName(
           name_attr, sym_name_attr_name, result.attributes)) {
+    return mlir::failure();
+  }
+
+  if(parser.parseOperandList(captures)) {
     return mlir::failure();
   }
 
@@ -59,9 +89,14 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
     return mlir::failure();
   }
 
+  if(args.size() < captures.size()) {
+    return parser.emitError(signatureLocation) << "more captures than args";
+  }
+  mlir::ArrayRef<mlir::OpAsmParser::Argument> capture_args = mlir::ArrayRef(args).take_front(captures.size());
+  mlir::ArrayRef<mlir::OpAsmParser::Argument> func_args = mlir::ArrayRef(args).drop_front(captures.size());
   mlir::SmallVector<mlir::Type> arg_types;
   llvm::transform(
-      args, std::back_inserter(arg_types), [](auto x) { return x.type; });
+      func_args, std::back_inserter(arg_types), [](auto x) { return x.type; });
 
   auto get_err = [&parser, &signatureLocation]() -> mlir::InFlightDiagnostic {
     return std::move(
@@ -118,6 +153,13 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
     if (body->empty())
       return parser.emitError(loc, "expectednon-empty function body");
   }
+  mlir::SmallVector<mlir::Value> captures_vals;
+  for(auto [c,a]: llvm::zip_equal(captures, capture_args)) {
+    if(parser.resolveOperand(c, a.type, captures_vals)) {
+      return mlir::failure();
+    }
+  }
+  result.addOperands(captures_vals);
   return mlir::success();
 }
 
@@ -128,9 +170,13 @@ void hugr_mlir::FuncOp::print(mlir::OpAsmPrinter& p) {
     p << visibility << ' ';
   }
   p.printSymbolName(getSymName());
+  p.printOperands(getCaptures());
+
   p.printStrippedAttrOrType(getExtensionSet());
 
-  mlir::ArrayRef<mlir::Type> argTypes = getArgumentTypes();
+
+  mlir::SmallVector<mlir::Type> argTypes{getCaptures().getTypes()};
+  llvm::copy(getArgumentTypes(), std::back_inserter(argTypes));
   mlir::ArrayRef<mlir::Type> resultTypes = getResultTypes();
   auto foi = llvm::cast<mlir::FunctionOpInterface>(getOperation());
   mlir::function_interface_impl::printFunctionSignature(
@@ -259,12 +305,41 @@ hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
   }
 }
 
-mlir::LogicalResult hugr_mlir::CallOp::verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
-  if(mlir::failed(verifyHugrSymbolUserOpInterface(llvm::cast<mlir::SymbolUserOpInterface>(getOperation()), symbolTable))) {
+mlir::LogicalResult hugr_mlir::CallOp::verifySymbolUses(::mlir::SymbolTableCollection &stc) {
+  LLVM_DEBUG(llvm::dbgs() << "CallOp::verifySymbolUses\n");
+  if(mlir::failed(verifyHugrSymbolUserOpInterface(llvm::cast<mlir::SymbolUserOpInterface>(getOperation()), stc))) {
     return mlir::failure();
   }
+  auto scope = getOperation()->getParentWithTrait<mlir::OpTrait::IsIsolatedFromAbove>();
+  auto lookup = [&](mlir::SymbolRefAttr attr) -> mlir::Operation* {
+    LLVM_DEBUG({
+      auto& os = llvm::dbgs();
+      os << "CallOp::verifySymbolUses::lookup: " << attr << ", scope:";
+      if(scope) {
+        os << scope->getName();
+      } else {
+        os << "no scope";
+      }
+      os << "\n";
+    });
+    auto parent = getOperation()->getParentOp();
+    for(;;) {
+      while(parent && parent != scope && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
+        LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
+        parent = parent->getParentOp();
+      }
+      if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
+        LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
+        auto mb_r = stc.lookupSymbolIn(parent, attr);
+        if(mb_r || parent == scope) { return mb_r; }
+        parent = parent->getParentOp();
+      }
+      if(!parent) { return nullptr; }
+    }
+  };
+
   if(auto callee = getCalleeAttrAttr()) {
-    auto from_st = symbolTable.lookupNearestSymbolFrom(getOperation(), callee.getRef());
+    auto from_st = lookup(callee.getRef());
     if(!from_st) {
       return emitOpError("Unknown symbol: ") << callee;
     }
@@ -530,18 +605,7 @@ mlir::LogicalResult hugr_mlir::DfgOp::verifyRegions() {
     return mlir::success();
   }
   {
-    mlir::SmallVector<mlir::Type> expected_region_types;
-    if (auto input_extensions = getInputExtensions()) {
-      llvm::transform(
-          getInputs().getTypes(), std::back_inserter(expected_region_types),
-          [&input_extensions](mlir::Type t) {
-            return ExtendedType::get(llvm::cast<HugrTypeInterface>(t))
-                .removeExtensions(*input_extensions);
-          });
-    } else {
-      llvm::copy(
-          getInputs().getTypes(), std::back_inserter(expected_region_types));
-    }
+    mlir::SmallVector<mlir::Type> expected_region_types{getInputs().getTypes()};
 
     if (!areTypesCompatible(
             getBody().getArgumentTypes(), expected_region_types)) {
@@ -752,6 +816,9 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
   mlir::Operation* this_op_symbol_table =
       op->getParentWithTrait<mlir::OpTrait::SymbolTable>();
 
+  mlir::Operation* scope_op =
+      op->getParentWithTrait<mlir::OpTrait::IsIsolatedFromAbove>();
+
   auto getOpOrParentWithSymbolTable = [](mlir::Operation* op) {
     return op->hasTrait<mlir::OpTrait::SymbolTable>()
                ? op
@@ -845,10 +912,25 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
       get_ifd() << "No symbol table";  // << ref.getRef();
       break;
     }
+
     for (auto ref : ref_types) {
-      mlir::Operation* o = stc.lookupSymbolIn(symbol_table, ref.getRef());
+      auto parent = symbol_table;
+      mlir::Operation* o = nullptr;
+      for(;;) {
+        while(parent && parent != scope_op && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
+          LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
+          parent = parent->getParentOp();
+        }
+        if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
+          LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
+          o = stc.lookupSymbolIn(parent, ref.getRef());
+          if(parent == scope_op) { break; }
+          parent = parent->getParentOp();
+        }
+        if(o || !parent) { break; }
+      }
       if (!o) {
-        get_ifd() << "Unknown symbol: " << ref.getRef();
+        get_ifd() << "Unknown symbol0: " << ref.getRef();
         break;
       }
       auto alias_op = llvm::dyn_cast<hugr_mlir::TypeAliasOp>(o);
