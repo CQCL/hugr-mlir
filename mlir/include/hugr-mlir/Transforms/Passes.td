@@ -8,7 +8,7 @@ include "mlir/Rewrite/PassUtil.td"
 // ToLLVM
 //===----------------------------------------------------------------------===//
 
-def LowerHugrPass : Pass<"lower-hugr"> {
+def LowerHugrPass : Pass<"lower-hugr-transform"> {
   let summary = "TODO";
   let description = [{
   TODO

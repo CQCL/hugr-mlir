@@ -1,5 +1,6 @@
 add_mlir_library(HugrMLIRTransforms
   LowerHugrPass.cpp
+  Utils.cpp
 
   DEPENDS
   HugrMLIRTransformsPassIncGen

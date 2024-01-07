@@ -55,11 +55,6 @@ struct LowerOutput : OpRewritePattern<hugr_mlir::OutputOp> {
       hugr_mlir::OutputOp, PatternRewriter&) const override;
 };
 
-struct LowerSwitch : OpRewritePattern<hugr_mlir::SwitchOp> {
-  using OpRewritePattern::OpRewritePattern;
-  LogicalResult matchAndRewrite(
-      hugr_mlir::SwitchOp, PatternRewriter&) const override;
-};
 
 struct LowerCall : OpRewritePattern<hugr_mlir::CallOp> {
   using OpRewritePattern::OpRewritePattern;
@@ -163,50 +158,6 @@ mlir::LogicalResult LowerOutput::matchAndRewrite(
   return success();
 }
 
-mlir::LogicalResult LowerSwitch::matchAndRewrite(
-    hugr_mlir::SwitchOp op, PatternRewriter& rw) const {
-  assert(op.getDestinations().size() > 0 && "must");
-
-  auto loc = op.getLoc();
-  auto pred = op.getPredicate();
-  auto pred_ty = llvm::cast<hugr_mlir::SumType>(pred.getType());
-
-  SmallVector<int32_t> case_values;
-  for (auto i = 0; i < pred_ty.numAlts(); ++i) {
-    case_values.push_back(i);
-  }
-
-  SmallVector<Block*> case_destinations{op.getDestinations()};
-  SmallVector<SmallVector<Value>> case_operands;
-
-  auto tag = rw.createOrFold<index::CastUOp>(
-      loc, rw.getI32Type(), rw.createOrFold<hugr_mlir::ReadTagOp>(loc, pred));
-
-  for (auto [i, t] : llvm::enumerate(
-           llvm::cast<hugr_mlir::SumType>(pred.getType()).getTypes())) {
-    auto tt = llvm::cast<TupleType>(t);
-    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, tt, pred, i);
-    auto& case_ops = case_operands.emplace_back();
-    rw.createOrFold<hugr_mlir::UnpackTupleOp>(case_ops, loc, tt.getTypes(), v);
-    llvm::copy(op.getOtherInputs(), std::back_inserter(case_ops));
-  }
-
-  assert(
-      case_values.size() == case_destinations.size() &&
-      case_values.size() == case_operands.size() && case_values.size() > 0 &&
-      "must");
-
-  SmallVector<ValueRange> case_operands_vrs;
-  llvm::transform(
-      case_operands, std::back_inserter(case_operands_vrs),
-      [](SmallVectorImpl<Value>& x) { return ValueRange(x); });
-  rw.replaceOpWithNewOp<cf::SwitchOp>(
-      op, tag, case_destinations[0], case_operands_vrs[0],
-      ArrayRef(case_values).drop_front(),
-      ArrayRef(case_destinations).drop_front(),
-      ArrayRef(case_operands_vrs).drop_front());
-  return success();
-}
 
 mlir::LogicalResult LowerCall::matchAndRewrite(hugr_mlir::CallOp op, PatternRewriter & rw) const {
     if(auto callee = op.getCalleeAttrAttr()) {
@@ -222,7 +173,7 @@ mlir::LogicalResult LowerCall::matchAndRewrite(hugr_mlir::CallOp op, PatternRewr
 
 mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
   RewritePatternSet ps(context);
-  ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerSwitch, LowerCall>(context);
+  ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerCall>(context);
 
   patterns =
       FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);

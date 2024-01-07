@@ -12,6 +12,13 @@
 namespace {
 using namespace mlir;
 
+struct SimpleHugrTypeConverter : TypeConverter  {
+  SimpleHugrTypeConverter();
+  FailureOr<Value> materializeTargetSum(OpBuilder&, hugr_mlir::SumType, Value, Location) const;
+  FailureOr<Value> materializeTargetTuple(OpBuilder&, TupleType, Value, Location) const;
+  FailureOr<Value> materializeSourceSum(OpBuilder&, hugr_mlir::SumType, TypedValue<hugr_mlir::SumType>, Location) const;
+  FailureOr<Value> materializeSourceTuple(OpBuilder&, TupleType, TypedValue<TupleType>, Location) const;
+};
 
 struct HugrTypeConverter : OneToNTypeConverter  {
     HugrTypeConverter();
@@ -262,6 +269,100 @@ HugrTypeConverter::HugrTypeConverter() : OneToNTypeConverter() {
     // });
 }
 
+FailureOr<Value> SimpleHugrTypeConverter::materializeTargetSum(OpBuilder& rw, hugr_mlir::SumType dest_t, Value src, Location loc) const {
+    assert(false && "unimplemented");
+}
+
+FailureOr<Value> SimpleHugrTypeConverter::materializeTargetTuple(OpBuilder& rw, TupleType dest_t, Value src, Location loc) const {
+    SmallVector<Value> unpacked;
+    rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpacked, loc, dest_t.getTypes(), src);
+    SmallVector<Value> converted;
+    for(auto v: unpacked) {
+        if(!isLegal(v.getType())) {
+          v = materializeTargetConversion(rw, loc, convertType(v.getType()), v);
+        }
+        converted.push_back(v);
+    }
+    return success(rw.createOrFold<hugr_mlir::MakeTupleOp>(loc, dest_t, converted));
+}
+
+FailureOr<Value> SimpleHugrTypeConverter::materializeSourceSum(OpBuilder&, hugr_mlir::SumType, TypedValue<hugr_mlir::SumType>, Location) const {
+    assert(false && "unimplemented");
+}
+
+FailureOr<Value> SimpleHugrTypeConverter::materializeSourceTuple(OpBuilder& rw, TupleType dest_t, TypedValue<TupleType> src, Location loc) const {
+    if(dest_t.size() != src.getType().size()) { return failure(); }
+    SmallVector<Value> unpacked;
+    rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpacked, loc, src.getType().getTypes(), src);
+    SmallVector<Value> unconverted;
+    for(auto [dt, v]: llvm::zip_equal(dest_t.getTypes(), unpacked)) {
+        if(dt != v.getType()) {
+          v = materializeSourceConversion(rw, loc, dt, v);
+        }
+        unconverted.push_back(v);
+    }
+    return success(rw.createOrFold<hugr_mlir::MakeTupleOp>(loc, dest_t, unconverted));
+}
+
+SimpleHugrTypeConverter::SimpleHugrTypeConverter() {
+    addConversion([this](TupleType tt) -> std::optional<Type> {
+        SmallVector<Type> ts;
+        if(failed(this->convertTypes(tt.getTypes(), ts))) { return std::nullopt; }
+        return TupleType::get(tt.getContext(), ts);
+    });
+    addConversion([this](hugr_mlir::SumType st) -> std::optional<Type> {
+        SmallVector<Type> ts;
+        if(failed(this->convertTypes(st.getTypes(), ts))) { return std::nullopt; }
+        return hugr_mlir::SumType::get(st.getContext(), ts);
+    });
+    addSourceMaterialization([this](OpBuilder& rw, TupleType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<TupleType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<TupleType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeSourceTuple(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+    addTargetMaterialization([this](OpBuilder& rw, TupleType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<TupleType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<TupleType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeTargetTuple(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+    addArgumentMaterialization([this](OpBuilder& rw, TupleType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<TupleType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<TupleType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeSourceTuple(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+
+    addSourceMaterialization([this](OpBuilder& rw, hugr_mlir::SumType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<hugr_mlir::SumType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<hugr_mlir::SumType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeSourceSum(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+    addTargetMaterialization([this](OpBuilder& rw, hugr_mlir::SumType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<hugr_mlir::SumType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<hugr_mlir::SumType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeTargetSum(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+    addArgumentMaterialization([this](OpBuilder& rw, hugr_mlir::SumType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {
+        TypedValue<hugr_mlir::SumType> src;
+        if(vs.size() != 1 || !(src = llvm::dyn_cast<TypedValue<hugr_mlir::SumType>>(vs.front()))) { return std::nullopt; }
+        auto p = this->materializeSourceSum(rw, dest_t, src, loc);
+        if(failed(p)) { return std::nullopt; }
+        return *p;
+    });
+}
 std::unique_ptr<mlir::TypeConverter> hugr_mlir::createTypeConverter() {
     return std::make_unique<HugrTypeConverter>();
+}
+
+std::unique_ptr<mlir::TypeConverter> hugr_mlir::createSimpleTypeConverter() {
+    return std::make_unique<SimpleHugrTypeConverter>();
 }

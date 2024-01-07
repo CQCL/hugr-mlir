@@ -3,15 +3,7 @@ add_executable(hugr-mlir-opt
 )
 target_link_libraries(hugr-mlir-opt
   PRIVATE
-  HugrMLIRDialect
-  HugrMLIRAnalysis
-  HugrMLIRTransforms
-  HugrMLIRConversion
-  MLIRArithDialect
-  MLIRControlFlowDialect
-  MLIRLLVMDialect
-  MLIRFuncDialect
-  MLIROptLib
+  HugrMLIROpt
 )
 set_target_properties(hugr-mlir-opt
   PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${HUGR_MLIR_TOOLS_DIR}"

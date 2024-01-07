@@ -103,12 +103,10 @@ def Hugr_FuncOp : Hugr_Op<"func",
     let extraClassDeclaration = [{
         bool isDeclaration() { return getBody().empty(); }
         static mlir::StringRef getDefaultDialect() { return "hugr"; }
+        StaticEdgeAttr getStaticEdgeAttr();
 
         ExtensionSetAttr getExtensionSet() { return getFunctionType().getExtensions(); }
         mlir::LogicalResult verifyBody();
-
-
-
     }];
 }
 
@@ -277,10 +275,9 @@ def FuncStaticEdgeAttr : Attr<CPred<"llvm::isa<hugr_mlir::FunctionType>(llvm::ca
 
 def Hugr_CallOp : Hugr_Op<"call",
   [ AttrSizedOperandSegments
-  // RangedTypesMatchWith<"inputs match function type", "callee", "inputs", "llvm::cast<FunctionType>($_self).getArgumentTypes()">
-  // , RangedTypesMatchWith<"outputs match function type", "callee", "outputs", "llvm::cast<FunctionType>($_self).getResultTypes()">
   , HugrMemoryOp
   , DeclareOpInterfaceMethods<SymbolUserOpInterface>
+  , DeclareOpInterfaceMethods<CallOpInterface>
   // , InferTypeOpInterface
   ]> {
     let summary = "A Hugr Call op";
@@ -305,6 +302,15 @@ def Hugr_CallOp : Hugr_Op<"call",
     );
 
     let hasVerifier = 1;
+
+    let builders = [
+        OpBuilder<(ins "mlir::TypedValue<hugr_mlir::FunctionType>":$callee, "mlir::ValueRange":$args), [{
+          $_state.addOperands(callee);
+          $_state.addOperands(args);
+          $_state.addTypes(callee.getType().getResultTypes());
+          $_state.addAttribute(getOperandSegmentSizesAttrName($_state.name), $_builder.getDenseI32ArrayAttr({1,(int32_t)args.size()}));
+        }]>
+    ];
 
     let extraClassDeclaration = [{
         FunctionType getFunctionType();
@@ -652,6 +658,53 @@ def Hugr_IdentityOp : Hugr_Op<"identity",
         Variadic<HugrTypeInterface>:$outputs
     );
 }
+
+def Hugr_AllocClosureOp : Hugr_Op<"alloc_closure", []> {
+  let summary = "Allocate a closure";
+  let results = (outs Hugr_ClosureType:$output);
+}
+
+def Hugr_AllocFunctionOp : Hugr_Op<"alloc_function",
+  [DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
+  let summary = "Allocate a FunctionType";
+  // TODO alloc effect
+  let arguments = (ins
+      FuncStaticEdgeAttr:$func
+  );
+  let results = (outs Hugr_FunctionType:$output);
+}
+
+def Hugr_WriteClosureOp : Hugr_Op<"write_closure", []> {
+  // TODO Write Effect
+  let summary = "Write to a closure";
+  let arguments = (ins
+      Hugr_ClosureType:$closure,
+      Variadic<HugrTypeInterface>:$inputs // TODO not linear
+  );
+}
+
+def Hugr_ReadClosureOp : Hugr_Op<"read_closure", []> {
+  // TODO Read Effect
+  let summary = "Write to a closure";
+  let arguments = (ins
+      Hugr_FunctionType:$closure
+  );
+  let results = (outs Variadic<HugrTypeInterface>:$outputs // TODO not linear
+  );
+}
+
+def Hugr_UnpackFunctionOp : Hugr_Op<"unpack_function", [DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
+  let summary = "Unpack a !hugr.function into a TypedValue<FunctionType> and a !hugr.closure";
+  let arguments = (ins
+      Hugr_FunctionType:$input
+  );
+  let results = (outs
+      FunctionType:$func,
+      Hugr_ClosureType:$closure
+  );
+}
+
+
 
 
 #endif

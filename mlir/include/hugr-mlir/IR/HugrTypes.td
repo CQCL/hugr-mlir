@@ -6,6 +6,13 @@
 include "hugr-mlir/IR/HugrDialect.td"
 include "hugr-mlir/IR/HugrAttrs.td"
 
+def Hugr_ClosureType : Hugr_Type<"Closure","closure"> {
+    let summary = "A Hugr Closure Type";
+    let description = [{ TODO }];
+
+    let assemblyFormat = "";
+}
+
 def Hugr_FunctionType : Hugr_Type<"Function", "function"> {
     let summary = "A Hugr Function Type";
     let description = [{

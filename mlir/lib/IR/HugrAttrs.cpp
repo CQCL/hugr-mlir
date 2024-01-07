@@ -44,8 +44,12 @@ mlir::TupleType hugr_mlir::UnitAttr::getType() {
 
 hugr_mlir::TypeConstraintAttr hugr_mlir::TypeConstraintAttr::intersection(
     TypeConstraintAttr other) {
-  return TypeConstraintAttr::get(
-      getContext(), std::min(getValue(), other.getValue()));
+  return intersection(other.getValue());
+}
+
+hugr_mlir::TypeConstraintAttr hugr_mlir::TypeConstraintAttr::intersection(
+  TypeConstraint other) {
+  return TypeConstraintAttr::get(getContext(), std::min(getValue(), other));
 }
 
 hugr_mlir::ExtensionSetAttr hugr_mlir::ExtensionSetAttr::remove(
@@ -59,6 +63,12 @@ hugr_mlir::ExtensionSetAttr hugr_mlir::ExtensionSetAttr::remove(
       getExtensions(), std::back_inserter(new_attrs),
       [&rhs_set](auto x) { return !rhs_set.contains(x); });
   return ExtensionSetAttr::get(getContext(), new_attrs);
+}
+
+hugr_mlir::ExtensionSetAttr hugr_mlir::ExtensionSetAttr::merge(ExtensionSetAttr rhs) {
+  llvm::SmallVector<ExtensionAttr> all{getExtensions()};
+  llvm::copy(rhs.getExtensions(), std::back_inserter(all));
+  return ExtensionSetAttr::get(getContext(), all);
 }
 
 auto hugr_mlir::SumAttr::getSumType() -> SumType {

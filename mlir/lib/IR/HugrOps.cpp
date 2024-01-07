@@ -15,6 +15,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //  FuncOp
 /////////////////////////////////////////////////////////////////////////////
+
+hugr_mlir::StaticEdgeAttr hugr_mlir::FuncOp::getStaticEdgeAttr() {
+  mlir::OpBuilder builder(getContext());
+  return builder.getAttr<StaticEdgeAttr>(getFunctionType(), builder.getAttr<mlir::SymbolRefAttr>(getSymNameAttr()));
+}
+
 mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getResultTypes() {
   return getFunctionType().getResultTypes();
 }
@@ -305,31 +311,59 @@ hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
   }
 }
 
+mlir::CallInterfaceCallable hugr_mlir::CallOp::getCallableForCallee() {
+  if(auto attr = getCalleeAttrAttr()) {
+    return attr.getRef();
+  }
+  return getCalleeValue();
+}
+
+void hugr_mlir::CallOp::setCalleeFromCallable(::mlir::CallInterfaceCallable callee) {
+  llvm::TypeSwitch<::mlir::CallInterfaceCallable>(callee)
+    .Case([&](mlir::Value v) {
+      setCalleeAttrAttr(nullptr);
+      getCalleeValueMutable().assign(v);
+    }).Case([&](mlir::SymbolRefAttr a) {
+      getCalleeValueMutable().clear();
+      // TODO this function type gets no extensions, dodgy. perhaps panic here?
+      auto ft = FunctionType::get(ExtensionSetAttr::get(getContext()), mlir::FunctionType::get(getContext(), getInputs().getType(), getOutputs().getType()));
+      setCalleeAttrAttr(::hugr_mlir::StaticEdgeAttr::get(ft, a));
+    });
+}
+
+
+mlir::Operation::operand_range hugr_mlir::CallOp::getArgOperands() {
+  return getInputs();
+}
+mlir::MutableOperandRange hugr_mlir::CallOp::getArgOperandsMutable() {
+  return getInputsMutable();
+}
+
 mlir::LogicalResult hugr_mlir::CallOp::verifySymbolUses(::mlir::SymbolTableCollection &stc) {
-  LLVM_DEBUG(llvm::dbgs() << "CallOp::verifySymbolUses\n");
+  // LLVM_DEBUG(llvm::dbgs() << "CallOp::verifySymbolUses\n");
   if(mlir::failed(verifyHugrSymbolUserOpInterface(llvm::cast<mlir::SymbolUserOpInterface>(getOperation()), stc))) {
     return mlir::failure();
   }
   auto scope = getOperation()->getParentWithTrait<mlir::OpTrait::IsIsolatedFromAbove>();
   auto lookup = [&](mlir::SymbolRefAttr attr) -> mlir::Operation* {
-    LLVM_DEBUG({
-      auto& os = llvm::dbgs();
-      os << "CallOp::verifySymbolUses::lookup: " << attr << ", scope:";
-      if(scope) {
-        os << scope->getName();
-      } else {
-        os << "no scope";
-      }
-      os << "\n";
-    });
+    // LLVM_DEBUG({
+    //   auto& os = llvm::dbgs();
+    //   os << "CallOp::verifySymbolUses::lookup: " << attr << ", scope:";
+    //   if(scope) {
+    //     os << scope->getName();
+    //   } else {
+    //     os << "no scope";
+    //   }
+    //   os << "\n";
+    // });
     auto parent = getOperation()->getParentOp();
     for(;;) {
       while(parent && parent != scope && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-        LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
+        // LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
         parent = parent->getParentOp();
       }
       if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-        LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
+        // LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
         auto mb_r = stc.lookupSymbolIn(parent, attr);
         if(mb_r || parent == scope) { return mb_r; }
         parent = parent->getParentOp();
@@ -746,6 +780,36 @@ mlir::OpFoldResult hugr_mlir::ConstantOp::fold(FoldAdaptor adaptor) {
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// UnpackFunctionOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::UnpackFunctionOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+  mlir::OpBuilder builder(context);
+  UnpackFunctionOpAdaptor adaptor(operands, attributes, properties, regions);
+  auto old_ft = llvm::dyn_cast<FunctionType>(adaptor.getInput().getType());
+  if(!old_ft) {
+    return mlir::emitOptionalError(location, "Input not a function type:");
+  }
+  mlir::SmallVector<mlir::Type> new_arg_tys{builder.getType<ClosureType>()};
+  llvm::copy(old_ft.getArgumentTypes(), std::back_inserter(new_arg_tys));
+  inferredReturnTypes.push_back(builder.getFunctionType(new_arg_tys, old_ft.getResultTypes()));
+  inferredReturnTypes.push_back(new_arg_tys[0]);
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// UnpackFunctionOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::AllocFunctionOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+  mlir::OpBuilder builder(context);
+  AllocFunctionOpAdaptor adaptor(operands, attributes, properties, regions);
+  auto func = adaptor.getFunc();
+  FunctionType ft;
+  if(!func || !(ft = llvm::dyn_cast<FunctionType>(func.getType()))) { return mlir::emitOptionalError(location, "func is not a static edge attr"); }
+  inferredReturnTypes.push_back(ft);
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Miscilaneous free functions
 /////////////////////////////////////////////////////////////////////////////
 void hugr_mlir::getHugrTypeMemoryEffects(
@@ -918,11 +982,11 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
       mlir::Operation* o = nullptr;
       for(;;) {
         while(parent && parent != scope_op && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-          LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
+          // LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
           parent = parent->getParentOp();
         }
         if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-          LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
+          // LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
           o = stc.lookupSymbolIn(parent, ref.getRef());
           if(parent == scope_op) { break; }
           parent = parent->getParentOp();

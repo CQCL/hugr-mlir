@@ -6,9 +6,7 @@ add_mlir_library(HugrMLIRTranslate
     ${dialect_libs}
     ${translation_libs}
     MLIRTranslateLib
-)
-target_link_libraries(HugrMLIRTranslate
-  PUBLIC hugr-mlir-headers-interface
+    hugr-mlir-headers-interface
 )
 
-mlir_check_all_link_libraries(hugr-mlir-translate)
+mlir_check_all_link_libraries(HugrMLIRTranslate)

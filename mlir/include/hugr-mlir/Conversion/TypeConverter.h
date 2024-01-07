@@ -14,6 +14,7 @@ class MLIRContext;
 namespace hugr_mlir {
 /* void populateHugrToLLVMConversionPatterns(mlir::RewritePatternSet&, mlir::TypeConverter const&, int benefit = 1); */
 std::unique_ptr<mlir::TypeConverter> createTypeConverter();
+std::unique_ptr<mlir::TypeConverter> createSimpleTypeConverter();
 }
 
 #endif

@@ -25,10 +25,22 @@ struct ExternalTupleHugrTypeInterfaceModel
     : public HugrTypeInterface::ExternalModel<
           ExternalTupleHugrTypeInterfaceModel, mlir::TupleType> {
   ExtensionSetAttr getExtensions(mlir::Type t) const {
-    return ExtensionSetAttr::get(t.getContext());
+    auto acc = ExtensionSetAttr::get(t.getContext());
+    for(auto t: llvm::cast<mlir::TupleType>(t).getTypes()) {
+      if(auto hti = llvm::dyn_cast<HugrTypeInterface>(t)) {
+        acc = acc.merge(hti.getExtensions());
+      }
+    }
+    return acc;
   }
   TypeConstraint getConstraint(mlir::Type t) const {
-    return TypeConstraint::Copyable;
+    auto acc = TypeConstraintAttr::get(t.getContext(), TypeConstraint::Copyable);
+    for(auto t: llvm::cast<mlir::TupleType>(t).getTypes()) {
+      if(auto hti = llvm::dyn_cast<HugrTypeInterface>(t)) {
+        acc = acc.intersection(hti.getConstraint());
+      }
+    }
+    return acc.getValue();
   }
 };
 
@@ -68,10 +80,22 @@ struct ExternalFloat64HugrTypeInterfaceModel
 struct SumHugrTypeInterfaceModel : public HugrTypeInterface::ExternalModel<
                                        SumHugrTypeInterfaceModel, SumType> {
   ExtensionSetAttr getExtensions(mlir::Type t) const {
-    return ExtensionSetAttr::get(t.getContext());
+    auto acc = ExtensionSetAttr::get(t.getContext());
+    for(auto t: llvm::cast<SumType>(t).getTypes()) {
+      if(auto hti = llvm::dyn_cast<HugrTypeInterface>(t)) {
+        acc = acc.merge(hti.getExtensions());
+      }
+    }
+    return acc;
   }
   TypeConstraint getConstraint(mlir::Type t) const {
-    return TypeConstraint::Copyable;
+    auto acc = TypeConstraintAttr::get(t.getContext(), TypeConstraint::Copyable);
+    for(auto t: llvm::cast<SumType>(t).getTypes()) {
+      if(auto hti = llvm::dyn_cast<HugrTypeInterface>(t)) {
+        acc = acc.intersection(hti.getConstraint());
+      }
+    }
+    return acc.getValue();
   }
 };
 
@@ -108,9 +132,9 @@ struct ExtendedHugrTypeInterfaceModel
   }
 };
 
-struct FunctionHugrTypeInterfaceModel
+struct HugrFunctionHugrTypeInterfaceModel
     : public HugrTypeInterface::ExternalModel<
-          ExtendedHugrTypeInterfaceModel, FunctionType> {
+          HugrFunctionHugrTypeInterfaceModel, FunctionType> {
   ExtensionSetAttr getExtensions(mlir::Type t) const {
     return ExtensionSetAttr::get(t.getContext());
   }
@@ -119,23 +143,36 @@ struct FunctionHugrTypeInterfaceModel
   }
 };
 
+struct ExternalFunctionHugrTypeInterfaceModel
+    : public HugrTypeInterface::ExternalModel<
+          ExternalFunctionHugrTypeInterfaceModel, mlir::FunctionType> {
+  ExtensionSetAttr getExtensions(mlir::Type t) const {
+    return ExtensionSetAttr::get(t.getContext());
+  }
+  TypeConstraint getConstraint(mlir::Type t) const {
+    return TypeConstraint::Equatable;
+  }
+};
+
 }  // namespace
 
 void hugr_mlir::HugrDialect::registerTypeInterfaces() {
-  SumType::attachInterface<SumHugrTypeInterfaceModel>(*getContext());
-  OpaqueType::attachInterface<OpaqueHugrTypeInterfaceModel>(*getContext());
-  AliasRefType::attachInterface<AliasRefHugrTypeInterfaceModel>(*getContext());
-  ExtendedType::attachInterface<ExtendedHugrTypeInterfaceModel>(*getContext());
-  FunctionType::attachInterface<FunctionHugrTypeInterfaceModel>(*getContext());
+  auto& context = *getContext();
+  SumType::attachInterface<SumHugrTypeInterfaceModel>(context);
+  OpaqueType::attachInterface<OpaqueHugrTypeInterfaceModel>(context);
+  AliasRefType::attachInterface<AliasRefHugrTypeInterfaceModel>(context);
+  ExtendedType::attachInterface<ExtendedHugrTypeInterfaceModel>(context);
+  FunctionType::attachInterface<HugrFunctionHugrTypeInterfaceModel>(context);
 
   mlir::IndexType::attachInterface<ExternalIndexHugrTypeInterfaceModel>(
-      *getContext());
+      context);
   mlir::TupleType::attachInterface<ExternalTupleHugrTypeInterfaceModel>(
-      *getContext());
+      context);
   mlir::Float32Type::attachInterface<ExternalFloat32HugrTypeInterfaceModel>(
-      *getContext());
+      context);
   mlir::Float64Type::attachInterface<ExternalFloat64HugrTypeInterfaceModel>(
-      *getContext());
+      context);
   mlir::IntegerType::attachInterface<ExternalIntegerHugrTypeInterfaceModel>(
-      *getContext());
+      context);
+  mlir::FunctionType::attachInterface<ExternalFunctionHugrTypeInterfaceModel>(context);
 }

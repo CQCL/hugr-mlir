@@ -64,6 +64,7 @@ def Hugr_ExtensionSetAttr : Hugr_Attr<"ExtensionSet", "exts"> {
       static mlir::FailureOr<mlir::SmallVector<ExtensionAttr>> parseExtensionList(mlir::AsmParser&);
       unsigned size() { return getExtensions().size(); }
       ExtensionSetAttr remove(ExtensionSetAttr rhs);
+      ExtensionSetAttr merge(ExtensionSetAttr rhs);
   }];
 }
 
@@ -140,6 +141,7 @@ def Hugr_TypeConstraintAttr : Hugr_EnumAttr<Hugr_TypeConstraintEnum, "constraint
     let assemblyFormat = "$value";
     let extraClassDeclaration = [{
         TypeConstraintAttr intersection(TypeConstraintAttr);
+        TypeConstraintAttr intersection(TypeConstraint);
     }];
 }
 
