@@ -33,6 +33,7 @@ def ConvertHugrFuncPass : Pass<"convert-hugr-func","hugr_mlir::ModuleOp"> {
   let dependentDialects = [
     "::hugr_mlir::HugrDialect",
     "::mlir::func::FuncDialect",
+    "::mlir::index::IndexDialect",
     "::mlir::cf::ControlFlowDialect",
   ];
 }

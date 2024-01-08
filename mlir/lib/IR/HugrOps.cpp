@@ -13,6 +13,37 @@
 #define DEBUG_TYPE "hugr-ops"
 
 /////////////////////////////////////////////////////////////////////////////
+//  ModuleOp
+/////////////////////////////////////////////////////////////////////////////
+mlir::LogicalResult hugr_mlir::ModuleOp::verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
+  HugrSymbolMap map;
+  std::optional<mlir::InFlightDiagnostic> mb_ifd;
+  auto ifd = [&](mlir::Twine t) -> mlir::InFlightDiagnostic& {
+    if(!mb_ifd) { mb_ifd.emplace(emitError(t)); }
+    return *mb_ifd;
+  };
+  getOperation()->walk([&](mlir::Operation* op) {
+    if(op->hasTrait<mlir::OpTrait::IsIsolatedFromAbove>()) { return mlir::WalkResult::skip(); }
+    if(auto sym = llvm::dyn_cast<mlir::SymbolOpInterface>(op)) {
+      auto r = map.insert(std::make_pair(mlir::FlatSymbolRefAttr::get(sym.getNameAttr()), sym.getOperation()));
+      if(!r.second) {
+        auto& e = ifd("hugr.module contains duplicate definitions for symbol:");
+        e.attachNote(sym->getLoc()) << sym->getName();
+        e.attachNote(r.first->second->getLoc()) << r.first->second->getName();
+        return mlir::WalkResult::interrupt();
+      };
+    }
+    return mlir::WalkResult::advance();
+  });
+  for(auto const& [k,v]: map) {
+    if(mlir::failed(verifyHugrSymbolUses(v, map))) {
+      return mlir::failure();
+    }
+  }
+  return mlir::success();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //  FuncOp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -339,52 +370,22 @@ mlir::MutableOperandRange hugr_mlir::CallOp::getArgOperandsMutable() {
   return getInputsMutable();
 }
 
-mlir::LogicalResult hugr_mlir::CallOp::verifySymbolUses(::mlir::SymbolTableCollection &stc) {
-  // LLVM_DEBUG(llvm::dbgs() << "CallOp::verifySymbolUses\n");
-  if(mlir::failed(verifyHugrSymbolUserOpInterface(llvm::cast<mlir::SymbolUserOpInterface>(getOperation()), stc))) {
-    return mlir::failure();
+mlir::LogicalResult hugr_mlir::CallOp::verifyHugrSymbolUses(HugrSymbolMap const& map) {
+  auto callee_attr = getCalleeAttrAttr();
+  if(!callee_attr) { return mlir::success(); }
+
+  auto callee_op = map.lookup(callee_attr.getRef());
+  if(!callee_op) {
+      return emitOpError("Unknown symbol: ") << callee_attr.getRef();
   }
-  auto scope = getOperation()->getParentWithTrait<mlir::OpTrait::IsIsolatedFromAbove>();
-  auto lookup = [&](mlir::SymbolRefAttr attr) -> mlir::Operation* {
-    // LLVM_DEBUG({
-    //   auto& os = llvm::dbgs();
-    //   os << "CallOp::verifySymbolUses::lookup: " << attr << ", scope:";
-    //   if(scope) {
-    //     os << scope->getName();
-    //   } else {
-    //     os << "no scope";
-    //   }
-    //   os << "\n";
-    // });
-    auto parent = getOperation()->getParentOp();
-    for(;;) {
-      while(parent && parent != scope && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-        // LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
-        parent = parent->getParentOp();
-      }
-      if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-        // LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
-        auto mb_r = stc.lookupSymbolIn(parent, attr);
-        if(mb_r || parent == scope) { return mb_r; }
-        parent = parent->getParentOp();
-      }
-      if(!parent) { return nullptr; }
-    }
-  };
 
-  if(auto callee = getCalleeAttrAttr()) {
-    auto from_st = lookup(callee.getRef());
-    if(!from_st) {
-      return emitOpError("Unknown symbol: ") << callee;
-    }
-    auto func_op = llvm::dyn_cast<FuncOp>(from_st);
-    if(!func_op) {
-      return emitOpError("Symbol References op of type: ") << from_st->getName() << ", expected " << FuncOp::getOperationName();
-    }
+  auto callee_func = llvm::dyn_cast<FuncOp>(callee_op);
+  if(!callee_func) {
+    return emitOpError("Symbol References op of type: ") << callee_op->getName() << ", expected " << FuncOp::getOperationName();
+  }
 
-    if(func_op.getFunctionType() != callee.getType()) {
-      return emitOpError("Callee has type: ") << func_op.getFunctionType() << ", expected: " << callee.getType();
-    }
+  if(callee_func.getFunctionType() != callee_attr.getType()) {
+    return emitOpError("Callee has type: ") << callee_func.getFunctionType() << ", expected: " << callee_attr.getType();
   }
 
   return mlir::success();
@@ -866,56 +867,27 @@ bool hugr_mlir::isControlFlowGraphRegion(mlir::Region& region) {
 /////////////////////////////////////////////////////////////////////////////
 //  verifyHugrSymbolUserOpInterface
 /////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
-    mlir::SymbolUserOpInterface op, mlir::SymbolTableCollection& stc) {
-  // struct WorkItem {
-  //   std::string name;
-  //   Operation* symbol_table;
-  //   Attribute attr;
-  // };
+mlir::LogicalResult hugr_mlir::verifyHugrSymbolUses(
+    mlir::Operation* op, HugrSymbolMap const& stc) {
+  if(auto co = llvm::dyn_cast<CallOp>(op)) {
+    if(mlir::failed(co.verifyHugrSymbolUses(stc))) {
+      return mlir::failure();
+    }
+  }
 
   mlir::OpBuilder builder(op->getContext());
 
-  // might be null, which is fine so long as we have no references
-  mlir::Operation* this_op_symbol_table =
-      op->getParentWithTrait<mlir::OpTrait::SymbolTable>();
-
-  mlir::Operation* scope_op =
-      op->getParentWithTrait<mlir::OpTrait::IsIsolatedFromAbove>();
-
-  auto getOpOrParentWithSymbolTable = [](mlir::Operation* op) {
-    return op->hasTrait<mlir::OpTrait::SymbolTable>()
-               ? op
-               : op->getParentWithTrait<mlir::OpTrait::SymbolTable>();
-  };
-
-  std::optional<mlir::InFlightDiagnostic> mb_ifd;
-  auto get_ifd = [&]() -> mlir::InFlightDiagnostic& {
-    if (!mb_ifd) {
-      mb_ifd.emplace(mlir::emitError(op->getLoc()));
-    }
-    return *mb_ifd;
-  };
-
-  llvm::SmallVector<std::tuple<mlir::NamedAttribute, mlir::Operation*>>
+  llvm::SmallVector<std::tuple<mlir::Twine, mlir::Attribute>>
       worklist;
   llvm::transform(op->getAttrs(), std::back_inserter(worklist), [&](auto x) {
-    return std::make_tuple(x, this_op_symbol_table);
+    return std::make_tuple(mlir::Twine("Attribute: ").concat(x.getName().getValue()), x.getValue());
   });
   for (auto& r : op->getRegions()) {
     for (auto const& [i, b] : llvm::enumerate(r.getBlocks())) {
       llvm::transform(
           b.getArguments(), std::back_inserter(worklist), [&](auto x) {
-            std::string s;
-            {
-              llvm::raw_string_ostream os(s);
-              os << "r[" << r.getRegionNumber() << "]b[" << i << "]_"
-                 << x.getArgNumber();
-            }
-            return std::make_tuple(
-                mlir::NamedAttribute(
-                    builder.getStringAttr(s), mlir::TypeAttr::get(x.getType())),
-                this_op_symbol_table);
+            mlir::Twine s = mlir::Twine("region,block,arg:").concat(mlir::Twine(r.getRegionNumber())).concat(",").concat(mlir::Twine(i)).concat(",").concat(mlir::Twine(x.getArgNumber()));
+            return std::make_tuple(s, mlir::TypeAttr::get(x.getType()));
           });
     }
   }
@@ -923,104 +895,58 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUserOpInterface(
       llvm::enumerate(op->getOperands()), std::back_inserter(worklist),
       [&](auto x) {
         auto [i, operand] = x;
-        std::string s;
-        {
-          llvm::raw_string_ostream os(s);
-          os << "operand_" << i;
-        }
-        mlir::Operation* symbol_table =
-            llvm::TypeSwitch<mlir::Value, mlir::Operation*>(operand)
-                .Case([&](mlir::BlockArgument ba) -> mlir::Operation* {
-                  return getOpOrParentWithSymbolTable(
-                      ba.getOwner()->getParentOp());
-                })
-                .Case([&](mlir::OpResult& res) -> mlir::Operation* {
-                  return getOpOrParentWithSymbolTable(res.getOwner());
-                })
-                .Default([](mlir::Value) -> mlir::Operation* {
-                  assert(false && "unknown value subclass");
-                });
-        return std::make_tuple(
-            mlir::NamedAttribute(
-                builder.getStringAttr(s),
-                mlir::TypeAttr::get(operand.getType())),
-            symbol_table);
+        mlir::Twine s = mlir::Twine("operand ").concat(mlir::Twine(i));
+        return std::make_tuple(s, mlir::TypeAttr::get(operand.getType()));
       });
 
   llvm::transform(
       llvm::enumerate(op->getResults()), std::back_inserter(worklist),
       [&](auto x) {
         auto [i, res] = x;
-        std::string s;
-        {
-          llvm::raw_string_ostream os(s);
-          os << "result_" << i;
-        }
-        return std::make_tuple(
-            mlir::NamedAttribute(
-                builder.getStringAttr(s), mlir::TypeAttr::get(res.getType())),
-            this_op_symbol_table);
+        mlir::Twine s = mlir::Twine("result ").concat(mlir::Twine(i));
+        return std::make_tuple(s, mlir::TypeAttr::get(res.getType()));
       });
 
-  for (auto const& [named_attr, symbol_table] : worklist) {
+  for (auto const& [label, a] : worklist) {
     llvm::DenseSet<hugr_mlir::AliasRefType> ref_types;
 
     mlir::AttrTypeWalker walker;
     walker.addWalk([&](hugr_mlir::AliasRefType ref) { ref_types.insert(ref); });
-    walker.walk(named_attr.getValue());
+    walker.walk(a);
 
     if (ref_types.empty()) {
       continue;
     }
-    if (!symbol_table) {
-      get_ifd() << "No symbol table";  // << ref.getRef();
-      break;
-    }
 
     for (auto ref : ref_types) {
-      auto parent = symbol_table;
-      mlir::Operation* o = nullptr;
-      for(;;) {
-        while(parent && parent != scope_op && !parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-          // LLVM_DEBUG(llvm::dbgs() << "rejecting parent: " << parent->getName() << "\n");
-          parent = parent->getParentOp();
+      std::optional<mlir::InFlightDiagnostic> mb_ifd;
+      auto get_ifd = [&]() -> mlir::InFlightDiagnostic& {
+        if (!mb_ifd) {
+          mb_ifd.emplace(mlir::emitError(op->getLoc())) << "Error resolving type alias reference in " << label << " of " << op->getName() << ": " << ref;
         }
-        if(parent && parent->hasTrait<mlir::OpTrait::SymbolTable>()) {
-          // LLVM_DEBUG(llvm::dbgs() << "Trying: " << parent->getName() << "\n");
-          o = stc.lookupSymbolIn(parent, ref.getRef());
-          if(parent == scope_op) { break; }
-          parent = parent->getParentOp();
-        }
-        if(o || !parent) { break; }
+        return *mb_ifd;
+      };
+      auto referee = stc.lookup(ref.getRef());
+      if (!referee) {
+        return get_ifd() << "Unknown symbol: " << ref.getRef();
       }
-      if (!o) {
-        get_ifd() << "Unknown symbol0: " << ref.getRef();
-        break;
-      }
-      auto alias_op = llvm::dyn_cast<hugr_mlir::TypeAliasOp>(o);
+      auto alias_op = llvm::dyn_cast<hugr_mlir::TypeAliasOp>(referee);
       if (!alias_op) {
-        auto& ifd = get_ifd() << "Alias references non-hugr.type_alias op";
-        ifd.attachNote(o->getLoc()) << o;
-        break;
+        auto& ifd = get_ifd() << "Symbol references non type-alias op: " << referee->getName();
+        ifd.attachNote(referee->getLoc());
+        return ifd;
       }
 
       if (alias_op.getExtensionsAttr() != ref.getExtensions()) {
-        auto& ifd = get_ifd() << "Alias has wrong extensions: expected "
-                              << alias_op.getExtensionsAttr() << " for " << ref;
-        ifd.attachNote(alias_op.getLoc())
-            << "symbol table:" << alias_op->getName();
-        break;
+        auto& ifd = get_ifd() << "Alias has mismatched extensions:" << alias_op.getExtensionsAttr();
+        ifd.attachNote(alias_op.getLoc());
+        return ifd;
       }
       if (alias_op.getConstraint() != ref.getConstraint()) {
-        auto& ifd = get_ifd() << "Alias has wrong constraint: expected "
-                              << alias_op.getConstraintAttr() << " for " << ref;
-        ifd.attachNote(alias_op.getLoc())
-            << "symbol table:" << alias_op->getName();
-        break;
+        auto& ifd = get_ifd() << "Alias has mismatched constraint:" << alias_op.getConstraintAttr();
+        ifd.attachNote(alias_op.getLoc());
+        return ifd;
       }
-    }
-    if (mb_ifd) {
-      return mlir::failure();
     }
   }
 

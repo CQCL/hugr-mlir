@@ -27,8 +27,9 @@ bool isDataflowGraphRegion(mlir::Region &);
 
 bool isControlFlowGraphRegion(mlir::Region &);
 
-mlir::LogicalResult verifyHugrSymbolUserOpInterface(
-    mlir::SymbolUserOpInterface, mlir::SymbolTableCollection &);
+using HugrSymbolMap = mlir::DenseMap<mlir::SymbolRefAttr, mlir::Operation*>;
+mlir::LogicalResult verifyHugrSymbolUses(
+    mlir::Operation*, HugrSymbolMap const&);
 
 }  // namespace hugr_mlir
 
@@ -44,17 +45,16 @@ struct HugrTypeMemoryEffectsTrait
   }
 };
 
-template <typename ConcreteOp>
-struct HugrSymbolUserTrait : TraitBase<ConcreteOp, HugrSymbolUserTrait> {
-  LogicalResult verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
-    return hugr_mlir::verifyHugrSymbolUserOpInterface(
-        llvm::cast<SymbolUserOpInterface>(this->getOperation()), symbolTable);
-  }
+// template <typename ConcreteOp>
+// struct HugrSymbolUserTrait : TraitBase<ConcreteOp, HugrSymbolUserTrait> {
+//   LogicalResult verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
+//     return hugr_mlir::verifyHugrSymbolUses(this->getOperation(), symbolTable);
+//   }
 
-  static LogicalResult verifyTrait(Operation *op) {
-    return success(llvm::isa_and_present<SymbolUserOpInterface>(*op));
-  }
-};
+//   static LogicalResult verifyTrait(Operation *op) {
+//     return success(llvm::isa_and_present<SymbolUserOpInterface>(*op));
+//   }
+// };
 
 }  // namespace mlir::OpTrait
 

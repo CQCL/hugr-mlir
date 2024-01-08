@@ -4,6 +4,7 @@ use itertools::{zip_eq, Itertools};
 use melior::ir::attribute::FlatSymbolRefAttribute;
 use melior::ir::{BlockRef, Type, ValueLike};
 use std::borrow::{BorrowMut, Cow};
+use std::cell::RefCell;
 use std::iter::{empty, zip};
 use std::ops::Deref;
 
@@ -16,7 +17,7 @@ use melior::{
 use std::collections::{HashMap, HashSet};
 use std::vec::Vec;
 
-use crate::mlir::hugr::{StaticEdgeAttr, DfgOp};
+use crate::mlir::hugr::{DfgOp, StaticEdgeAttr};
 use crate::{mlir, Error, Result};
 
 pub mod types;
@@ -36,79 +37,84 @@ type SymbolItem<'a> = (
     melior::ir::attribute::StringAttribute<'a>,
 );
 
-struct Symboliser<'a, V: HugrView> {
-    context: &'a Context,
-    hugr: &'a V,
-    allocated_symbols: HashSet<String>,
-    node_to_symbol: HashMap<hugr::Node, SymbolItem<'a>>,
-    next_unique: i32,
-}
+// struct Symboliser<'a, V: HugrView> {
+//     context: &'a Context,
+//     hugr: &'a V,
+//     allocated_symbols: std::rc::Rc<RefCell<HashSet<String>>>,
+//     node_to_symbol: HashMap<hugr::Node, SymbolItem<'a>>,
+//     next_unique: i32,
+// }
 
-impl<'a, V: HugrView> Clone for Symboliser<'a, V> {
-    fn clone(&self) -> Self {
-        Self {
-            context: self.context,
-            hugr: self.hugr,
-            allocated_symbols: self.allocated_symbols.clone(),
-            node_to_symbol: self.node_to_symbol.clone(),
-            next_unique: self.next_unique,
-        }
-    }
-}
+// impl<'a, V: HugrView> Clone for Symboliser<'a, V> {
+//     fn clone(&self) -> Self {
+//         Self {
+//             context: self.context,
+//             hugr: self.hugr,
+//             allocated_symbols: self.allocated_symbols.clone(),
+//             node_to_symbol: self.node_to_symbol.clone(),
+//             next_unique: self.next_unique,
+//         }
+//     }
+// }
 
-impl<'a, V: HugrView> Symboliser<'a, V> {
-    fn new(context: &'a Context, hugr: &'a V) -> Self {
-        Self {
-            context,
-            hugr,
-            allocated_symbols: HashSet::new(),
-            node_to_symbol: HashMap::new(),
-            next_unique: 0,
-        }
-    }
+// impl<'a, V: HugrView> Symboliser<'a, V> {
+//     fn new(context: &'a Context, hugr: &'a V) -> Self {
+//         Self {
+//             context,
+//             hugr,
+//             allocated_symbols: std::rc::Rc::new(RefCell::new(HashSet::new())),
+//             node_to_symbol: HashMap::new(),
+//             next_unique: 0,
+//         }
+//     }
 
-    fn get_or_alloc<'b>(&'b mut self, k: hugr::Node) -> Result<SymbolItem<'a>> {
-        if let Some(r) = self.node_to_symbol.get(&k) {
-            Ok(*r)
-        } else {
-            use hugr::ops::OpType;
-            use hugr::NodeIndex;
-            let (ty, mut sym) = match self.hugr.get_optype(k) {
-                &OpType::FuncDecl(hugr::ops::FuncDecl {
-                    ref name,
-                    ref signature,
-                })
-                | &OpType::FuncDefn(hugr::ops::FuncDefn {
-                    ref name,
-                    ref signature,
-                }) if signature.params().len() == 0 => {
-                    let ty = hugr_to_mlir_function_type(self.context, signature.body())?.into();
-                    Ok((ty, name.to_string()))
-                }
-                OpType::Const(const_) => {
-                    let ty = hugr_to_mlir_type(self.context, const_.const_type())?;
-                    Ok((ty, format!("const_{}", k.index())))
-                }
-                opty => Err(anyhow!("Bad optype for static edge: {:?}", opty)),
-            }?;
-            if self.allocated_symbols.contains(&sym) {
-                sym = format!("{}_{}", sym, self.next_unique);
-                self.next_unique += 1;
-            }
-            let attr = mlir::hugr::StaticEdgeAttr::new(
-                ty,
-                mlir::hugr::SymbolRefAttr::new(self.context, sym.as_ref(), empty()),
-            );
-            let None = self.node_to_symbol.insert(k, (attr, ty, melior::ir::attribute::StringAttribute::new(self.context, &sym))) else {
-                panic!("Expected node to be unmapped: {:?}", k);
-            };
-            if !self.allocated_symbols.insert(sym.clone()) {
-                panic!("Expected sym to be unallocated: {}", sym);
-            }
-            Ok(*self.node_to_symbol.get(&k).unwrap())
-        }
-    }
-}
+//     fn get_or_alloc<'b>(&'b mut self, k: hugr::Node) -> Result<SymbolItem<'a>> {
+//         if let Some(r) = self.node_to_symbol.get(&k) {
+//             Ok(*r)
+//         } else {
+//             use hugr::ops::OpType;
+//             use hugr::NodeIndex;
+//             let (ty, mut sym0) = match self.hugr.get_optype(k) {
+//                 &OpType::FuncDecl(hugr::ops::FuncDecl {
+//                     ref name,
+//                     ref signature,
+//                 })
+//                 | &OpType::FuncDefn(hugr::ops::FuncDefn {
+//                     ref name,
+//                     ref signature,
+//                 }) if signature.params().len() == 0 => {
+//                     let ty = hugr_to_mlir_function_type(self.context, signature.body())?.into();
+//                     Ok((ty, name.to_string()))
+//                 }
+//                 OpType::Const(const_) => {
+//                     let ty = hugr_to_mlir_type(self.context, const_.const_type())?;
+//                     Ok((ty, format!("const_{}", k.index())))
+//                 }
+//                 opty => Err(anyhow!("Bad optype for static edge: {:?}", opty)),
+//             }?;
+//             sym0 = if self.allocated_symbols.borrow().contains(&sym0) {
+//                 format!("{}_{}", sym0 , k.index())
+//             } else { sym0 };
+
+//             let mut sym = sym0.clone();
+//             while self.allocated_symbols.borrow().contains(&sym) {
+//                 sym = format!("{}_{}", sym0, self.next_unique);
+//                 self.next_unique += 1;
+//             }
+//             let attr = mlir::hugr::StaticEdgeAttr::new(
+//                 ty,
+//                 mlir::hugr::SymbolRefAttr::new(self.context, sym.as_ref(), empty()),
+//             );
+//             let None = self.node_to_symbol.insert(k, (attr, ty, melior::ir::attribute::StringAttribute::new(self.context, &sym))) else {
+//                 panic!("Expected node to be unmapped: {:?}", k);
+//             };
+//             if !self.allocated_symbols.deref().borrow_mut().insert(sym.clone()) {
+//                 panic!("Expected sym to be unallocated: {}", sym);
+//             }
+//             Ok(*self.node_to_symbol.get(&k).unwrap())
+//         }
+//     }
+// }
 
 struct MlirData<'a, 'b> {
     node: hugr::Node,
@@ -117,6 +123,8 @@ struct MlirData<'a, 'b> {
     loc: Location<'a>,
 }
 
+type CollectSymbolMap<'a> = HashMap<String, HashMap<hugr::Node, Type<'a>>>;
+
 trait EmitMlir {
     type Op<'a>: Into<Operation<'a>>;
     fn emit<'a, 'b, V: HugrView>(
@@ -124,6 +132,14 @@ trait EmitMlir {
         state: &mut TranslationState<'a, 'b, V>,
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>>;
+
+    fn collect_symbols<'a>(
+        &self,
+        context: &'a Context,
+        node: hugr::Node,
+        _map: &mut CollectSymbolMap<'a>,
+    ) -> () {
+    }
 }
 
 impl EmitMlir for hugr::ops::OpType {
@@ -139,6 +155,7 @@ impl EmitMlir for hugr::ops::OpType {
             OpType::Output(ref output) => output.emit(state, data).map(Into::into),
             OpType::FuncDecl(ref funcdecl) => funcdecl.emit(state, data).map(Into::into),
             OpType::FuncDefn(ref funcdefn) => funcdefn.emit(state, data).map(Into::into),
+            // TODO AliasDecl/AliasDefn
             OpType::Module(ref module) => module.emit(state, data).map(Into::into),
             OpType::Call(ref call) => call.emit(state, data).map(Into::into),
             OpType::CallIndirect(ref callindirect) => {
@@ -151,6 +168,22 @@ impl EmitMlir for hugr::ops::OpType {
             OpType::TailLoop(ref tailloop) => tailloop.emit(state, data).map(Into::into),
             OpType::DFG(ref dfg) => dfg.emit(state, data).map(Into::into),
             _ => todo!(),
+        }
+    }
+
+    fn collect_symbols<'a>(
+        &self,
+        context: &'a Context,
+        node: hugr::Node,
+        map: &mut CollectSymbolMap<'a>,
+    ) -> () {
+        use hugr::ops::OpType;
+        match self {
+            OpType::FuncDecl(ref funcdecl) => funcdecl.collect_symbols(context, node, map),
+            OpType::FuncDefn(ref funcdefn) => funcdefn.collect_symbols(context, node, map),
+            OpType::Const(ref const_) => const_.collect_symbols(context, node, map),
+            // TODO AliasDecl/AliasDefn
+            _ => (),
         }
     }
 }
@@ -222,12 +255,33 @@ impl EmitMlir for hugr::ops::FuncDefn {
         state: &mut TranslationState<'a, 'b, V>,
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
-        let (_, ty, sym) = state.symbols.get_or_alloc(data.node)?;
+        let (_, ty, sym) = state.symbols.get(&data.node).unwrap();
         let block = Block::new(&[]);
         state.build_dataflow_block(data.node, &block)?;
         let body = Region::new();
         body.append_block(block);
-        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?, data.loc))
+        Ok(mlir::hugr::FuncOp::new(
+            body,
+            *sym,
+            (*ty).try_into()?,
+            data.loc,
+        ))
+    }
+
+    fn collect_symbols<'a>(
+        &self,
+        context: &'a Context,
+        node: hugr::Node,
+        map: &mut CollectSymbolMap<'a>,
+    ) -> () {
+        push_symbol(
+            map,
+            &self.name,
+            node,
+            hugr_to_mlir_function_type(context, self.signature.body())
+                .unwrap()
+                .into(),
+        )
     }
 }
 
@@ -238,9 +292,29 @@ impl EmitMlir for hugr::ops::FuncDecl {
         state: &mut TranslationState<'a, 'b, V>,
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
-        let (_, ty, sym) = state.symbols.get_or_alloc(data.node)?;
+        let (_, ty, sym) = state.symbols.get(&data.node).unwrap();
         let body = Region::new();
-        Ok(mlir::hugr::FuncOp::new(body, sym, ty.try_into()?, data.loc))
+        Ok(mlir::hugr::FuncOp::new(
+            body,
+            *sym,
+            (*ty).try_into()?,
+            data.loc,
+        ))
+    }
+    fn collect_symbols<'a>(
+        &self,
+        context: &'a Context,
+        node: hugr::Node,
+        map: &mut CollectSymbolMap<'a>,
+    ) -> () {
+        push_symbol(
+            map,
+            &self.name,
+            node,
+            hugr_to_mlir_function_type(context, self.signature.body())
+                .unwrap()
+                .into(),
+        )
     }
 }
 
@@ -291,10 +365,10 @@ impl EmitMlir for hugr::ops::Call {
             .collect_vec()
             .into_iter()
             .exactly_one()?;
-        let (static_edge, _, _) = state.symbols.get_or_alloc(target_n)?;
+        let (static_edge, _, _) = state.symbols.get(&target_n).unwrap();
 
         Ok(mlir::hugr::CallOp::new(
-            static_edge,
+            *static_edge,
             &data.inputs,
             &data.result_types,
             data.loc,
@@ -464,10 +538,27 @@ impl EmitMlir for hugr::ops::Const {
         state: &mut TranslationState<'a, 'b, V>,
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
-        let (_, _, name) = state.symbols.get_or_alloc(data.node)?;
+        let (_, _, name) = state.symbols.get(&data.node).unwrap();
         let ty = hugr_to_mlir_type(state.context, self.const_type())?;
         let val = hugr_to_mlir_value(state.context, self.const_type(), self.value())?;
-        Ok(mlir::hugr::ConstOp::new(name, ty, val, data.loc))
+        Ok(mlir::hugr::ConstOp::new(*name, ty, val, data.loc))
+    }
+
+    fn collect_symbols<'a>(
+        &self,
+        context: &'a Context,
+        node: hugr::Node,
+        map: &mut CollectSymbolMap<'a>,
+    ) -> () {
+        use hugr::NodeIndex;
+        push_symbol(
+            map,
+            &format!("const_{}", node.index()),
+            node,
+            hugr_to_mlir_type(context, self.const_type())
+                .unwrap()
+                .into(),
+        )
     }
 }
 
@@ -491,11 +582,11 @@ impl EmitMlir for hugr::ops::LoadConstant {
             .collect_vec()
             .into_iter()
             .exactly_one()?;
-        let (edge, _, _) = state.symbols.get_or_alloc(target_n)?;
+        let (edge, _, _) = state.symbols.get(&target_n).unwrap();
         assert_eq!(data.result_types.len(), 1);
         Ok(mlir::hugr::LoadConstantOp::new(
             data.result_types[0],
-            edge,
+            *edge,
             data.loc,
         ))
     }
@@ -550,7 +641,7 @@ where
     hugr: &'a V,
     block: &'b Block<'a>,
     scope: Scope<'a, 'b>,
-    symbols: Symboliser<'a, V>,
+    symbols: &'a HashMap<hugr::Node, SymbolItem<'a>>,
 }
 
 impl<'a, 'b, V: HugrView> Clone for TranslationState<'a, 'b, V> {
@@ -560,7 +651,7 @@ impl<'a, 'b, V: HugrView> Clone for TranslationState<'a, 'b, V> {
             hugr: self.hugr,
             block: self.block,
             scope: self.scope.clone(),
-            symbols: self.symbols.clone(),
+            symbols: self.symbols,
             // seen_nodes: self.seen_nodes.clone(),
         }
     }
@@ -570,16 +661,20 @@ impl<'a, 'b, V: HugrView> TranslationState<'a, 'b, V>
 where
     'a: 'b,
 {
-    fn new(context: &'a Context, hugr: &'a V, block: &'b Block<'a>) -> Self {
+    fn new(
+        context: &'a Context,
+        hugr: &'a V,
+        block: &'b Block<'a>,
+        symbols: &'a HashMap<hugr::Node, SymbolItem<'a>>,
+    ) -> Self {
         TranslationState {
             context,
             hugr,
             block,
             scope: HashMap::new(),
-            symbols: Symboliser::new(context, hugr),
-            // scope: Cow::Owned(HashMap::new()),
-            // symbols: Cow::Owned(HashMap::new()),
-            // seen_nodes: Cow::Owned(std::collections::HashSet::new()),
+            symbols, // scope: Cow::Owned(HashMap::new()),
+                     // symbols: Cow::Owned(HashMap::new()),
+                     // seen_nodes: Cow::Owned(std::collections::HashSet::new()),
         }
     }
 
@@ -606,8 +701,7 @@ where
             hugr: self.hugr,
             block,
             scope: self.scope.clone(),
-            symbols: self.symbols.clone(),
-            // seen_nodes: self.seen_nodes,
+            symbols: self.symbols, // seen_nodes: self.seen_nodes,
         };
         state.push_scope(
             block_args
@@ -787,29 +881,42 @@ where
                 // };
                 // let scoped_defs_ref = &scoped_defs;
 
-
                 // let dfg_body = Region::new();
                 // let dfg_br = dfg_body.append_block(dfg_block);
-                let output_tys = state.push_block(&dfg_block, it_ref.iter().copied(), move |mut state| {
-                    for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
-                        state.node_to_op(c, ul)?;
-                    }
-                    let output_args = state
-                        .collect_inputs_vec(o)?
-                        .into_iter()
-                        .map(|(_, v)| v)
-                        .collect_vec();
-                    state.block.append_operation(mlir::hugr::OutputOp::new(&output_args, ul).into());
-                    Ok::<_, Error>(output_args.iter().map(|x| x.r#type()).collect_vec())
-                })?;
+                let output_tys =
+                    state.push_block(&dfg_block, it_ref.iter().copied(), move |mut state| {
+                        for c in state.hugr.children(parent).filter(|x| *x != i && *x != o) {
+                            state.node_to_op(c, ul)?;
+                        }
+                        let output_args = state
+                            .collect_inputs_vec(o)?
+                            .into_iter()
+                            .map(|(_, v)| v)
+                            .collect_vec();
+                        state
+                            .block
+                            .append_operation(mlir::hugr::OutputOp::new(&output_args, ul).into());
+                        Ok::<_, Error>(output_args.iter().map(|x| x.r#type()).collect_vec())
+                    })?;
                 let mut dfg_args = Vec::new();
-                for i in 0..state.block.argument_count() { dfg_args.push(state.block.argument(i).unwrap().into()) }
+                for i in 0..state.block.argument_count() {
+                    dfg_args.push(state.block.argument(i).unwrap().into())
+                }
 
                 let dfg_body = Region::new();
                 dfg_body.append_block(dfg_block);
-                let dfg_op = block.append_operation(mlir::hugr::DfgOp::new(dfg_body, &output_tys, &dfg_args, mlir::hugr::ExtensionSetAttr::new(state.context, []), ul).into());
-                let mut dfg_results = Vec::<Value<'a,'c>>::new();
-                for r in unsafe {dfg_op.to_ref()}.results() {
+                let dfg_op = block.append_operation(
+                    mlir::hugr::DfgOp::new(
+                        dfg_body,
+                        &output_tys,
+                        &dfg_args,
+                        mlir::hugr::ExtensionSetAttr::new(state.context, []),
+                        ul,
+                    )
+                    .into(),
+                );
+                let mut dfg_results = Vec::<Value<'a, 'c>>::new();
+                for r in unsafe { dfg_op.to_ref() }.results() {
                     dfg_results.push(r.into());
                 }
 
@@ -821,6 +928,52 @@ where
     }
 }
 
+fn push_symbol<'a>(map: &mut CollectSymbolMap<'a>, name: &str, node: hugr::Node, t: Type<'a>) {
+    let mut v = map.get(name).cloned().unwrap_or(HashMap::new());
+    v.insert(node, t);
+    map.insert(name.to_string(), v);
+}
+
+fn collect_all_symbols<'a>(
+    context: &'a melior::Context,
+    hugr: &impl HugrView,
+) -> HashMap<hugr::Node, SymbolItem<'a>> {
+    use hugr::NodeIndex;
+    let mut collected_syms = CollectSymbolMap::new();
+    for n in hugr.nodes() {
+        hugr.get_optype(n)
+            .collect_symbols(context, n, &mut collected_syms);
+    }
+    let mut r = HashMap::new();
+    let mk_item = |n: &str, (_, ty)| {
+        let attr = mlir::hugr::StaticEdgeAttr::new(
+            ty,
+            mlir::hugr::SymbolRefAttr::new(context, n, empty()),
+        );
+        (
+            attr,
+            ty,
+            melior::ir::attribute::StringAttribute::new(context, n),
+        )
+    };
+
+    for (name, items) in collected_syms {
+        assert!(items.len() > 0);
+        let mut items_vec = items.into_iter().collect_vec();
+        if items_vec.len() == 1 {
+            let item = items_vec[0];
+            r.insert(item.0, mk_item(&name, item));
+        } else {
+            items_vec.sort_by(|ref x, ref y| x.0.index().cmp(&y.0.index()));
+            for item in items_vec {
+                let n = format!("{}_{}", &name, item.0.index());
+                r.insert(item.0, mk_item(&n, item));
+            }
+        }
+    }
+    r
+}
+
 /// creates an MLIR module holding the mlir representation of the HugrView
 pub fn hugr_to_mlir<'c>(
     loc: Location<'c>,
@@ -829,7 +982,8 @@ pub fn hugr_to_mlir<'c>(
     let module = melior::ir::Module::new(loc);
     let block = module.body();
     let context = loc.context();
-    let mut state = TranslationState::new(&context, hugr, &block);
+    let symbols = collect_all_symbols(&context, hugr);
+    let mut state = TranslationState::new(&context, hugr, &block, &symbols);
     state.node_to_op(hugr.root(), loc)?;
     Ok(module)
 }

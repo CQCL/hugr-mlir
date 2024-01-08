@@ -28,6 +28,9 @@ static hugr_mlir::ModuleOp getOwningModule(mlir::Operation *op) {
     }
 }
 
+static bool isTopLevelFunc(hugr_mlir::FuncOp op) {
+    return llvm::isa_and_present<hugr_mlir::ModuleOp>(op);
+}
 
 namespace {
 
@@ -86,6 +89,14 @@ private:
 struct HugrCallToCall : OpConversionPattern<hugr_mlir::CallOp> {
     using OpConversionPattern::OpConversionPattern;
     LogicalResult matchAndRewrite(hugr_mlir::CallOp, OpAdaptor, ConversionPatternRewriter&) const override;
+};
+
+struct HugrCallTopLevelToCall : OpConversionPattern<hugr_mlir::CallOp> {
+    template<typename ...Args>
+    HugrCallTopLevelToCall(PreConvertHugrFuncPass::FuncClosureMap_t& fcm, Args&& ...args) : OpConversionPattern(std::forward<Args>(args)...), func_closure_map(fcm) {}
+    LogicalResult matchAndRewrite(hugr_mlir::CallOp, OpAdaptor, ConversionPatternRewriter&) const override;
+private:
+    PreConvertHugrFuncPass::FuncClosureMap_t& func_closure_map;
 };
 
 struct OutputToReturn : OpConversionPattern<hugr_mlir::OutputOp> {
@@ -217,17 +228,17 @@ LogicalResult ClosureiseCallOp::matchAndRewrite(hugr_mlir::CallOp op, OpAdaptor 
 
 LogicalResult HugrFuncToFunc::matchAndRewrite(hugr_mlir::FuncOp op, OpAdaptor adaptor, ConversionPatternRewriter &rw) const {
     assert(getTypeConverter() && "must have type converter");
-    if(op.isDeclaration() && op.getCaptures().size() > 0) { return failure(); }
-    if(hugr_mlir::opHasNonLocalEdges(op)) { return failure(); }
+    if(op.isDeclaration() && op.getCaptures().size() > 0) { return rw.notifyMatchFailure(op, "A declaration with captures"); }
+    if(hugr_mlir::opHasNonLocalEdges(op)) { return rw.notifyMatchFailure(op, "nonlocal edges"); }
 
     auto module = getOwningModule(op);
     assert(module && "must have owning module");
 
     auto loc = op.getLoc();
 
-    if(failed(rw.convertNonEntryRegionTypes(&op.getBody(), *getTypeConverter(), {}))) {
-        return failure();
-    }
+    // if(failed(rw.convertNonEntryRegionTypes(&op.getBody(), *getTypeConverter(), {}))) {
+    //     return failure();
+    // }
 
     NamedAttrList list(op->getDiscardableAttrs());
     if (auto attr = op.getSymVisibilityAttr()) {
@@ -280,11 +291,15 @@ LogicalResult HugrFuncToFunc::matchAndRewrite(hugr_mlir::FuncOp op, OpAdaptor ad
             rw.inlineRegionBefore(func.getBody(), op.getBody(), func.getBody().end());
             rw.mergeBlocks(old_entry, entry_block, replacements);
 
-            rw.setInsertionPoint(op);
-            SmallVector<Value> unpacked;
-            rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpacked, loc, rw.getRemappedValue(func_closure_map.lookup(op.getSymNameAttr())));
-            assert(unpacked.size() == 2 && "must");
-            rw.replaceOpWithNewOp<hugr_mlir::WriteClosureOp>(op, unpacked[1], adaptor.getCaptures());
+            if(!op.getCaptures().empty()) {
+                rw.setInsertionPoint(op);
+                SmallVector<Value> unpacked;
+                rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpacked, loc, rw.getRemappedValue(func_closure_map.lookup(op.getSymNameAttr())));
+                assert(unpacked.size() == 2 && "must");
+                rw.replaceOpWithNewOp<hugr_mlir::WriteClosureOp>(op, unpacked[1], adaptor.getCaptures());
+            } else {
+                rw.eraseOp(op);
+            }
         });
     } else {
         assert(op.getCaptures().size() == 0 && "or we would have failed on entry");
@@ -322,6 +337,24 @@ LogicalResult HugrCallToCall::matchAndRewrite(hugr_mlir::CallOp op, OpAdaptor ad
     return success();
 }
 
+LogicalResult HugrCallTopLevelToCall::matchAndRewrite(hugr_mlir::CallOp op, OpAdaptor adaptor, ConversionPatternRewriter &rw) const {
+    auto a = adaptor.getCalleeAttrAttr();
+    if(!a) { return failure(); }
+    if(func_closure_map.lookup(a.getRef().getLeafReference())) { return rw.notifyMatchFailure(op, "func_closure_map does hold this callee"); }
+
+    SmallVector<Type> return_types;
+    if(failed(getTypeConverter()->convertTypes(llvm::cast<hugr_mlir::FunctionType>(a.getType()).getResultTypes(), return_types))) {
+        return failure();
+    }
+    rw.setInsertionPoint(op);
+    auto closure = rw.createOrFold<hugr_mlir::AllocClosureOp>(op.getLoc(), true);
+    SmallVector<Value> args{closure};
+    llvm::copy(adaptor.getInputs(), std::back_inserter(args));
+
+    rw.replaceOpWithNewOp<func::CallOp>(op, a.getRef(), return_types, args);
+    return success();
+}
+
 void PreConvertHugrFuncPass::runOnOperation() {
     auto context = &getContext();
     // collect funcs
@@ -334,6 +367,7 @@ void PreConvertHugrFuncPass::runOnOperation() {
     FuncClosureMap_t func_closures;
     IRRewriter rw(context);
     for(auto f: hugr_funcs) {
+        if (!isTopLevelFunc(f)) { continue; }
         rw.setInsertionPointToStart(&f->getParentRegion()->front());
         auto o = rw.create<hugr_mlir::AllocFunctionOp>(f.getLoc(), f.getStaticEdgeAttr());
         func_closures.insert({f.getSymNameAttr(), o.getOutput()});
@@ -343,14 +377,14 @@ void PreConvertHugrFuncPass::runOnOperation() {
     ConversionTarget target(*context);
     target.addLegalDialect<cf::ControlFlowDialect, hugr_mlir::HugrDialect, index::IndexDialect,func::FuncDialect>();
     target.addIllegalOp<hugr_mlir::SwitchOp>();
-    target.addDynamicallyLegalOp<hugr_mlir::CallOp>([](hugr_mlir::CallOp op) {
-        return !!op.getCalleeValue();
+    target.addDynamicallyLegalOp<hugr_mlir::CallOp>([&](hugr_mlir::CallOp op) {
+        return !!op.getCalleeValue() || !func_closures.contains(op.getCalleeAttrAttr().getRef().getLeafReference());
     });
-    target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>([](hugr_mlir::LoadConstantOp op) {
-        return !llvm::isa<hugr_mlir::FunctionType>(op.getConstRef().getType());
+    target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>([&](hugr_mlir::LoadConstantOp op) {
+        return !llvm::isa<hugr_mlir::FunctionType>(op.getConstRef().getType()) || !func_closures.contains(op.getConstRef().getRef().getLeafReference());
     });
-    target.addDynamicallyLegalOp<hugr_mlir::ConstantOp>([](hugr_mlir::ConstantOp op) {
-        return !llvm::isa<hugr_mlir::FunctionType>(op.getValue().getType());
+    target.addDynamicallyLegalOp<hugr_mlir::ConstantOp>([&](hugr_mlir::ConstantOp op) {
+        return !llvm::isa<hugr_mlir::FunctionType>(op.getValue().getType()) || !func_closures.contains(llvm::cast<hugr_mlir::StaticEdgeAttr>(op.getValue()).getRef().getLeafReference());
     });
 
     {
@@ -366,7 +400,7 @@ void PreConvertHugrFuncPass::runOnOperation() {
 
     // legalize funcs to have no non-local edges
     for(auto f: hugr_funcs) {
-        if(f.isDeclaration()) { continue; }
+        if(f.isDeclaration() || isTopLevelFunc(f)) { continue; }
 
         auto orig_num_caps = f.getCaptures().size();
         llvm::SetVector<Value> captures;
@@ -394,12 +428,13 @@ void PreConvertHugrFuncPass::runOnOperation() {
             rw.mergeBlocks(old_launch_block, new_launch_block, replacements);
             f.getCapturesMutable().assign(captures.getArrayRef());
             rw.replaceUsesWithIf(captures.getArrayRef(), new_launch_block->getArguments().take_front(captures.size()), [&](OpOperand & oo) {
-                return f != oo.getOwner() && f->isAncestor(oo.getOwner());
+                return f->isProperAncestor(oo.getOwner());
             });
+            assert(!hugr_mlir::opHasNonLocalEdges(f) && "we just removed nonlocal edges");
         });
     }
     target.addDynamicallyLegalOp<hugr_mlir::FuncOp>([](hugr_mlir::FuncOp op) {
-        return hugr_mlir::opHasNonLocalEdges(op);
+        return !hugr_mlir::opHasNonLocalEdges(op);
     });
 
     // TODO this can be disabled in production
@@ -425,7 +460,6 @@ void ConvertHugrFuncPass::runOnOperation() {
         // todo fail if insert fails
     });
 
-    ConversionTarget target(*context);
     auto type_converter = hugr_mlir::createSimpleTypeConverter();
     type_converter->addConversion([tc=type_converter.get()](hugr_mlir::FunctionType t) -> std::optional<Type> {
         OpBuilder rw(t.getContext());
@@ -436,13 +470,13 @@ void ConvertHugrFuncPass::runOnOperation() {
     type_converter->addConversion([tc=type_converter.get()](FunctionType ft) -> std::optional<Type> {
         TypeConverter::SignatureConversion sc1(ft.getNumInputs()), sc2(ft.getNumResults());
         if(failed(tc->convertSignatureArgs(ft.getInputs(), sc1)) || failed(tc->convertSignatureArgs(ft.getResults(), sc2))) {
-            return std::nullopt;
+            return nullptr;
         }
         return {FunctionType::get(ft.getContext(), sc1.getConvertedTypes(), sc2.getConvertedTypes())};
     });
 
     RewritePatternSet ps(context);
-    ps.add<HugrFuncToFunc>(fcm, *type_converter, context);
+    ps.add<HugrFuncToFunc, HugrCallTopLevelToCall>(fcm, *type_converter, context);
     ps.add<HugrCallToCall,LowerAllocFunction,OutputToReturn>(*type_converter, context);
     populateFunctionOpInterfaceTypeConversionPattern<func::FuncOp>(ps, *type_converter);
     populateBranchOpInterfaceTypeConversionPattern(ps, *type_converter);
@@ -452,6 +486,8 @@ void ConvertHugrFuncPass::runOnOperation() {
 
     FrozenRewritePatternSet patterns(std::move(ps), disabledPatterns, enabledPatterns);
 
+    ConversionTarget target(*context);
+    target.addLegalDialect<hugr_mlir::HugrDialect, func::FuncDialect, mlir::cf::ControlFlowDialect, mlir::index::IndexDialect>();
     target.addIllegalOp<hugr_mlir::FuncOp, hugr_mlir::CallOp, hugr_mlir::AllocFunctionOp, hugr_mlir::SwitchOp>();
     target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>([](hugr_mlir::LoadConstantOp op) {
         return !llvm::isa<hugr_mlir::FunctionType>(op.getConstRef().getType());
@@ -480,7 +516,7 @@ void ConvertHugrFuncPass::runOnOperation() {
     });
 
     if(failed(applyPartialConversion(getOperation(), target, patterns))) {
-        emitError(getOperation()->getLoc()) << "Failed to applyPartialConversion";
+        emitError(getOperation()->getLoc()) << "ConvertHugrFuncPass:Failed to applyPartialConversion";
         return signalPassFailure();
     }
 }

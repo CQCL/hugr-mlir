@@ -305,14 +305,15 @@ FailureOr<Value> SimpleHugrTypeConverter::materializeSourceTuple(OpBuilder& rw, 
 }
 
 SimpleHugrTypeConverter::SimpleHugrTypeConverter() {
+    addConversion([](Type t) { return t; });
     addConversion([this](TupleType tt) -> std::optional<Type> {
         SmallVector<Type> ts;
-        if(failed(this->convertTypes(tt.getTypes(), ts))) { return std::nullopt; }
+        if(failed(this->convertTypes(tt.getTypes(), ts))) { return nullptr; }
         return TupleType::get(tt.getContext(), ts);
     });
     addConversion([this](hugr_mlir::SumType st) -> std::optional<Type> {
         SmallVector<Type> ts;
-        if(failed(this->convertTypes(st.getTypes(), ts))) { return std::nullopt; }
+        if(failed(this->convertTypes(st.getTypes(), ts))) { return nullptr; }
         return hugr_mlir::SumType::get(st.getContext(), ts);
     });
     addSourceMaterialization([this](OpBuilder& rw, TupleType dest_t, ValueRange vs, Location loc) -> std::optional<Value> {

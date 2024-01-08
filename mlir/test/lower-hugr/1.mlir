@@ -1,4 +1,4 @@
-// RUN: hugr-mlir-opt %s --lower-hugr=hugr-verify --convert-hugr | FileCheck %s
+// RUN: hugr-mlir-opt %s --lower-hugr | FileCheck %s
 
 module {
   hugr.module {

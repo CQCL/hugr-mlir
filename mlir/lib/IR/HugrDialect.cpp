@@ -6,10 +6,21 @@
 #include "mlir/Dialect/UB/IR/UBOps.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "llvm/ADT/TypeSwitch.h"
+#include "mlir/Interfaces/FoldInterfaces.h"
 
 // clang-format on
 
 #include "hugr-mlir/IR/HugrDialect.cpp.inc"
+
+namespace {
+struct HugrDialectFoldInterface : mlir::DialectFoldInterface {
+  using DialectFoldInterface::DialectFoldInterface;
+  bool shouldMaterializeInto(mlir::Region* r) const override {
+    return llvm::isa<hugr_mlir::FuncOp>(r->getParentOp());
+  }
+};
+
+}
 
 mlir::Operation* hugr_mlir::HugrDialect::materializeConstant(::mlir::OpBuilder &rw, ::mlir::Attribute value, ::mlir::Type type, ::mlir::Location loc) {
   return mlir::TypeSwitch<mlir::Attribute, mlir::Operation*>(value)
@@ -30,4 +41,6 @@ void hugr_mlir::HugrDialect::initialize() {
   registerAttrs();
   registerOps();
   registerTypeInterfaces();
+
+  addInterfaces<HugrDialectFoldInterface>();
 }

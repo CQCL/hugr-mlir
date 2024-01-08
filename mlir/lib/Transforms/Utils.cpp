@@ -6,5 +6,5 @@
 bool hugr_mlir::opHasNonLocalEdges(mlir::Operation * op) {
   llvm::SetVector<mlir::Value> nonlocals;
   mlir::getUsedValuesDefinedAbove(op->getRegions(), nonlocals);
-  return nonlocals.empty();
+  return !nonlocals.empty();
 }
