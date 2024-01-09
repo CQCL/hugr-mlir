@@ -7,9 +7,9 @@ class DialectRegistry;
 
 namespace hugr_mlir {
 
-int HugrMlirOptMain(int argc, char **argv, mlir::DialectRegistry*);
+int HugrMlirOptMain(int argc, char **argv, mlir::DialectRegistry *);
 void registerHugrOptPipelines();
 
-}
+}  // namespace hugr_mlir
 
-#endif // HUGR_MLIR_OPT_HUGROPT_H
+#endif  // HUGR_MLIR_OPT_HUGROPT_H

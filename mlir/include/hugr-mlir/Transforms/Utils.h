@@ -6,9 +6,7 @@ class Operation;
 }
 
 namespace hugr_mlir {
-    bool opHasNonLocalEdges(mlir::Operation*);
+bool opHasNonLocalEdges(mlir::Operation*);
 }
 
-
-
-#endif // UTILS_H_
+#endif  // UTILS_H_

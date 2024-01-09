@@ -27,9 +27,9 @@ bool isDataflowGraphRegion(mlir::Region &);
 
 bool isControlFlowGraphRegion(mlir::Region &);
 
-using HugrSymbolMap = mlir::DenseMap<mlir::SymbolRefAttr, mlir::Operation*>;
+using HugrSymbolMap = mlir::DenseMap<mlir::SymbolRefAttr, mlir::Operation *>;
 mlir::LogicalResult verifyHugrSymbolUses(
-    mlir::Operation*, HugrSymbolMap const&);
+    mlir::Operation *, HugrSymbolMap const &);
 
 }  // namespace hugr_mlir
 
@@ -47,8 +47,10 @@ struct HugrTypeMemoryEffectsTrait
 
 // template <typename ConcreteOp>
 // struct HugrSymbolUserTrait : TraitBase<ConcreteOp, HugrSymbolUserTrait> {
-//   LogicalResult verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
-//     return hugr_mlir::verifyHugrSymbolUses(this->getOperation(), symbolTable);
+//   LogicalResult verifySymbolUses(::mlir::SymbolTableCollection &symbolTable)
+//   {
+//     return hugr_mlir::verifyHugrSymbolUses(this->getOperation(),
+//     symbolTable);
 //   }
 
 //   static LogicalResult verifyTrait(Operation *op) {

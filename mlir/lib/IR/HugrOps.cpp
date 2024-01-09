@@ -15,18 +15,24 @@
 /////////////////////////////////////////////////////////////////////////////
 //  ModuleOp
 /////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::ModuleOp::verifySymbolUses(::mlir::SymbolTableCollection &symbolTable) {
+mlir::LogicalResult hugr_mlir::ModuleOp::verifySymbolUses(
+    ::mlir::SymbolTableCollection& symbolTable) {
   HugrSymbolMap map;
   std::optional<mlir::InFlightDiagnostic> mb_ifd;
   auto ifd = [&](mlir::Twine t) -> mlir::InFlightDiagnostic& {
-    if(!mb_ifd) { mb_ifd.emplace(emitError(t)); }
+    if (!mb_ifd) {
+      mb_ifd.emplace(emitError(t));
+    }
     return *mb_ifd;
   };
   getOperation()->walk([&](mlir::Operation* op) {
-    if(op->hasTrait<mlir::OpTrait::IsIsolatedFromAbove>()) { return mlir::WalkResult::skip(); }
-    if(auto sym = llvm::dyn_cast<mlir::SymbolOpInterface>(op)) {
-      auto r = map.insert(std::make_pair(mlir::FlatSymbolRefAttr::get(sym.getNameAttr()), sym.getOperation()));
-      if(!r.second) {
+    if (op->hasTrait<mlir::OpTrait::IsIsolatedFromAbove>()) {
+      return mlir::WalkResult::skip();
+    }
+    if (auto sym = llvm::dyn_cast<mlir::SymbolOpInterface>(op)) {
+      auto r = map.insert(std::make_pair(
+          mlir::FlatSymbolRefAttr::get(sym.getNameAttr()), sym.getOperation()));
+      if (!r.second) {
         auto& e = ifd("hugr.module contains duplicate definitions for symbol:");
         e.attachNote(sym->getLoc()) << sym->getName();
         e.attachNote(r.first->second->getLoc()) << r.first->second->getName();
@@ -35,8 +41,8 @@ mlir::LogicalResult hugr_mlir::ModuleOp::verifySymbolUses(::mlir::SymbolTableCol
     }
     return mlir::WalkResult::advance();
   });
-  for(auto const& [k,v]: map) {
-    if(mlir::failed(verifyHugrSymbolUses(v, map))) {
+  for (auto const& [k, v] : map) {
+    if (mlir::failed(verifyHugrSymbolUses(v, map))) {
       return mlir::failure();
     }
   }
@@ -49,7 +55,9 @@ mlir::LogicalResult hugr_mlir::ModuleOp::verifySymbolUses(::mlir::SymbolTableCol
 
 hugr_mlir::StaticEdgeAttr hugr_mlir::FuncOp::getStaticEdgeAttr() {
   mlir::OpBuilder builder(getContext());
-  return builder.getAttr<StaticEdgeAttr>(getFunctionType(), builder.getAttr<mlir::SymbolRefAttr>(getSymNameAttr()));
+  return builder.getAttr<StaticEdgeAttr>(
+      getFunctionType(),
+      builder.getAttr<mlir::SymbolRefAttr>(getSymNameAttr()));
 }
 
 mlir::ArrayRef<mlir::Type> hugr_mlir::FuncOp::getResultTypes() {
@@ -64,24 +72,24 @@ mlir::Region* hugr_mlir::FuncOp::getCallableRegion() { return &getBody(); }
 
 mlir::LogicalResult hugr_mlir::FuncOp::verifyBody() {
   using namespace mlir;
-  if (isExternal())
-    return success();
+  if (isExternal()) return success();
   SmallVector<Type> fnInputTypes{getCaptures().getTypes()};
   llvm::copy(getArgumentTypes(), std::back_inserter(fnInputTypes));
-  Block &entryBlock = getBody().front();
+  Block& entryBlock = getBody().front();
 
   unsigned numArguments = fnInputTypes.size();
   if (entryBlock.getNumArguments() != numArguments)
     return emitOpError("entry block must have ")
-          << numArguments << " arguments to match function captures and signature";
+           << numArguments
+           << " arguments to match function captures and signature";
 
   for (unsigned i = 0, e = fnInputTypes.size(); i != e; ++i) {
     Type argType = entryBlock.getArgument(i).getType();
     if (fnInputTypes[i] != argType) {
       return emitOpError("type of entry block argument #")
-            << i << '(' << argType
-            << ") must match the type of the corresponding argument in "
-            << "function signature(" << fnInputTypes[i] << ')';
+             << i << '(' << argType
+             << ") must match the type of the corresponding argument in "
+             << "function signature(" << fnInputTypes[i] << ')';
     }
   }
 
@@ -113,7 +121,7 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
     return mlir::failure();
   }
 
-  if(parser.parseOperandList(captures)) {
+  if (parser.parseOperandList(captures)) {
     return mlir::failure();
   }
 
@@ -126,11 +134,13 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
     return mlir::failure();
   }
 
-  if(args.size() < captures.size()) {
+  if (args.size() < captures.size()) {
     return parser.emitError(signatureLocation) << "more captures than args";
   }
-  mlir::ArrayRef<mlir::OpAsmParser::Argument> capture_args = mlir::ArrayRef(args).take_front(captures.size());
-  mlir::ArrayRef<mlir::OpAsmParser::Argument> func_args = mlir::ArrayRef(args).drop_front(captures.size());
+  mlir::ArrayRef<mlir::OpAsmParser::Argument> capture_args =
+      mlir::ArrayRef(args).take_front(captures.size());
+  mlir::ArrayRef<mlir::OpAsmParser::Argument> func_args =
+      mlir::ArrayRef(args).drop_front(captures.size());
   mlir::SmallVector<mlir::Type> arg_types;
   llvm::transform(
       func_args, std::back_inserter(arg_types), [](auto x) { return x.type; });
@@ -191,8 +201,8 @@ mlir::ParseResult hugr_mlir::FuncOp::parse(
       return parser.emitError(loc, "expectednon-empty function body");
   }
   mlir::SmallVector<mlir::Value> captures_vals;
-  for(auto [c,a]: llvm::zip_equal(captures, capture_args)) {
-    if(parser.resolveOperand(c, a.type, captures_vals)) {
+  for (auto [c, a] : llvm::zip_equal(captures, capture_args)) {
+    if (parser.resolveOperand(c, a.type, captures_vals)) {
       return mlir::failure();
     }
   }
@@ -210,7 +220,6 @@ void hugr_mlir::FuncOp::print(mlir::OpAsmPrinter& p) {
   p.printOperands(getCaptures());
 
   p.printStrippedAttrOrType(getExtensionSet());
-
 
   mlir::SmallVector<mlir::Type> argTypes{getCaptures().getTypes()};
   llvm::copy(getArgumentTypes(), std::back_inserter(argTypes));
@@ -343,25 +352,30 @@ hugr_mlir::FunctionType hugr_mlir::CallOp::getFunctionType() {
 }
 
 mlir::CallInterfaceCallable hugr_mlir::CallOp::getCallableForCallee() {
-  if(auto attr = getCalleeAttrAttr()) {
+  if (auto attr = getCalleeAttrAttr()) {
     return attr.getRef();
   }
   return getCalleeValue();
 }
 
-void hugr_mlir::CallOp::setCalleeFromCallable(::mlir::CallInterfaceCallable callee) {
+void hugr_mlir::CallOp::setCalleeFromCallable(
+    ::mlir::CallInterfaceCallable callee) {
   llvm::TypeSwitch<::mlir::CallInterfaceCallable>(callee)
-    .Case([&](mlir::Value v) {
-      setCalleeAttrAttr(nullptr);
-      getCalleeValueMutable().assign(v);
-    }).Case([&](mlir::SymbolRefAttr a) {
-      getCalleeValueMutable().clear();
-      // TODO this function type gets no extensions, dodgy. perhaps panic here?
-      auto ft = FunctionType::get(ExtensionSetAttr::get(getContext()), mlir::FunctionType::get(getContext(), getInputs().getType(), getOutputs().getType()));
-      setCalleeAttrAttr(::hugr_mlir::StaticEdgeAttr::get(ft, a));
-    });
+      .Case([&](mlir::Value v) {
+        setCalleeAttrAttr(nullptr);
+        getCalleeValueMutable().assign(v);
+      })
+      .Case([&](mlir::SymbolRefAttr a) {
+        getCalleeValueMutable().clear();
+        // TODO this function type gets no extensions, dodgy. perhaps panic
+        // here?
+        auto ft = FunctionType::get(
+            ExtensionSetAttr::get(getContext()),
+            mlir::FunctionType::get(
+                getContext(), getInputs().getType(), getOutputs().getType()));
+        setCalleeAttrAttr(::hugr_mlir::StaticEdgeAttr::get(ft, a));
+      });
 }
-
 
 mlir::Operation::operand_range hugr_mlir::CallOp::getArgOperands() {
   return getInputs();
@@ -370,22 +384,29 @@ mlir::MutableOperandRange hugr_mlir::CallOp::getArgOperandsMutable() {
   return getInputsMutable();
 }
 
-mlir::LogicalResult hugr_mlir::CallOp::verifyHugrSymbolUses(HugrSymbolMap const& map) {
+mlir::LogicalResult hugr_mlir::CallOp::verifyHugrSymbolUses(
+    HugrSymbolMap const& map) {
   auto callee_attr = getCalleeAttrAttr();
-  if(!callee_attr) { return mlir::success(); }
+  if (!callee_attr) {
+    return mlir::success();
+  }
 
   auto callee_op = map.lookup(callee_attr.getRef());
-  if(!callee_op) {
-      return emitOpError("Unknown symbol: ") << callee_attr.getRef();
+  if (!callee_op) {
+    return emitOpError("Unknown symbol: ") << callee_attr.getRef();
   }
 
   auto callee_func = llvm::dyn_cast<FuncOp>(callee_op);
-  if(!callee_func) {
-    return emitOpError("Symbol References op of type: ") << callee_op->getName() << ", expected " << FuncOp::getOperationName();
+  if (!callee_func) {
+    return emitOpError("Symbol References op of type: ")
+           << callee_op->getName() << ", expected "
+           << FuncOp::getOperationName();
   }
 
-  if(callee_func.getFunctionType() != callee_attr.getType()) {
-    return emitOpError("Callee has type: ") << callee_func.getFunctionType() << ", expected: " << callee_attr.getType();
+  if (callee_func.getFunctionType() != callee_attr.getType()) {
+    return emitOpError("Callee has type: ")
+           << callee_func.getFunctionType()
+           << ", expected: " << callee_attr.getType();
   }
 
   return mlir::success();
@@ -519,12 +540,18 @@ mlir::LogicalResult hugr_mlir::MakeTupleOp::inferReturnTypes(
 }
 
 mlir::OpFoldResult hugr_mlir::MakeTupleOp::fold(FoldAdaptor adaptor) {
-  auto mb_poison = llvm::find_if(adaptor.getInputs(), [](auto a) { return llvm::isa_and_present<mlir::ub::PoisonAttrInterface>(a); });
-  if(mb_poison != adaptor.getInputs().end()) {
+  auto mb_poison = llvm::find_if(adaptor.getInputs(), [](auto a) {
+    return llvm::isa_and_present<mlir::ub::PoisonAttrInterface>(a);
+  });
+  if (mb_poison != adaptor.getInputs().end()) {
     return *mb_poison;
-  } else if(llvm::all_of(adaptor.getInputs(), [](auto a) { return llvm::isa_and_present<mlir::TypedAttr>(a); })) {
+  } else if (llvm::all_of(adaptor.getInputs(), [](auto a) {
+               return llvm::isa_and_present<mlir::TypedAttr>(a);
+             })) {
     mlir::SmallVector<mlir::TypedAttr> as;
-    llvm::transform(adaptor.getInputs(), std::back_inserter(as), [](auto a) { return llvm::dyn_cast<mlir::TypedAttr>(a); });
+    llvm::transform(adaptor.getInputs(), std::back_inserter(as), [](auto a) {
+      return llvm::dyn_cast<mlir::TypedAttr>(a);
+    });
     return hugr_mlir::TupleAttr::get(getContext(), as);
   }
   return nullptr;
@@ -560,14 +587,19 @@ mlir::LogicalResult hugr_mlir::UnpackTupleOp::inferReturnTypes(
   return mlir::success();
 }
 
-mlir::LogicalResult hugr_mlir::UnpackTupleOp::fold(FoldAdaptor adaptor, ::llvm::SmallVectorImpl< ::mlir::OpFoldResult> &results) {
-  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
-    for(auto i = 0; i < getNumResults(); ++i) {
+mlir::LogicalResult hugr_mlir::UnpackTupleOp::fold(
+    FoldAdaptor adaptor,
+    ::llvm::SmallVectorImpl<::mlir::OpFoldResult>& results) {
+  if (auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(
+          adaptor.getInput())) {
+    for (auto i = 0; i < getNumResults(); ++i) {
       results.push_back(poison);
     }
     return mlir::success();
-  } else if(auto v = llvm::dyn_cast_if_present<hugr_mlir::TupleAttr>(adaptor.getInput())) {
-    if(v.getValues().size() == getNumResults()) {
+  } else if (
+      auto v =
+          llvm::dyn_cast_if_present<hugr_mlir::TupleAttr>(adaptor.getInput())) {
+    if (v.getValues().size() == getNumResults()) {
       llvm::copy(v.getValues(), std::back_inserter(results));
       return mlir::success();
     }
@@ -711,10 +743,13 @@ mlir::LogicalResult hugr_mlir::TagOp::verify() {
 }
 
 mlir::OpFoldResult hugr_mlir::TagOp::fold(FoldAdaptor adaptor) {
-  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+  if (auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(
+          adaptor.getInput())) {
     return poison;
-  } else if (auto v = llvm::dyn_cast_if_present<mlir::TypedAttr>(adaptor.getInput())) {
-    return hugr_mlir::SumAttr::get(getResult().getType(), adaptor.getTag().getZExtValue(), v);
+  } else if (
+      auto v = llvm::dyn_cast_if_present<mlir::TypedAttr>(adaptor.getInput())) {
+    return hugr_mlir::SumAttr::get(
+        getResult().getType(), adaptor.getTag().getZExtValue(), v);
   }
   return nullptr;
 }
@@ -741,10 +776,13 @@ mlir::LogicalResult hugr_mlir::ReadVariantOp::inferReturnTypes(
 }
 
 mlir::OpFoldResult hugr_mlir::ReadVariantOp::fold(FoldAdaptor adaptor) {
-  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+  if (auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(
+          adaptor.getInput())) {
     return poison;
-  } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
-    if(getTag() == attr.getTag()) {
+  } else if (
+      auto attr =
+          llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
+    if (getTag() == attr.getTag()) {
       return attr.getValue();
     }
     return mlir::ub::PoisonAttr::get(getContext());
@@ -756,11 +794,14 @@ mlir::OpFoldResult hugr_mlir::ReadVariantOp::fold(FoldAdaptor adaptor) {
 // ReadTagOp
 /////////////////////////////////////////////////////////////////////////////
 mlir::OpFoldResult hugr_mlir::ReadTagOp::fold(FoldAdaptor adaptor) {
-  if(auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(adaptor.getInput())) {
+  if (auto poison = llvm::dyn_cast_if_present<mlir::ub::PoisonAttrInterface>(
+          adaptor.getInput())) {
     return poison;
-  } else if(auto attr = llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
+  } else if (
+      auto attr =
+          llvm::dyn_cast_if_present<hugr_mlir::SumAttr>(adaptor.getInput())) {
     return attr.getTagAttr();
-  } else if(getInput().getType().numAlts() == 1) {
+  } else if (getInput().getType().numAlts() == 1) {
     return mlir::IntegerAttr::get(mlir::IndexType::get(getContext()), 0);
   }
 
@@ -770,7 +811,11 @@ mlir::OpFoldResult hugr_mlir::ReadTagOp::fold(FoldAdaptor adaptor) {
 /////////////////////////////////////////////////////////////////////////////
 // ConstantOp
 /////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::ConstantOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+mlir::LogicalResult hugr_mlir::ConstantOp::inferReturnTypes(
+    ::mlir::MLIRContext* context, ::std::optional<::mlir::Location> location,
+    ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes,
+    ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions,
+    ::llvm::SmallVectorImpl<::mlir::Type>& inferredReturnTypes) {
   ConstantOpAdaptor adaptor(operands, attributes, properties, regions);
   inferredReturnTypes.push_back(adaptor.getValue().getType());
   return mlir::success();
@@ -783,16 +828,21 @@ mlir::OpFoldResult hugr_mlir::ConstantOp::fold(FoldAdaptor adaptor) {
 /////////////////////////////////////////////////////////////////////////////
 // UnpackFunctionOp
 /////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::UnpackFunctionOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+mlir::LogicalResult hugr_mlir::UnpackFunctionOp::inferReturnTypes(
+    ::mlir::MLIRContext* context, ::std::optional<::mlir::Location> location,
+    ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes,
+    ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions,
+    ::llvm::SmallVectorImpl<::mlir::Type>& inferredReturnTypes) {
   mlir::OpBuilder builder(context);
   UnpackFunctionOpAdaptor adaptor(operands, attributes, properties, regions);
   auto old_ft = llvm::dyn_cast<FunctionType>(adaptor.getInput().getType());
-  if(!old_ft) {
+  if (!old_ft) {
     return mlir::emitOptionalError(location, "Input not a function type:");
   }
   mlir::SmallVector<mlir::Type> new_arg_tys{builder.getType<ClosureType>()};
   llvm::copy(old_ft.getArgumentTypes(), std::back_inserter(new_arg_tys));
-  inferredReturnTypes.push_back(builder.getFunctionType(new_arg_tys, old_ft.getResultTypes()));
+  inferredReturnTypes.push_back(
+      builder.getFunctionType(new_arg_tys, old_ft.getResultTypes()));
   inferredReturnTypes.push_back(new_arg_tys[0]);
   return mlir::success();
 }
@@ -800,12 +850,18 @@ mlir::LogicalResult hugr_mlir::UnpackFunctionOp::inferReturnTypes(::mlir::MLIRCo
 /////////////////////////////////////////////////////////////////////////////
 // UnpackFunctionOp
 /////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::AllocFunctionOp::inferReturnTypes(::mlir::MLIRContext *context, ::std::optional< ::mlir::Location> location, ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes, ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions, ::llvm::SmallVectorImpl< ::mlir::Type> &inferredReturnTypes) {
+mlir::LogicalResult hugr_mlir::AllocFunctionOp::inferReturnTypes(
+    ::mlir::MLIRContext* context, ::std::optional<::mlir::Location> location,
+    ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes,
+    ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions,
+    ::llvm::SmallVectorImpl<::mlir::Type>& inferredReturnTypes) {
   mlir::OpBuilder builder(context);
   AllocFunctionOpAdaptor adaptor(operands, attributes, properties, regions);
   auto func = adaptor.getFunc();
   FunctionType ft;
-  if(!func || !(ft = llvm::dyn_cast<FunctionType>(func.getType()))) { return mlir::emitOptionalError(location, "func is not a static edge attr"); }
+  if (!func || !(ft = llvm::dyn_cast<FunctionType>(func.getType()))) {
+    return mlir::emitOptionalError(location, "func is not a static edge attr");
+  }
   inferredReturnTypes.push_back(ft);
   return mlir::success();
 }
@@ -863,30 +919,35 @@ bool hugr_mlir::isControlFlowGraphRegion(mlir::Region& region) {
   return true;
 }
 
-
 /////////////////////////////////////////////////////////////////////////////
 //  verifyHugrSymbolUserOpInterface
 /////////////////////////////////////////////////////////////////////////////
 mlir::LogicalResult hugr_mlir::verifyHugrSymbolUses(
     mlir::Operation* op, HugrSymbolMap const& stc) {
-  if(auto co = llvm::dyn_cast<CallOp>(op)) {
-    if(mlir::failed(co.verifyHugrSymbolUses(stc))) {
+  if (auto co = llvm::dyn_cast<CallOp>(op)) {
+    if (mlir::failed(co.verifyHugrSymbolUses(stc))) {
       return mlir::failure();
     }
   }
 
   mlir::OpBuilder builder(op->getContext());
 
-  llvm::SmallVector<std::tuple<mlir::Twine, mlir::Attribute>>
-      worklist;
+  llvm::SmallVector<std::tuple<mlir::Twine, mlir::Attribute>> worklist;
   llvm::transform(op->getAttrs(), std::back_inserter(worklist), [&](auto x) {
-    return std::make_tuple(mlir::Twine("Attribute: ").concat(x.getName().getValue()), x.getValue());
+    return std::make_tuple(
+        mlir::Twine("Attribute: ").concat(x.getName().getValue()),
+        x.getValue());
   });
   for (auto& r : op->getRegions()) {
     for (auto const& [i, b] : llvm::enumerate(r.getBlocks())) {
       llvm::transform(
           b.getArguments(), std::back_inserter(worklist), [&](auto x) {
-            mlir::Twine s = mlir::Twine("region,block,arg:").concat(mlir::Twine(r.getRegionNumber())).concat(",").concat(mlir::Twine(i)).concat(",").concat(mlir::Twine(x.getArgNumber()));
+            mlir::Twine s = mlir::Twine("region,block,arg:")
+                                .concat(mlir::Twine(r.getRegionNumber()))
+                                .concat(",")
+                                .concat(mlir::Twine(i))
+                                .concat(",")
+                                .concat(mlir::Twine(x.getArgNumber()));
             return std::make_tuple(s, mlir::TypeAttr::get(x.getType()));
           });
     }
@@ -922,7 +983,9 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUses(
       std::optional<mlir::InFlightDiagnostic> mb_ifd;
       auto get_ifd = [&]() -> mlir::InFlightDiagnostic& {
         if (!mb_ifd) {
-          mb_ifd.emplace(mlir::emitError(op->getLoc())) << "Error resolving type alias reference in " << label << " of " << op->getName() << ": " << ref;
+          mb_ifd.emplace(mlir::emitError(op->getLoc()))
+              << "Error resolving type alias reference in " << label << " of "
+              << op->getName() << ": " << ref;
         }
         return *mb_ifd;
       };
@@ -932,18 +995,21 @@ mlir::LogicalResult hugr_mlir::verifyHugrSymbolUses(
       }
       auto alias_op = llvm::dyn_cast<hugr_mlir::TypeAliasOp>(referee);
       if (!alias_op) {
-        auto& ifd = get_ifd() << "Symbol references non type-alias op: " << referee->getName();
+        auto& ifd = get_ifd() << "Symbol references non type-alias op: "
+                              << referee->getName();
         ifd.attachNote(referee->getLoc());
         return ifd;
       }
 
       if (alias_op.getExtensionsAttr() != ref.getExtensions()) {
-        auto& ifd = get_ifd() << "Alias has mismatched extensions:" << alias_op.getExtensionsAttr();
+        auto& ifd = get_ifd() << "Alias has mismatched extensions:"
+                              << alias_op.getExtensionsAttr();
         ifd.attachNote(alias_op.getLoc());
         return ifd;
       }
       if (alias_op.getConstraint() != ref.getConstraint()) {
-        auto& ifd = get_ifd() << "Alias has mismatched constraint:" << alias_op.getConstraintAttr();
+        auto& ifd = get_ifd() << "Alias has mismatched constraint:"
+                              << alias_op.getConstraintAttr();
         ifd.attachNote(alias_op.getLoc());
         return ifd;
       }

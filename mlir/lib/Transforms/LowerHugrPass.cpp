@@ -55,7 +55,6 @@ struct LowerOutput : OpRewritePattern<hugr_mlir::OutputOp> {
       hugr_mlir::OutputOp, PatternRewriter&) const override;
 };
 
-
 struct LowerCall : OpRewritePattern<hugr_mlir::CallOp> {
   using OpRewritePattern::OpRewritePattern;
   LogicalResult matchAndRewrite(
@@ -158,17 +157,21 @@ mlir::LogicalResult LowerOutput::matchAndRewrite(
   return success();
 }
 
+mlir::LogicalResult LowerCall::matchAndRewrite(
+    hugr_mlir::CallOp op, PatternRewriter& rw) const {
+  if (auto callee = op.getCalleeAttrAttr()) {
+    rw.replaceOpWithNewOp<func::CallOp>(
+        op, callee.getRef(), op.getResultTypes(), op.getInputs());
+  }  // else if (auto callee = op.getCalleeValue()){
+  //     rw.replaceOpWithNewOp<func::CallIndirectOp>(op, callee,
+  //     op.getResultTypes(), op.getInputs());
+  // }
 
-mlir::LogicalResult LowerCall::matchAndRewrite(hugr_mlir::CallOp op, PatternRewriter & rw) const {
-    if(auto callee = op.getCalleeAttrAttr()) {
-        rw.replaceOpWithNewOp<func::CallOp>(op, callee.getRef(), op.getResultTypes(), op.getInputs());
-    } // else if (auto callee = op.getCalleeValue()){
-    //     rw.replaceOpWithNewOp<func::CallIndirectOp>(op, callee, op.getResultTypes(), op.getInputs());
-    // }
+  else {
+    return failure();
+  }
 
-    else { return failure(); }
-
-    return success();
+  return success();
 }
 
 mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
@@ -184,15 +187,16 @@ void LowerHugrPass::runOnOperation() {
   auto op = getOperation();
   auto context = &getContext();
   ConversionTarget target(*context);
-  target.addLegalDialect<hugr_mlir::HugrDialect, func::FuncDialect,cf::ControlFlowDialect,scf::SCFDialect,index::IndexDialect>();
+  target.addLegalDialect<
+      hugr_mlir::HugrDialect, func::FuncDialect, cf::ControlFlowDialect,
+      scf::SCFDialect, index::IndexDialect>();
   target.addIllegalOp<
-        hugr_mlir::FuncOp, hugr_mlir::CfgOp, hugr_mlir::DfgOp,
-        hugr_mlir::TailLoopOp, hugr_mlir::ConditionalOp, hugr_mlir::OutputOp,
-        hugr_mlir::SwitchOp>();
+      hugr_mlir::FuncOp, hugr_mlir::CfgOp, hugr_mlir::DfgOp,
+      hugr_mlir::TailLoopOp, hugr_mlir::ConditionalOp, hugr_mlir::OutputOp,
+      hugr_mlir::SwitchOp>();
 
-  target.addDynamicallyLegalOp<hugr_mlir::CallOp>([](hugr_mlir::CallOp op) -> bool {
-      return !!op.getCalleeValue();
-  });
+  target.addDynamicallyLegalOp<hugr_mlir::CallOp>(
+      [](hugr_mlir::CallOp op) -> bool { return !!op.getCalleeValue(); });
 
   bool changed = false;
   if (failed(applyPartialConversion(op, target, patterns))) {

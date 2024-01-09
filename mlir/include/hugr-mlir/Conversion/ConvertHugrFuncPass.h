@@ -9,5 +9,4 @@ namespace hugr_mlir {
 #include "hugr-mlir/Conversion/Passes.h.inc"
 }  // namespace hugr_mlir
 
-
-#endif // HUGR_MLIR_CONVERSION_CONVERTHUGRFUNCPASS_H
+#endif  // HUGR_MLIR_CONVERSION_CONVERTHUGRFUNCPASS_H
