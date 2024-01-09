@@ -247,23 +247,30 @@ HugrTypeConverter::HugrTypeConverter() : OneToNTypeConverter() {
     }
     return {t};
   });
-  addConversion([this](TupleType tt, llvm::SmallVectorImpl<Type>& result) -> std::optional<LogicalResult> {
-    SmallVector<Type> ts;
-    if (failed(this->convertTypes(tt.getTypes(), result))) {
-      return std::nullopt;
-    }
-    return success();
-  });
-  addConversion([this](hugr_mlir::SumType st, llvm::SmallVectorImpl<Type>& result) -> std::optional<LogicalResult> {
-    result.push_back(IndexType::get(st.getContext()));
-    if (failed(this->convertTypes(st.getTypes(), result))) {
-      result.clear();
-      return std::nullopt;
-    }
-    return success();
-  });
+  addConversion(
+      [this](
+          TupleType tt,
+          llvm::SmallVectorImpl<Type>& result) -> std::optional<LogicalResult> {
+        SmallVector<Type> ts;
+        if (failed(this->convertTypes(tt.getTypes(), result))) {
+          return std::nullopt;
+        }
+        return success();
+      });
+  addConversion(
+      [this](
+          hugr_mlir::SumType st,
+          llvm::SmallVectorImpl<Type>& result) -> std::optional<LogicalResult> {
+        result.push_back(IndexType::get(st.getContext()));
+        if (failed(this->convertTypes(st.getTypes(), result))) {
+          result.clear();
+          return std::nullopt;
+        }
+        return success();
+      });
   // addConversion([this](hugr_mlir::ClosureType t) -> std::optional<Type> {
-  //     return MemRefType::get({}, LLVM::LLVMStructType::getOpaque("_.hugr.closure", t.getContext()));
+  //     return MemRefType::get({},
+  //     LLVM::LLVMStructType::getOpaque("_.hugr.closure", t.getContext()));
   // });
   addConversion([this](FunctionType t) -> std::optional<Type> {
     SmallVector<Type> inputs;

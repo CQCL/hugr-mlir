@@ -43,7 +43,6 @@ struct LowerHugrFuncToFunc : OpRewritePattern<hugr_mlir::FuncOp> {
       hugr_mlir::FuncOp, PatternRewriter&) const override;
 };
 
-
 struct LowerOutput : OpRewritePattern<hugr_mlir::OutputOp> {
   using OpRewritePattern::OpRewritePattern;
   LogicalResult matchAndRewrite(
@@ -106,7 +105,6 @@ mlir::LogicalResult LowerHugrFuncToFunc::matchAndRewrite(
   return success();
 }
 
-
 mlir::LogicalResult LowerOutput::matchAndRewrite(
     hugr_mlir::OutputOp op, PatternRewriter& rw) const {
   auto parent = op->getParentOp();
@@ -140,7 +138,8 @@ mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
   // ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerCall>(context);
 
   // patterns =
-  //     FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+  //     FrozenRewritePatternSet(std::move(ps), disabledPatterns,
+  //     enabledPatterns);
   return success();
 }
 

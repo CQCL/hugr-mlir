@@ -5,8 +5,8 @@
 #include "hugr-mlir/IR/HugrOps.h"
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
-#include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
+#include "mlir/Dialect/SCF/IR/SCF.h"
 #include "mlir/Transforms/DialectConversion.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Transforms/OneToNTypeConversion.h"
@@ -16,9 +16,9 @@
 #include "mlir/Dialect/Func/Transforms/OneToNFuncConversions.h"
 #include "mlir/Dialect/Index/IR/IndexDialect.h"
 #include "mlir/Dialect/Index/IR/IndexOps.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/SCF/Transforms/Patterns.h"
 #include "mlir/Dialect/UB/IR/UBOps.h"
-#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 
 #define DEBUG_TYPE "convert-hugr-pass"
 
@@ -42,7 +42,8 @@ struct ConvertHugrPass : hugr_mlir::impl::ConvertHugrPassBase<ConvertHugrPass> {
   std::shared_ptr<TypeConverter> type_converter;
 };
 
-struct ConvertHugrModulePass : hugr_mlir::impl::ConvertHugrModulePassBase<ConvertHugrModulePass> {
+struct ConvertHugrModulePass
+    : hugr_mlir::impl::ConvertHugrModulePassBase<ConvertHugrModulePass> {
   using ConvertHugrModulePassBase::ConvertHugrModulePassBase;
   void runOnOperation() override;
 
@@ -117,10 +118,12 @@ struct LowerEmptyWriteClosure : OpRewritePattern<hugr_mlir::WriteClosureOp> {
       hugr_mlir::WriteClosureOp, PatternRewriter&) const override;
 };
 
-// struct ConvertAllocClosure : OneToNOpConversionPattern<hugr_mlir::AllocClosureOp> {
+// struct ConvertAllocClosure :
+// OneToNOpConversionPattern<hugr_mlir::AllocClosureOp> {
 //   using OneToNOpConversionPattern::OneToNOpConversionPattern;
 //   LogicalResult matchAndRewrite(
-//       hugr_mlir::AllocClosureOp, OpAdaptor, OneToNPatternRewriter&) const override;
+//       hugr_mlir::AllocClosureOp, OpAdaptor, OneToNPatternRewriter&) const
+//       override;
 // };
 
 struct ConvertFuncBlockArgs : OneToNOpConversionPattern<func::FuncOp> {
@@ -216,7 +219,7 @@ mlir::LogicalResult ConvertReadVariant::matchAndRewrite(
 }
 
 mlir::LogicalResult ConvertFuncBlockArgs::matchAndRewrite(
-  func::FuncOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
+    func::FuncOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
   auto tc = getTypeConverter<OneToNTypeConverter>();
   if (!tc) {
     return rw.notifyMatchFailure(op, "no type converter");
@@ -254,10 +257,14 @@ mlir::LogicalResult ConvertFuncBlockArgs::matchAndRewrite(
     }
   };
   auto mk_work_item = [&tc](Block& b) -> FailureOr<WorkItem> {
-    if (b.isEntryBlock() || tc->isLegal(b.getArgumentTypes())) { return failure() ; }
+    if (b.isEntryBlock() || tc->isLegal(b.getArgumentTypes())) {
+      return failure();
+    }
     WorkItem wi(WorkItem(b, OneToNTypeMapping(b.getArgumentTypes())));
-    if (!wi.allPredsAreBranchOpInterfaces()
-        ||  failed(tc->convertSignatureArgs(b.getArgumentTypes(), wi.mapping))) {return failure();}
+    if (!wi.allPredsAreBranchOpInterfaces() ||
+        failed(tc->convertSignatureArgs(b.getArgumentTypes(), wi.mapping))) {
+      return failure();
+    }
     return std::move(wi);
   };
   std::vector<WorkItem> worklist;
@@ -428,10 +435,15 @@ mlir::LogicalResult LowerCfg::matchAndRewrite(
 mlir::LogicalResult LowerDfg::matchAndRewrite(
     hugr_mlir::DfgOp op, PatternRewriter& rw) const {
   hugr_mlir::OutputOp dfg_output;
-  if(op.getBody().empty() || !(dfg_output = llvm::dyn_cast<hugr_mlir::OutputOp>(op.getBody().front().getTerminator()))) { return failure(); }
+  if (op.getBody().empty() ||
+      !(dfg_output = llvm::dyn_cast<hugr_mlir::OutputOp>(
+            op.getBody().front().getTerminator()))) {
+    return failure();
+  }
   auto entry_block = op->getBlock();
   auto split_block = rw.splitBlock(entry_block, Block::iterator{op});
-  rw.inlineBlockBefore(&op.getBody().front(), entry_block, entry_block->end(), op.getInputs());
+  rw.inlineBlockBefore(
+      &op.getBody().front(), entry_block, entry_block->end(), op.getInputs());
   rw.inlineBlockBefore(split_block, entry_block, entry_block->end());
   rw.replaceOp(op, dfg_output.getOutputs());
   rw.eraseOp(dfg_output);
@@ -441,7 +453,9 @@ mlir::LogicalResult LowerDfg::matchAndRewrite(
 mlir::LogicalResult LowerEmptyReadClosure::matchAndRewrite(
     hugr_mlir::ReadClosureOp op, PatternRewriter& rw) const {
   // TODO this should be done by canonicalisation
-  if(!op.getResults().empty()) { return failure(); }
+  if (!op.getResults().empty()) {
+    return failure();
+  }
   rw.eraseOp(op);
   return success();
 }
@@ -449,14 +463,18 @@ mlir::LogicalResult LowerEmptyReadClosure::matchAndRewrite(
 mlir::LogicalResult LowerEmptyWriteClosure::matchAndRewrite(
     hugr_mlir::WriteClosureOp op, PatternRewriter& rw) const {
   // TODO this should be done by canonicalisation
-  if(!op.getInputs().empty()) { return failure(); }
+  if (!op.getInputs().empty()) {
+    return failure();
+  }
   rw.eraseOp(op);
   return success();
 }
 
 // mlir::LogicalResult ConvertAllocClosure::matchAndRewrite(
-//     hugr_mlir::AllocClosureOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
-//   auto t = llvm::cast<MemRefType>(getTypeConverter()->convertType(op.getOutput().getType()));
+//     hugr_mlir::AllocClosureOp op, OpAdaptor adaptor, OneToNPatternRewriter&
+//     rw) const {
+//   auto t =
+//   llvm::cast<MemRefType>(getTypeConverter()->convertType(op.getOutput().getType()));
 //   rw.replaceOpWithNewOp<memref::AllocOp>(op, t);
 //   return success();
 // }
@@ -474,18 +492,19 @@ mlir::LogicalResult ConvertHugrPass::initialize(MLIRContext* context) {
     populateFuncTypeConversionPatterns(*type_converter, ps);
     scf::populateSCFStructuralOneToNTypeConversions(*type_converter, ps);
 
-    conversion_patterns =
-        FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+    conversion_patterns = FrozenRewritePatternSet(
+        std::move(ps), disabledPatterns, enabledPatterns);
   }
   {
     RewritePatternSet ps(context);
     // TODO lower ConditionalOp and TailLoopOp here
-    ps.add<LowerCfg,LowerDfg,LowerEmptyReadClosure,LowerEmptyWriteClosure>(context);
-    lowering_patterns = FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+    ps.add<LowerCfg, LowerDfg, LowerEmptyReadClosure, LowerEmptyWriteClosure>(
+        context);
+    lowering_patterns = FrozenRewritePatternSet(
+        std::move(ps), disabledPatterns, enabledPatterns);
   }
   return success();
 };
-
 
 void ConvertHugrPass::runOnOperation() {
   auto op = getOperation();
@@ -494,28 +513,30 @@ void ConvertHugrPass::runOnOperation() {
   {
     GreedyRewriteConfig cfg;
     cfg.useTopDownTraversal = true;
-    if(failed(applyPatternsAndFoldGreedily(op, lowering_patterns, cfg))) {
-      emitError(op->getLoc(), "LowerHugrPass: Failed to apply lowering patterns");
+    if (failed(applyPatternsAndFoldGreedily(op, lowering_patterns, cfg))) {
+      emitError(
+          op->getLoc(), "LowerHugrPass: Failed to apply lowering patterns");
       return signalPassFailure();
     }
   }
 
   if (failed(applyPartialOneToNConversion(
-          op, static_cast<OneToNTypeConverter&>(*type_converter), conversion_patterns))) {
+          op, static_cast<OneToNTypeConverter&>(*type_converter),
+          conversion_patterns))) {
     emitError(
         op->getLoc(),
         "ConvertHugrPass: failure to applyPartialOneToNConversion");
     return signalPassFailure();
   }
 
-
-
-  if(hugrVerify) {
+  if (hugrVerify) {
     ConversionTarget target(*context);
     target.addIllegalDialect<hugr_mlir::HugrDialect>();
     target.addLegalOp<hugr_mlir::ExtensionOp>();
-    if(failed(applyPartialConversion(op, target, {}))) {
-      emitError(op->getLoc(), "ConvertHugrPass: Failed to eliminate all non extension hgur ops");
+    if (failed(applyPartialConversion(op, target, {}))) {
+      emitError(
+          op->getLoc(),
+          "ConvertHugrPass: Failed to eliminate all non extension hgur ops");
       return signalPassFailure();
     }
   }
@@ -524,10 +545,13 @@ void ConvertHugrPass::runOnOperation() {
 void ConvertHugrModulePass::runOnOperation() {
   IRRewriter rw(&getContext());
 
-  SmallVector<hugr_mlir::ModuleOp> worklist{getOperation().getOps<hugr_mlir::ModuleOp>()};
-  for(auto hm: worklist) {
-    if(!hm.getBody().empty()) {
-      rw.inlineBlockBefore(&hm.getBody().front(), getOperation().getBody(), getOperation().getBody()->end());
+  SmallVector<hugr_mlir::ModuleOp> worklist{
+      getOperation().getOps<hugr_mlir::ModuleOp>()};
+  for (auto hm : worklist) {
+    if (!hm.getBody().empty()) {
+      rw.inlineBlockBefore(
+          &hm.getBody().front(), getOperation().getBody(),
+          getOperation().getBody()->end());
     }
     rw.eraseOp(hm);
   }
