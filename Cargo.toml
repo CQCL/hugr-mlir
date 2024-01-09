@@ -1,29 +1,30 @@
-[patch.crates-io]
-mlir-sys = { path = "../mlir-sys" }
-melior-macro = { path = "../melior/macro" }
-melior = { path = "../melior/melior" , features = [] }
+# [patch.crates-io]
+# mlir-sys = { path = "../mlir-sys" }
+# melior-macro = { path = "../melior/macro" }
+# melior = { path = "../melior/melior" , features = [] }
 
-[patch."https://github.com/doug-q/mlir-sys.git"]
-mlir-sys = { path = "../mlir-sys" }
-mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
+# [patch."https://github.com/doug-q/mlir-sys.git"]
+# mlir-sys = { path = "../mlir-sys" }
+# mlir-sys0 = { path = "../mlir-sys/mlir-sys0" }
 
 
 
-[patch."https://github.com/CQCL-DEV/hugr.git"]
-quantinuum-hugr = { path = "../hugr" }
+# [patch."https://github.com/CQCL-DEV/hugr.git"]
+# quantinuum-hugr = { path = "../hugr" }
 
 # TODO
 # we have forks of mlir-sys and melior that allow us to override how mlir links,
 # and add some small missing features. These should be upstreamed.
 #
-# [patch.crates-io]
-# mlir-sys = { git = "https://github.com/doug-q/mlir-sys", branch = "llvm18"}
-# melior-macro = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
-# melior = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
+[patch.crates-io]
+mlir-sys = { git = "https://github.com/doug-q/mlir-sys", branch = "llvm18"}
+melior-macro = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
+melior = { git = "https://github.com/doug-q/melior", branch = "llvm18"}
 
 [workspace]
-members = ["guppy/validator","hugr-mlir"]
-# members = ["hugr-mlir"]
+# members = ["guppy/validator","hugr-mlir"]
+members = ["hugr-mlir"]
+resolver = "2"
 
 [workspace.package]
 

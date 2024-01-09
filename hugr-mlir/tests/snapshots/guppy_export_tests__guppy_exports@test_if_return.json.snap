@@ -5,6 +5,7 @@ input_file: hugr-mlir/tests/guppy-exports/test_if_return.json
 ---
 module {
   hugr.module {
+    func @new[]() -> !hugr<opaque "qubit"["prelude"] [Linear]>
     func @test[](%arg0: !hugr.sum<tuple<>, tuple<>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
       %0 = dfg input extensions [] %arg0 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
       ^bb0(%arg1: !hugr.sum<tuple<>, tuple<>>):
@@ -39,7 +40,6 @@ module {
       }
       output %0 : !hugr<opaque "qubit"["prelude"] [Linear]>
     }
-    func @new[]() -> !hugr<opaque "qubit"["prelude"] [Linear]>
   }
 }
 

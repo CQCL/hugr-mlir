@@ -54,8 +54,8 @@ module {
                 ^bb0(%arg11: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg12: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg13: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
                   %16:2 = dfg input extensions [] %arg11, %arg12, %arg13 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
                   ^bb0(%arg14: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg15: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg16: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-                    %18 = ext_op []"iadd" %arg14, %arg15 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
-                    %19 = ext_op []"iadd" %18, %arg16 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+                    %18 = ext_op []"iadd" %arg15, %arg16 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+                    %19 = ext_op []"iadd" %18, %arg14 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
                     %20 = make_tuple()
                     %21 = tag 0 %20 : tuple<> -> <tuple<>>
                     output %21, %19 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>

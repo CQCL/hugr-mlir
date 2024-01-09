@@ -5,17 +5,18 @@ input_file: hugr-mlir/tests/guppy-exports/test_measure.json
 ---
 module {
   hugr.module {
+    func @measure[](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr.sum<tuple<>, tuple<>>
     func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
       %0 = dfg input extensions [] %arg0, %arg1 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
       ^bb0(%arg2: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
         %1 = cfg %arg2, %arg3 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
-        ^bb0(%arg4: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg5: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-          %2:2 = dfg input extensions [] %arg4, %arg5 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
-          ^bb0(%arg6: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg7: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-            %4 = call @measure  [](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr.sum<tuple<>, tuple<>> %arg6
+        ^bb0(%arg4: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg5: !hugr<opaque "qubit"["prelude"] [Linear]>):
+          %2:2 = dfg input extensions [] %arg4, %arg5 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
+          ^bb0(%arg6: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg7: !hugr<opaque "qubit"["prelude"] [Linear]>):
+            %4 = call @measure  [](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr.sum<tuple<>, tuple<>> %arg7
             %5 = make_tuple()
             %6 = tag 0 %5 : tuple<> -> <tuple<>>
-            output %6, %arg7 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+            output %6, %arg6 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
           }
           switch %2#0, %2#1 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> ^bb1
         ^bb1(%3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):  // pred: ^bb0
@@ -25,7 +26,6 @@ module {
       }
       output %0 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
     }
-    func @measure[](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr.sum<tuple<>, tuple<>>
   }
 }
 

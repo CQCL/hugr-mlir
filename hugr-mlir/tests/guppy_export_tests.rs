@@ -1,4 +1,3 @@
-use insta::with_settings;
 use rstest::{fixture, rstest};
 use std::fs;
 
@@ -17,7 +16,7 @@ pub fn test_context() -> melior::Context {
 
 #[rstest]
 fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
-    use hugr_mlir::{hugr_to_mlir::hugr_to_mlir, mlir_to_hugr::mlir_to_hugr};
+    use hugr_mlir::hugr_to_mlir::hugr_to_mlir;
     // unsafe { mlir_sys::mlirEnableGlobalDebug(true); }
     insta::glob!("guppy-exports", "*.json", |path| {
         let bytes = fs::read(path).unwrap();

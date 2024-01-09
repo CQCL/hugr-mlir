@@ -488,7 +488,6 @@
       "parent": 0
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -510,7 +509,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -532,7 +531,6 @@
       ]
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "args": [
@@ -548,7 +546,7 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 20
     },
     {
@@ -988,7 +986,6 @@
       }
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1005,7 +1002,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -1148,7 +1145,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1165,7 +1161,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -1282,7 +1278,6 @@
       }
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1299,7 +1294,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -1340,7 +1335,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1357,7 +1351,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -1500,7 +1494,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1517,7 +1510,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -1558,7 +1551,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1575,7 +1567,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [

@@ -5,6 +5,8 @@ input_file: hugr-mlir/tests/guppy-exports/test_interleave.json
 ---
 module {
   hugr.module {
+    func @f[](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
+    func @g[](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
     func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg1: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg2: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg3: !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
       %0:4 = dfg input extensions [] %arg0, %arg1, %arg2, %arg3 : (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) {
       ^bb0(%arg4: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg5: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg6: !hugr<opaque "qubit"["prelude"] [Linear]>, %arg7: !hugr<opaque "qubit"["prelude"] [Linear]>):
@@ -35,8 +37,6 @@ module {
       }
       output %0#0, %0#1, %0#2, %0#3 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>
     }
-    func @f[](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
-    func @g[](!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "qubit"["prelude"] [Linear]>)
   }
 }
 

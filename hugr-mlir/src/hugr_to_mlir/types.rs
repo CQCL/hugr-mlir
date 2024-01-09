@@ -59,7 +59,7 @@ pub fn hugr_to_mlir_type<'c>(
             mlir::hugr::TypeConstraintAttr::new(ctx, alias_decl.bound),
         )
         .into()),
-        TypeEnum::Function(ref function_type) if function_type.params().len() == 0 => {
+        TypeEnum::Function(ref function_type) if function_type.params().is_empty() => {
             Ok(hugr_to_mlir_function_type(ctx, function_type.body())?.into())
         }
         TypeEnum::Function(ref _function_type) => {

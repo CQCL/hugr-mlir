@@ -448,7 +448,6 @@
       "parent": 0
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -470,7 +469,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [],
       "parent": 22,
       "tuple_sum_rows": [
@@ -485,7 +484,6 @@
       ]
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "s": "Unit",
@@ -494,7 +492,7 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 22
     },
     {
@@ -1242,11 +1240,10 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "s": "Unit",
@@ -1308,7 +1305,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1318,7 +1314,7 @@
           "t": "Sum"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [],
       "parent": 22,
       "tuple_sum_rows": [
@@ -1539,7 +1535,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1549,7 +1544,7 @@
           "t": "Sum"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "s": "Unit",

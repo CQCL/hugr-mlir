@@ -5,6 +5,7 @@ input_file: hugr-mlir/tests/guppy-exports/test_return_call.json
 ---
 module {
   hugr.module {
+    func @op[](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]>
     func @test[](%arg0: !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
       %0 = dfg input extensions [] %arg0 : (!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
       ^bb0(%arg1: !hugr<opaque "qubit"["prelude"] [Linear]>):
@@ -25,7 +26,6 @@ module {
       }
       output %0 : !hugr<opaque "qubit"["prelude"] [Linear]>
     }
-    func @op[](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]>
   }
 }
 

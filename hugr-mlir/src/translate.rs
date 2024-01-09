@@ -18,8 +18,8 @@ pub fn translate_hugr_to_mlir<'c, E: Into<crate::Error>>(
     hugr_to_mlir(loc, &hugr)
 }
 
-pub fn translate_mlir_to_hugr<'c, E: Into<crate::Error>>(
-    src: &melior::ir::Operation<'c>,
+pub fn translate_mlir_to_hugr<E: Into<crate::Error>>(
+    src: &melior::ir::Operation,
 ) -> Result<hugr::Hugr> where
 {
     mlir_to_hugr(src.try_into().map_err(|_| {

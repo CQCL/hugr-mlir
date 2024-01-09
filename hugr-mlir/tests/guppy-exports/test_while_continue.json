@@ -43,7 +43,7 @@
     [
       [
         4,
-        1
+        0
       ],
       [
         12,
@@ -53,7 +53,7 @@
     [
       [
         4,
-        0
+        1
       ],
       [
         12,
@@ -618,17 +618,9 @@
       "parent": 0
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
-        {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        },
         {
           "args": [
             {
@@ -640,9 +632,16 @@
           "extension": "arithmetic.int.types",
           "id": "int",
           "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -670,7 +669,6 @@
       ]
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "args": [],
@@ -681,7 +679,7 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 22
     },
     {
@@ -716,13 +714,6 @@
       "parent": 1,
       "types": [
         {
-          "args": [],
-          "bound": "A",
-          "extension": "prelude",
-          "id": "qubit",
-          "t": "Opaque"
-        },
-        {
           "args": [
             {
               "n": 6,
@@ -732,6 +723,13 @@
           "bound": "E",
           "extension": "arithmetic.int.types",
           "id": "int",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
           "t": "Opaque"
         }
       ]
@@ -1278,7 +1276,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1302,7 +1299,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [],
@@ -1696,7 +1693,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -1720,7 +1716,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -2052,7 +2048,6 @@
       }
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -2064,7 +2059,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [],
@@ -2100,7 +2095,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -2124,7 +2118,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [
@@ -2172,7 +2166,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -2196,7 +2189,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [

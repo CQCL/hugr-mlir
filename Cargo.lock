@@ -497,13 +497,24 @@ dependencies = [
 
 [[package]]
 name = "delegate"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ee5df75c70b95bd3aacc8e2fd098797692fb1d54121019c4de481e42f04c8a1"
+checksum = "b4801d755ab05b6e25cbbf1afc342993aafa00e572409f9ee21633a19e609d9f"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.109",
+ "syn 2.0.38",
+]
+
+[[package]]
+name = "delegate"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e018fccbeeb50ff26562ece792ed06659b9c2dae79ece77c4456bb10d9bf79b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.38",
 ]
 
 [[package]]
@@ -816,7 +827,7 @@ dependencies = [
  "melior",
  "mlir-sys",
  "mlir-sys0",
- "quantinuum-hugr",
+ "quantinuum-hugr 0.1.0 (git+https://github.com/CQCL-DEV/hugr.git)",
  "rmp-serde",
  "rstest",
  "serde_json",
@@ -991,6 +1002,7 @@ checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
 [[package]]
 name = "melior"
 version = "0.11.0"
+source = "git+https://github.com/doug-q/melior?branch=llvm18#54408e8d1dbeaea39bc278ab26856b9b14cc5e59"
 dependencies = [
  "criterion",
  "dashmap",
@@ -1002,6 +1014,7 @@ dependencies = [
 [[package]]
 name = "melior-macro"
 version = "0.5.0"
+source = "git+https://github.com/doug-q/melior?branch=llvm18#54408e8d1dbeaea39bc278ab26856b9b14cc5e59"
 dependencies = [
  "comrak",
  "convert_case 0.6.0",
@@ -1046,6 +1059,7 @@ dependencies = [
 [[package]]
 name = "mlir-sys"
 version = "0.2.0"
+source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#2953175054d4aa258a65af22ab84c084aef4d23d"
 dependencies = [
  "bindgen 0.69.1",
  "cc",
@@ -1055,6 +1069,7 @@ dependencies = [
 [[package]]
 name = "mlir-sys0"
 version = "0.2.0"
+source = "git+https://github.com/doug-q/mlir-sys?branch=llvm18#2953175054d4aa258a65af22ab84c084aef4d23d"
 
 [[package]]
 name = "nom"
@@ -1250,13 +1265,13 @@ dependencies = [
 
 [[package]]
 name = "portgraph"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8be897a76c32073a098999883efd53f5520c188e77192136ce2628ecedf74386"
+checksum = "e79e1dbdf59146cb0941cbab3af7ecfe028c0976d96dc110964d770b88783b3b"
 dependencies = [
  "bitvec",
  "context-iterators",
- "delegate",
+ "delegate 0.11.0",
  "petgraph",
  "serde",
  "thiserror",
@@ -1350,11 +1365,12 @@ dependencies = [
 [[package]]
 name = "quantinuum-hugr"
 version = "0.1.0"
+source = "git+https://github.com/CQCL/hugr.git?rev=d07406c13b03a93014ae08a70bb789b25e0b31eb#d07406c13b03a93014ae08a70bb789b25e0b31eb"
 dependencies = [
  "bitvec",
  "cgmath",
  "context-iterators",
- "delegate",
+ "delegate 0.12.0",
  "derive_more",
  "downcast-rs",
  "enum_dispatch",
@@ -1366,7 +1382,36 @@ dependencies = [
  "petgraph",
  "portgraph",
  "regex",
- "rustversion",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "smol_str",
+ "strum",
+ "strum_macros",
+ "thiserror",
+ "typetag",
+]
+
+[[package]]
+name = "quantinuum-hugr"
+version = "0.1.0"
+source = "git+https://github.com/CQCL-DEV/hugr.git#d07406c13b03a93014ae08a70bb789b25e0b31eb"
+dependencies = [
+ "bitvec",
+ "cgmath",
+ "context-iterators",
+ "delegate 0.12.0",
+ "derive_more",
+ "downcast-rs",
+ "enum_dispatch",
+ "html-escape",
+ "itertools 0.12.0",
+ "lazy_static",
+ "num-rational",
+ "paste",
+ "petgraph",
+ "portgraph",
+ "regex",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -1786,9 +1831,9 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 
 [[package]]
 name = "target-lexicon"
-version = "0.12.12"
+version = "0.12.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14c39fd04924ca3a864207c66fc2cd7d22d7c016007f9ce846cbb9326331930a"
+checksum = "69758bda2e78f098e4ccb393021a0963bb3442eac05f135c30f61b7370bbafae"
 
 [[package]]
 name = "terminal_size"
@@ -1949,7 +1994,7 @@ version = "0.1.0"
 dependencies = [
  "lazy_static",
  "pyo3",
- "quantinuum-hugr",
+ "quantinuum-hugr 0.1.0 (git+https://github.com/CQCL/hugr.git?rev=d07406c13b03a93014ae08a70bb789b25e0b31eb)",
  "rmp-serde",
 ]
 

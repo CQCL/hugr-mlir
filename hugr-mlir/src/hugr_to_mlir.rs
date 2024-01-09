@@ -9,7 +9,10 @@ use std::iter::{empty, zip};
 use std::ops::Deref;
 
 use hugr::HugrView;
-use hugr::{ops::BasicBlock, types::EdgeKind};
+use hugr::{
+    ops::{DataflowBlock, ExitBlock},
+    types::EdgeKind,
+};
 use melior::{
     ir::{Block, Location, Operation, OperationRef, Region, Value},
     Context,
@@ -25,8 +28,6 @@ use types::*;
 
 pub mod value;
 use value::*;
-
-use hugr::ops::dataflow::DataflowOpTrait;
 
 type Scope<'a, 'b> = HashMap<(hugr::Node, hugr::OutgoingPort), Value<'a, 'b>>;
 type ScopeItem<'a, 'b> = <Scope<'a, 'b> as IntoIterator>::Item;
@@ -135,10 +136,10 @@ trait EmitMlir {
 
     fn collect_symbols<'a>(
         &self,
-        context: &'a Context,
-        node: hugr::Node,
+        _context: &'a Context,
+        _node: hugr::Node,
         _map: &mut CollectSymbolMap<'a>,
-    ) -> () {
+    ) {
     }
 }
 
@@ -176,7 +177,7 @@ impl EmitMlir for hugr::ops::OpType {
         context: &'a Context,
         node: hugr::Node,
         map: &mut CollectSymbolMap<'a>,
-    ) -> () {
+    ) {
         use hugr::ops::OpType;
         match self {
             OpType::FuncDecl(ref funcdecl) => funcdecl.collect_symbols(context, node, map),
@@ -273,7 +274,7 @@ impl EmitMlir for hugr::ops::FuncDefn {
         context: &'a Context,
         node: hugr::Node,
         map: &mut CollectSymbolMap<'a>,
-    ) -> () {
+    ) {
         push_symbol(
             map,
             &self.name,
@@ -306,7 +307,7 @@ impl EmitMlir for hugr::ops::FuncDecl {
         context: &'a Context,
         node: hugr::Node,
         map: &mut CollectSymbolMap<'a>,
-    ) -> () {
+    ) {
         push_symbol(
             map,
             &self.name,
@@ -399,7 +400,6 @@ impl EmitMlir for hugr::ops::CFG {
         state: &mut TranslationState<'a, 'b, V>,
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
-        use hugr::ops::controlflow::BasicBlock;
         use hugr::ops::OpType;
         use hugr::types::EdgeKind;
         use hugr::PortIndex;
@@ -412,7 +412,7 @@ impl EmitMlir for hugr::ops::CFG {
             }
             for (dfb_node, block) in node_to_block.iter() {
                 match state.hugr.get_optype(*dfb_node) {
-                    optype @ &OpType::BasicBlock(BasicBlock::DFB { .. }) => state
+                    optype @ &OpType::DataflowBlock(DataflowBlock { .. }) => state
                         .build_dataflow_block_term(
                             *dfb_node,
                             block.deref(),
@@ -441,7 +441,7 @@ impl EmitMlir for hugr::ops::CFG {
                                 ))
                             },
                         )?,
-                    &OpType::BasicBlock(BasicBlock::Exit { ref cfg_outputs }) => {
+                    &OpType::ExitBlock(ExitBlock { ref cfg_outputs }) => {
                         let args = collect_type_row_vec(state.context, cfg_outputs)?
                             .into_iter()
                             .map(|t| block.add_argument(t, data.loc))
@@ -473,8 +473,10 @@ impl EmitMlir for hugr::ops::custom::ExternalOp {
             ExternalOp::Extension(ref e) => e.def().name(),
             ExternalOp::Opaque(ref o) => o.name(),
         };
-        let extensions =
-            extension_set_to_extension_set_attr(state.context, &self.signature().extension_reqs);
+        let extensions = extension_set_to_extension_set_attr(
+            state.context,
+            &self.dataflow_signature().unwrap().extension_reqs,
+        );
         Ok(mlir::hugr::ExtensionOp::new(
             &data.result_types,
             name,
@@ -549,15 +551,13 @@ impl EmitMlir for hugr::ops::Const {
         context: &'a Context,
         node: hugr::Node,
         map: &mut CollectSymbolMap<'a>,
-    ) -> () {
+    ) {
         use hugr::NodeIndex;
         push_symbol(
             map,
             &format!("const_{}", node.index()),
             node,
-            hugr_to_mlir_type(context, self.const_type())
-                .unwrap()
-                .into(),
+            hugr_to_mlir_type(context, self.const_type()).unwrap(),
         )
     }
 }
@@ -958,13 +958,13 @@ fn collect_all_symbols<'a>(
     };
 
     for (name, items) in collected_syms {
-        assert!(items.len() > 0);
+        assert!(!items.is_empty());
         let mut items_vec = items.into_iter().collect_vec();
         if items_vec.len() == 1 {
             let item = items_vec[0];
             r.insert(item.0, mk_item(&name, item));
         } else {
-            items_vec.sort_by(|ref x, ref y| x.0.index().cmp(&y.0.index()));
+            items_vec.sort_by(|x, y| x.0.index().cmp(&y.0.index()));
             for item in items_vec {
                 let n = format!("{}_{}", &name, item.0.index());
                 r.insert(item.0, mk_item(&n, item));
@@ -1032,28 +1032,15 @@ mod test {
 
     #[test]
     fn test_loop_with_conditional() -> Result<()> {
-        // let dr = melior::dialect::DialectRegistry::new();
         let hugr_dh = crate::mlir::hugr::get_hugr_dialect_handle();
-        // hugr_dh.insert_dialect(&dr);
         let ctx = melior::Context::new();
-        println!("0: {}", ctx.registered_dialect_count());
-        println!("1: {}", ctx.loaded_dialect_count());
         hugr_dh.load_dialect(&ctx);
-        // ctx.append_dialect_registry(&dr);
-        println!("2: {}", ctx.registered_dialect_count());
-        println!("3: {}", ctx.loaded_dialect_count());
-        ctx.get_or_load_dialect("hugr");
-        println!("4: {}", ctx.registered_dialect_count());
-        println!("5: {}", ctx.loaded_dialect_count());
 
         let hugr = example_hugrs::loop_with_conditional()?;
         println!("dougrulz0");
         let ul = melior::ir::Location::unknown(&ctx);
-        let i = melior::ir::Identifier::new(&ctx, "d");
-        println!("dougrulz1");
 
         let mut op = super::hugr_to_mlir(ul, &hugr)?;
-        println!("dougrulz2");
         assert!(mlir::hugr_passes::verify_op(&mut op).is_ok());
         insta::assert_snapshot!(op.as_operation().to_string());
         Ok(())

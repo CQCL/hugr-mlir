@@ -348,11 +348,10 @@
       "parent": 0
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "s": "Unit",
@@ -366,11 +365,10 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "body": {
@@ -394,11 +392,10 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "s": "Unit",
@@ -412,7 +409,6 @@
       ]
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "s": "Unit",
@@ -421,11 +417,10 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 22
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "body": {
@@ -444,11 +439,10 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 27
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "s": "Unit",
@@ -457,7 +451,7 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 31
     },
     {

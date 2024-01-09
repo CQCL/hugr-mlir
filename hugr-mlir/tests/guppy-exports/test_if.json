@@ -2,7 +2,7 @@
   "edges": [
     [
       [
-        14,
+        13,
         0
       ],
       [
@@ -12,7 +12,7 @@
     ],
     [
       [
-        14,
+        13,
         0
       ],
       [
@@ -278,7 +278,6 @@
       "parent": 0
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -288,7 +287,7 @@
           "t": "Sum"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [],
       "parent": 15,
       "tuple_sum_rows": [
@@ -297,7 +296,6 @@
       ]
     },
     {
-      "block": "Exit",
       "cfg_outputs": [
         {
           "args": [],
@@ -308,13 +306,13 @@
         }
       ],
       "input_extensions": [],
-      "op": "BasicBlock",
+      "op": "ExitBlock",
       "parent": 15
     },
     {
       "input_extensions": [],
       "op": "Input",
-      "parent": 13,
+      "parent": 14,
       "types": [
         {
           "s": "Unit",
@@ -433,7 +431,7 @@
     {
       "input_extensions": [],
       "op": "Output",
-      "parent": 13,
+      "parent": 14,
       "types": [
         {
           "args": [],
@@ -443,6 +441,29 @@
           "t": "Opaque"
         }
       ]
+    },
+    {
+      "input_extensions": [],
+      "name": "new",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
     },
     {
       "input_extensions": [],
@@ -475,31 +496,8 @@
     },
     {
       "input_extensions": [],
-      "name": "new",
-      "op": "FuncDecl",
-      "parent": 0,
-      "signature": {
-        "body": {
-          "extension_reqs": [],
-          "input": [],
-          "output": [
-            {
-              "args": [],
-              "bound": "A",
-              "extension": "prelude",
-              "id": "qubit",
-              "t": "Opaque"
-            }
-          ]
-        },
-        "params": [],
-        "t": "G"
-      }
-    },
-    {
-      "input_extensions": [],
       "op": "CFG",
-      "parent": 13,
+      "parent": 14,
       "signature": {
         "extension_reqs": [],
         "input": [
@@ -521,11 +519,10 @@
       }
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [],
@@ -610,11 +607,10 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [],
@@ -668,7 +664,6 @@
       ]
     },
     {
-      "block": "DFB",
       "extension_delta": [],
       "input_extensions": [],
       "inputs": [
@@ -680,7 +675,7 @@
           "t": "Opaque"
         }
       ],
-      "op": "BasicBlock",
+      "op": "DataflowBlock",
       "other_outputs": [
         {
           "args": [],

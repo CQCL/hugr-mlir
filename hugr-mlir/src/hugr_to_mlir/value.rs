@@ -16,7 +16,9 @@ pub fn hugr_to_mlir_value<'c>(
     use hugr::values::Value;
     match value {
         Value::Tuple { vs } => {
-            let TypeEnum::Tuple(ref typerow) = typ.as_type_enum() else { Err(anyhow!("not a tuple type"))? };
+            let TypeEnum::Tuple(ref typerow) = typ.as_type_enum() else {
+                Err(anyhow!("not a tuple type"))?
+            };
             Ok(melior::ir::attribute::ArrayAttribute::new(
                 context,
                 zip_eq(typerow.iter(), vs.iter())
@@ -27,8 +29,12 @@ pub fn hugr_to_mlir_value<'c>(
             .into())
         }
         &Value::Sum { tag, ref value } => {
-            let TypeEnum::Sum(ref sum_type) =  typ.as_type_enum() else { Err(anyhow!("not a sum type"))? };
-            let Some(variant_type) = sum_type.get_variant(tag) else { Err(anyhow!("bad tag for sum type"))? };
+            let TypeEnum::Sum(ref sum_type) = typ.as_type_enum() else {
+                Err(anyhow!("not a sum type"))?
+            };
+            let Some(variant_type) = sum_type.get_variant(tag) else {
+                Err(anyhow!("bad tag for sum type"))?
+            };
             Ok(mlir::hugr::SumAttribute::new(
                 hugr_to_mlir_type(context, typ)?,
                 tag as u32,
@@ -36,7 +42,7 @@ pub fn hugr_to_mlir_value<'c>(
             )
             .into())
         }
-        &Value::Extension { ref c } => {
+        Value::Extension { c } => {
             if let Some(i) =
                 c.0.downcast_ref::<hugr::std_extensions::arithmetic::int_types::ConstIntS>()
             {
