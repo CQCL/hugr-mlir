@@ -786,6 +786,12 @@ mlir::OpFoldResult hugr_mlir::ReadVariantOp::fold(FoldAdaptor adaptor) {
       return attr.getValue();
     }
     return mlir::ub::PoisonAttr::get(getContext());
+  } else if (auto tagop = llvm::dyn_cast_if_present<TagOp>(getInput().getDefiningOp())) {
+    if (getTagAttr() == tagop.getTagAttr()) {
+      return tagop.getInput();
+    } else {
+      return mlir::ub::PoisonAttr::get(getContext());
+    }
   }
   return nullptr;
 }
@@ -803,6 +809,8 @@ mlir::OpFoldResult hugr_mlir::ReadTagOp::fold(FoldAdaptor adaptor) {
     return attr.getTagAttr();
   } else if (getInput().getType().numAlts() == 1) {
     return mlir::IntegerAttr::get(mlir::IndexType::get(getContext()), 0);
+  } else if (auto tagop = llvm::dyn_cast_if_present<TagOp>(getInput().getDefiningOp())) {
+    return tagop.getTagAttr();
   }
 
   return nullptr;

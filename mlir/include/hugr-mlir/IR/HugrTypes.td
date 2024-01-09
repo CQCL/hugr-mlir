@@ -5,8 +5,9 @@
 
 include "hugr-mlir/IR/HugrDialect.td"
 include "hugr-mlir/IR/HugrAttrs.td"
+include "mlir/IR/BuiltinTypeInterfaces.td"
 
-def Hugr_ClosureType : Hugr_Type<"Closure","closure"> {
+def Hugr_ClosureType : Hugr_Type<"Closure","closure",[MemRefElementTypeInterface]> {
     let summary = "A Hugr Closure Type";
     let description = [{ TODO }];
 

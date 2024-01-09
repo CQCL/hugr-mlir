@@ -650,11 +650,11 @@ def Hugr_IdentityOp : Hugr_Op<"identity",
     );
 }
 
-def Hugr_AllocClosureOp : Hugr_Op<"alloc_closure", []> {
-  let summary = "Allocate a closure";
-  let arguments = (ins UnitAttr:$null);
-  let results = (outs Hugr_ClosureType:$output);
-}
+// def Hugr_AllocClosureOp : Hugr_Op<"alloc_closure", []> {
+//   let summary = "Allocate a closure";
+//   let arguments = (ins UnitAttr:$null);
+//   let results = (outs Hugr_ClosureType:$output);
+// }
 
 def Hugr_AllocFunctionOp : Hugr_Op<"alloc_function",
   [DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
@@ -670,7 +670,7 @@ def Hugr_WriteClosureOp : Hugr_Op<"write_closure", []> {
   // TODO Write Effect
   let summary = "Write to a closure";
   let arguments = (ins
-      Hugr_ClosureType:$closure,
+      MemRefOf<[Hugr_ClosureType]>:$closure,
       Variadic<HugrTypeInterface>:$inputs // TODO not linear
   );
 }
@@ -679,7 +679,7 @@ def Hugr_ReadClosureOp : Hugr_Op<"read_closure", []> {
   // TODO Read Effect
   let summary = "Write to a closure";
   let arguments = (ins
-      Hugr_ClosureType:$closure
+      MemRefOf<[Hugr_ClosureType]>:$closure
   );
   let results = (outs Variadic<HugrTypeInterface>:$outputs // TODO not linear
   );
@@ -692,7 +692,7 @@ def Hugr_UnpackFunctionOp : Hugr_Op<"unpack_function", [DeclareOpInterfaceMethod
   );
   let results = (outs
       FunctionType:$func,
-      Hugr_ClosureType:$closure
+      MemRefOf<[Hugr_ClosureType]>:$closure
   );
 }
 

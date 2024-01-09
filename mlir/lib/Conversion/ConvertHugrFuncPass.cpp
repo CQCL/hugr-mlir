@@ -7,8 +7,10 @@
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/Func/Transforms/FuncConversions.h"
+#include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/Index/IR/IndexDialect.h"
 #include "mlir/Dialect/Index/IR/IndexOps.h"
+#include "mlir/Dialect/UB/IR/UBOps.h"
 #include "mlir/IR/PatternMatch.h"
 #include "mlir/Transforms/DialectConversion.h"
 #include "mlir/Transforms/RegionUtils.h"
@@ -402,7 +404,8 @@ LogicalResult LowerAllocFunction::matchAndRewrite(
   assert(res_t.size() == 2 && "conversion ensures it");
   auto func = rw.createOrFold<func::ConstantOp>(
       op.getLoc(), res_t.getType(0), op.getFunc().getRef().getLeafReference());
-  auto closure = rw.createOrFold<hugr_mlir::AllocClosureOp>(loc);
+  auto memref_t = MemRefType::get({}, rw.getType<hugr_mlir::ClosureType>());
+  auto closure = rw.createOrFold<memref::AllocOp>(op.getLoc(), memref_t);
   SmallVector args{func, closure};
   rw.replaceOp(op, rw.createOrFold<hugr_mlir::MakeTupleOp>(loc, res_t, args));
   return success();
@@ -419,7 +422,7 @@ LogicalResult HugrCallToCall::matchAndRewrite(
   auto tt = llvm::dyn_cast<TupleType>(v.getType());
   assert(
       tt && tt.size() == 2 && llvm::isa<FunctionType>(tt.getType(0)) &&
-      llvm::isa<hugr_mlir::ClosureType>(tt.getType(1)) &&
+      llvm::isa<MemRefType>(tt.getType(1)) &&
       "conversion not working");
 
   rw.setInsertionPoint(op);
@@ -448,7 +451,8 @@ LogicalResult HugrCallTopLevelToCall::matchAndRewrite(
     return failure();
   }
   rw.setInsertionPoint(op);
-  auto closure = rw.createOrFold<hugr_mlir::AllocClosureOp>(op.getLoc(), true);
+  auto memref_t = MemRefType::get({}, rw.getType<hugr_mlir::ClosureType>());
+  auto closure = rw.createOrFold<ub::PoisonOp>(op.getLoc(), memref_t, rw.getAttr<ub::PoisonAttr>());
   SmallVector<Value> args{closure};
   llvm::copy(adaptor.getInputs(), std::back_inserter(args));
 
@@ -595,7 +599,8 @@ void ConvertHugrFuncPass::runOnOperation() {
       [tc = type_converter.get()](
           hugr_mlir::FunctionType t) -> std::optional<Type> {
         OpBuilder rw(t.getContext());
-        SmallVector<Type> new_arg_tys{rw.getType<hugr_mlir::ClosureType>()};
+        auto memref_t = MemRefType::get({}, rw.getType<hugr_mlir::ClosureType>());
+        SmallVector<Type> new_arg_tys{memref_t};
         llvm::copy(t.getArgumentTypes(), std::back_inserter(new_arg_tys));
         return rw.getType<TupleType>(SmallVector<Type>{
             rw.getFunctionType(new_arg_tys, t.getResultTypes()),
@@ -629,8 +634,8 @@ void ConvertHugrFuncPass::runOnOperation() {
 
   ConversionTarget target(*context);
   target.addLegalDialect<
-      hugr_mlir::HugrDialect, func::FuncDialect, mlir::cf::ControlFlowDialect,
-      mlir::index::IndexDialect>();
+      hugr_mlir::HugrDialect, func::FuncDialect, cf::ControlFlowDialect,
+      index::IndexDialect, memref::MemRefDialect, ub::UBDialect>();
   target.addIllegalOp<
       hugr_mlir::FuncOp, hugr_mlir::CallOp, hugr_mlir::AllocFunctionOp,
       hugr_mlir::SwitchOp>();

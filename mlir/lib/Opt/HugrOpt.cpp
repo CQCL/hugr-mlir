@@ -23,19 +23,22 @@
 void hugr_mlir::registerHugrOptPipelines() {
   mlir::PassPipelineRegistration<>(
       "lower-hugr", "pipeline to lower hugr", [](mlir::OpPassManager& pm) {
-        auto& module_pm = pm.nest<hugr_mlir::ModuleOp>();
+        {
+          auto& module_pm = pm.nest<hugr_mlir::ModuleOp>();
 
-        module_pm.addPass(createPreConvertHugrFuncPass());
+          module_pm.addPass(createPreConvertHugrFuncPass());
 
-        module_pm.addPass(mlir::createCanonicalizerPass());
-        module_pm.addPass(mlir::createSCCPPass());
-        module_pm.addPass(mlir::createCanonicalizerPass());
-        module_pm.addPass(mlir::createCSEPass());
-        module_pm.addPass(mlir::createCanonicalizerPass());
+          module_pm.addPass(mlir::createCanonicalizerPass());
+          module_pm.addPass(mlir::createSCCPPass());
+          module_pm.addPass(mlir::createCanonicalizerPass());
+          module_pm.addPass(mlir::createCSEPass());
+          module_pm.addPass(mlir::createCanonicalizerPass());
 
-        module_pm.addPass(createConvertHugrFuncPass());
+          module_pm.addPass(createConvertHugrFuncPass());
+        }
 
-        // convert funcs
+        pm.addPass(createConvertHugrModulePass());
+        pm.addPass(createConvertHugrPass());
       });
 }
 

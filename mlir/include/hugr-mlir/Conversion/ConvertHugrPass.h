@@ -5,6 +5,7 @@
 
 namespace hugr_mlir {
 #define GEN_PASS_DECL_CONVERTHUGRPASS
+#define GEN_PASS_DECL_CONVERTHUGRMODULEPASS
 #include "hugr-mlir/Conversion/Passes.h.inc"
 }  // namespace hugr_mlir
 

@@ -6,7 +6,9 @@
 #include "mlir/Dialect/ControlFlow/IR/ControlFlowOps.h"
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
+#include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Transforms/DialectConversion.h"
+#include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Transforms/OneToNTypeConversion.h"
 // #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "llvm/ADT/TypeSwitch.h"
@@ -16,10 +18,13 @@
 #include "mlir/Dialect/Index/IR/IndexOps.h"
 #include "mlir/Dialect/SCF/Transforms/Patterns.h"
 #include "mlir/Dialect/UB/IR/UBOps.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+
 #define DEBUG_TYPE "convert-hugr-pass"
 
 namespace hugr_mlir {
 #define GEN_PASS_DEF_CONVERTHUGRPASS
+#define GEN_PASS_DEF_CONVERTHUGRMODULEPASS
 #include "hugr-mlir/Conversion/Passes.h.inc"
 }  // namespace hugr_mlir
 
@@ -32,7 +37,18 @@ struct ConvertHugrPass : hugr_mlir::impl::ConvertHugrPassBase<ConvertHugrPass> {
   void runOnOperation() override;
 
  private:
-  FrozenRewritePatternSet patterns;
+  FrozenRewritePatternSet conversion_patterns;
+  FrozenRewritePatternSet lowering_patterns;
+  std::shared_ptr<TypeConverter> type_converter;
+};
+
+struct ConvertHugrModulePass : hugr_mlir::impl::ConvertHugrModulePassBase<ConvertHugrModulePass> {
+  using ConvertHugrModulePassBase::ConvertHugrModulePassBase;
+  void runOnOperation() override;
+
+ private:
+  FrozenRewritePatternSet conversion_patterns;
+  FrozenRewritePatternSet lowering_patterns;
   std::shared_ptr<TypeConverter> type_converter;
 };
 
@@ -77,19 +93,40 @@ struct ConvertReadVariant
       OneToNPatternRewriter&) const override;
 };
 
-struct ConvertBlockArgs : OneToNConversionPattern {
-  ConvertBlockArgs(
-      TypeConverter& typeConverter, MLIRContext* context,
-      PatternBenefit benefit = 1, ArrayRef<StringRef> generatedNames = {})
-      : OneToNConversionPattern(
-            typeConverter, Pattern::MatchAnyOpTypeTag(), benefit, context,
-            generatedNames) {}
+struct LowerCfg : OpRewritePattern<hugr_mlir::CfgOp> {
+  using OpRewritePattern::OpRewritePattern;
   LogicalResult matchAndRewrite(
-      Operation* op, OneToNPatternRewriter& rewriter,
-      const OneToNTypeMapping& operandMapping,
-      const OneToNTypeMapping& resultMapping,
-      ValueRange convertedOperands) const override;
-  void initialize() { this->setHasBoundedRewriteRecursion(); }
+      hugr_mlir::CfgOp, PatternRewriter&) const override;
+};
+
+struct LowerDfg : OpRewritePattern<hugr_mlir::DfgOp> {
+  using OpRewritePattern::OpRewritePattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::DfgOp, PatternRewriter&) const override;
+};
+
+struct LowerEmptyReadClosure : OpRewritePattern<hugr_mlir::ReadClosureOp> {
+  using OpRewritePattern::OpRewritePattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::ReadClosureOp, PatternRewriter&) const override;
+};
+
+struct LowerEmptyWriteClosure : OpRewritePattern<hugr_mlir::WriteClosureOp> {
+  using OpRewritePattern::OpRewritePattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::WriteClosureOp, PatternRewriter&) const override;
+};
+
+// struct ConvertAllocClosure : OneToNOpConversionPattern<hugr_mlir::AllocClosureOp> {
+//   using OneToNOpConversionPattern::OneToNOpConversionPattern;
+//   LogicalResult matchAndRewrite(
+//       hugr_mlir::AllocClosureOp, OpAdaptor, OneToNPatternRewriter&) const override;
+// };
+
+struct ConvertFuncBlockArgs : OneToNOpConversionPattern<func::FuncOp> {
+  using OneToNOpConversionPattern::OneToNOpConversionPattern;
+  LogicalResult matchAndRewrite(
+      func::FuncOp, OpAdaptor, OneToNPatternRewriter&) const override;
 };
 
 struct ConvertConstant : OneToNOpConversionPattern<hugr_mlir::ConstantOp> {
@@ -178,14 +215,11 @@ mlir::LogicalResult ConvertReadVariant::matchAndRewrite(
   return success();
 }
 
-mlir::LogicalResult ConvertBlockArgs::matchAndRewrite(
-    Operation* op, OneToNPatternRewriter& rw,
-    const OneToNTypeMapping& operandMapping,
-    const OneToNTypeMapping& resultMapping,
-    ValueRange convertedOperands) const {
+mlir::LogicalResult ConvertFuncBlockArgs::matchAndRewrite(
+  func::FuncOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
   auto tc = getTypeConverter<OneToNTypeConverter>();
   if (!tc) {
-    return failure();
+    return rw.notifyMatchFailure(op, "no type converter");
   }
 
   struct WorkItem {
@@ -220,45 +254,31 @@ mlir::LogicalResult ConvertBlockArgs::matchAndRewrite(
     }
   };
   auto mk_work_item = [&tc](Block& b) -> FailureOr<WorkItem> {
-    auto mapping = OneToNTypeMapping(b.getArgumentTypes());
-    if (failed(tc->convertSignatureArgs(b.getArgumentTypes(), mapping))) {
-      return failure();
-    }
-    WorkItem wi(WorkItem(b, std::move(mapping)));
-    if (!wi.allPredsAreBranchOpInterfaces()) {
-      return failure();
-    }
+    if (b.isEntryBlock() || tc->isLegal(b.getArgumentTypes())) { return failure() ; }
+    WorkItem wi(WorkItem(b, OneToNTypeMapping(b.getArgumentTypes())));
+    if (!wi.allPredsAreBranchOpInterfaces()
+        ||  failed(tc->convertSignatureArgs(b.getArgumentTypes(), wi.mapping))) {return failure();}
     return std::move(wi);
   };
   std::vector<WorkItem> worklist;
   for (auto& r : op->getRegions()) {
     for (auto& b : r.getBlocks()) {
-      if (b.isEntryBlock()) {
-        continue;
-      }
-      if (tc->isLegal(b.getArgumentTypes())) {
-        continue;
-      }
       auto mb_wi = mk_work_item(b);
-      if (failed(mb_wi) || !mb_wi->allPredsAreBranchOpInterfaces()) {
+      if (failed(mb_wi)) {
         continue;
       }
       worklist.push_back(std::move(*mb_wi));
     }
   }
   if (worklist.empty()) {
-    return failure();
+    return rw.notifyMatchFailure(op, "no work to do");
   }
 
-  SmallVector<std::tuple<Block*, Block*, SmallVector<Value>>> merges;
+  std::vector<std::tuple<Block*, OneToNTypeMapping>> signature_conversions;
   LLVM_DEBUG(llvm::dbgs() << "ConvertBlockArgs:" << worklist.size() << "\n");
   rw.startRootUpdate(op);
   for (auto const& wi : worklist) {
     assert(wi.mapping.hasNonIdentityConversion() && "must");
-    SmallVector<Type> new_types{wi.mapping.getConvertedTypes()};
-    SmallVector<Location> new_locs;
-    wi.mapping.convertLocations(wi.target.getArguments(), new_locs);
-    auto new_block = rw.createBlock(&wi.target, new_types, new_locs);
 
     for (auto pred : wi.preds) {
       auto [boi, succ_i, succ_ops] =
@@ -280,31 +300,19 @@ mlir::LogicalResult ConvertBlockArgs::matchAndRewrite(
           "non identity");
       rw.startRootUpdate(boi);
       succ_ops.getMutableForwardedOperands().assign(new_forwarded_operands);
-      boi->setSuccessor(new_block, succ_i);
       rw.finalizeRootUpdate(boi);
     }
-    rw.setInsertionPointToStart(new_block);
-    SmallVector<Value> source_args;
-    llvm::transform(
-        wi.target.getArguments(), std::back_inserter(source_args),
-        [&](BlockArgument a) {
-          return tc->materializeSourceConversion(
-              rw, a.getLoc(), a.getType(),
-              wi.mapping.getConvertedValues(
-                  new_block->getArguments(), a.getArgNumber()));
-        });
-    merges.push_back(
-        std::make_tuple(&wi.target, new_block, std::move(source_args)));
+    signature_conversions.emplace_back(&wi.target, wi.mapping);
   }
-  if (merges.size()) {
-    for (auto& [source, dest, values] : merges) {
-      rw.mergeBlocks(source, dest, values);
+  if (signature_conversions.size()) {
+    for (auto& [target, sig] : signature_conversions) {
+      rw.applySignatureConversion(target, sig);
     }
     rw.finalizeRootUpdate(op);
     return success();
   }
   rw.cancelRootUpdate(op);
-  return failure();
+  return rw.notifyMatchFailure(op, "no merges");
 }
 
 LogicalResult ConvertConstant::matchAndRewrite(
@@ -382,61 +390,145 @@ LogicalResult ConvertConstant::matchAndRewrite(
       .Default([](auto) { return failure(); });
 }
 
+mlir::LogicalResult LowerCfg::matchAndRewrite(
+    hugr_mlir::CfgOp op, PatternRewriter& rw) const {
+  Block* parent_block = op->getBlock();
+  Region& body = op.getBody();
+
+  if (body.empty() || !parent_block) {
+    return failure();
+  }
+
+  auto loc = op.getLoc();
+  Block* exit_block;
+  {
+    auto tail_block = rw.splitBlock(parent_block, Block::iterator(op));
+    auto output_tys = op.getOutputs().getTypes();
+    exit_block = rw.createBlock(
+        tail_block, output_tys, SmallVector<Location>(output_tys.size(), loc));
+    rw.mergeBlocks(tail_block, exit_block);
+  }
+
+  SmallVector<hugr_mlir::OutputOp> outputs{
+      op.getBody().getOps<hugr_mlir::OutputOp>()};
+  for (auto output : outputs) {
+    rw.setInsertionPoint(output);
+    rw.replaceOpWithNewOp<cf::BranchOp>(
+        output, exit_block, output.getOutputs());
+  }
+
+  auto body_entry = &body.front();
+  rw.inlineRegionBefore(body, exit_block);
+  rw.setInsertionPointToEnd(parent_block);
+  rw.create<cf::BranchOp>(loc, body_entry, op.getInputs());
+  rw.replaceOp(op, exit_block->getArguments());
+  return success();
+}
+
+mlir::LogicalResult LowerDfg::matchAndRewrite(
+    hugr_mlir::DfgOp op, PatternRewriter& rw) const {
+  hugr_mlir::OutputOp dfg_output;
+  if(op.getBody().empty() || !(dfg_output = llvm::dyn_cast<hugr_mlir::OutputOp>(op.getBody().front().getTerminator()))) { return failure(); }
+  auto entry_block = op->getBlock();
+  auto split_block = rw.splitBlock(entry_block, Block::iterator{op});
+  rw.inlineBlockBefore(&op.getBody().front(), entry_block, entry_block->end(), op.getInputs());
+  rw.inlineBlockBefore(split_block, entry_block, entry_block->end());
+  rw.replaceOp(op, dfg_output.getOutputs());
+  rw.eraseOp(dfg_output);
+  return success();
+}
+
+mlir::LogicalResult LowerEmptyReadClosure::matchAndRewrite(
+    hugr_mlir::ReadClosureOp op, PatternRewriter& rw) const {
+  // TODO this should be done by canonicalisation
+  if(!op.getResults().empty()) { return failure(); }
+  rw.eraseOp(op);
+  return success();
+}
+
+mlir::LogicalResult LowerEmptyWriteClosure::matchAndRewrite(
+    hugr_mlir::WriteClosureOp op, PatternRewriter& rw) const {
+  // TODO this should be done by canonicalisation
+  if(!op.getInputs().empty()) { return failure(); }
+  rw.eraseOp(op);
+  return success();
+}
+
+// mlir::LogicalResult ConvertAllocClosure::matchAndRewrite(
+//     hugr_mlir::AllocClosureOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
+//   auto t = llvm::cast<MemRefType>(getTypeConverter()->convertType(op.getOutput().getType()));
+//   rw.replaceOpWithNewOp<memref::AllocOp>(op, t);
+//   return success();
+// }
+
 mlir::LogicalResult ConvertHugrPass::initialize(MLIRContext* context) {
   type_converter = hugr_mlir::createTypeConverter();
-  RewritePatternSet ps(context);
+  {
+    RewritePatternSet ps(context);
 
-  // ps.add<ConvertHugrFuncToFuncConversionPattern>(*type_converter, context);
-  ps.add<
-      ConvertConstant, ConvertMakeTuple, ConvertUnpackTuple, ConvertTag,
-      ConvertReadTag, ConvertReadVariant>(*type_converter, context);
-  ps.add<ConvertBlockArgs>(*type_converter, context);
-  populateFuncTypeConversionPatterns(*type_converter, ps);
-  scf::populateSCFStructuralOneToNTypeConversions(*type_converter, ps);
+    // ps.add<ConvertHugrFuncToFuncConversionPattern>(*type_converter, context);
+    ps.add<
+        ConvertConstant, ConvertMakeTuple, ConvertUnpackTuple, ConvertTag,
+        ConvertReadTag, ConvertReadVariant>(*type_converter, context);
+    ps.add<ConvertFuncBlockArgs>(*type_converter, context);
+    populateFuncTypeConversionPatterns(*type_converter, ps);
+    scf::populateSCFStructuralOneToNTypeConversions(*type_converter, ps);
 
-  patterns =
-      FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+    conversion_patterns =
+        FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+  }
+  {
+    RewritePatternSet ps(context);
+    // TODO lower ConditionalOp and TailLoopOp here
+    ps.add<LowerCfg,LowerDfg,LowerEmptyReadClosure,LowerEmptyWriteClosure>(context);
+    lowering_patterns = FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+  }
   return success();
 };
+
 
 void ConvertHugrPass::runOnOperation() {
   auto op = getOperation();
   auto context = &getContext();
-  // ConversionTarget target(*context);
 
-  // target.addLegalDialect<cf::ControlFlowDialect,func::FuncDialect,arith::ArithDialect,scf::SCFDialect>();
-  // target.addIllegalOp<hugr_mlir::FuncOp,hugr_mlir::CfgOp>();
-
-  // target.addLegalOp<UnrealizedConversionCastOp>();
-  // target.addDynamicallyLegalOp<func::FuncOp>([&](func::FuncOp op) {
-  //     return type_converter->isSignatureLegal(op.getFunctionType());
-  // });
-  // target.addDynamicallyLegalOp<hugr_mlir::OutputOp>([](hugr_mlir::OutputOp
-  // op) {
-  //     auto parent = op->getParentOp();
-  //     if(!parent) { return true; }
-  //     if(llvm::isa<func::FuncOp>(parent)) {
-  //         return false;
-  //     }
-  //     return true;
-  // });
+  {
+    GreedyRewriteConfig cfg;
+    cfg.useTopDownTraversal = true;
+    if(failed(applyPatternsAndFoldGreedily(op, lowering_patterns, cfg))) {
+      emitError(op->getLoc(), "LowerHugrPass: Failed to apply lowering patterns");
+      return signalPassFailure();
+    }
+  }
 
   if (failed(applyPartialOneToNConversion(
-          op, static_cast<OneToNTypeConverter&>(*type_converter), patterns))) {
+          op, static_cast<OneToNTypeConverter&>(*type_converter), conversion_patterns))) {
     emitError(
         op->getLoc(),
         "ConvertHugrPass: failure to applyPartialOneToNConversion");
     return signalPassFailure();
   }
 
-  // GreedyRewriteConfig cfg;
-  // cfg.useTopDownTraversal = true;
-  // bool changed = false;
-  // if(failed(applyPatternsAndFoldGreedily(op, patterns, cfg, &changed))) {
-  //     emitError(op->getLoc(), "LowerHugrPass: Failed to apply patterns");
-  //     return signalPassFailure();
-  // }
-  // if(!changed) {
-  //     markAllAnalysesPreserved();
-  // }
+
+
+  if(hugrVerify) {
+    ConversionTarget target(*context);
+    target.addIllegalDialect<hugr_mlir::HugrDialect>();
+    target.addLegalOp<hugr_mlir::ExtensionOp>();
+    if(failed(applyPartialConversion(op, target, {}))) {
+      emitError(op->getLoc(), "ConvertHugrPass: Failed to eliminate all non extension hgur ops");
+      return signalPassFailure();
+    }
+  }
+}
+
+void ConvertHugrModulePass::runOnOperation() {
+  IRRewriter rw(&getContext());
+
+  SmallVector<hugr_mlir::ModuleOp> worklist{getOperation().getOps<hugr_mlir::ModuleOp>()};
+  for(auto hm: worklist) {
+    if(!hm.getBody().empty()) {
+      rw.inlineBlockBefore(&hm.getBody().front(), getOperation().getBody(), getOperation().getBody()->end());
+    }
+    rw.eraseOp(hm);
+  }
 }

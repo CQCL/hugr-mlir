@@ -43,11 +43,6 @@ struct LowerHugrFuncToFunc : OpRewritePattern<hugr_mlir::FuncOp> {
       hugr_mlir::FuncOp, PatternRewriter&) const override;
 };
 
-struct LowerCfg : OpRewritePattern<hugr_mlir::CfgOp> {
-  using OpRewritePattern::OpRewritePattern;
-  LogicalResult matchAndRewrite(
-      hugr_mlir::CfgOp, PatternRewriter&) const override;
-};
 
 struct LowerOutput : OpRewritePattern<hugr_mlir::OutputOp> {
   using OpRewritePattern::OpRewritePattern;
@@ -111,40 +106,6 @@ mlir::LogicalResult LowerHugrFuncToFunc::matchAndRewrite(
   return success();
 }
 
-mlir::LogicalResult LowerCfg::matchAndRewrite(
-    hugr_mlir::CfgOp op, PatternRewriter& rw) const {
-  Block* parent_block = op->getBlock();
-  Region& body = op.getBody();
-
-  if (body.empty() || !parent_block) {
-    return failure();
-  }
-
-  auto loc = op.getLoc();
-  Block* exit_block;
-  {
-    auto tail_block = rw.splitBlock(parent_block, Block::iterator(op));
-    auto output_tys = op.getOutputs().getTypes();
-    exit_block = rw.createBlock(
-        tail_block, output_tys, SmallVector<Location>(output_tys.size(), loc));
-    rw.mergeBlocks(tail_block, exit_block);
-  }
-
-  SmallVector<hugr_mlir::OutputOp> outputs{
-      op.getBody().getOps<hugr_mlir::OutputOp>()};
-  for (auto output : outputs) {
-    rw.setInsertionPoint(output);
-    rw.replaceOpWithNewOp<cf::BranchOp>(
-        output, exit_block, output.getOutputs());
-  }
-
-  auto body_entry = &body.front();
-  rw.inlineRegionBefore(body, exit_block);
-  rw.setInsertionPointToEnd(parent_block);
-  rw.create<cf::BranchOp>(loc, body_entry, op.getInputs());
-  rw.replaceOp(op, exit_block->getArguments());
-  return success();
-}
 
 mlir::LogicalResult LowerOutput::matchAndRewrite(
     hugr_mlir::OutputOp op, PatternRewriter& rw) const {
@@ -175,11 +136,11 @@ mlir::LogicalResult LowerCall::matchAndRewrite(
 }
 
 mlir::LogicalResult LowerHugrPass::initialize(MLIRContext* context) {
-  RewritePatternSet ps(context);
-  ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerCall>(context);
+  // RewritePatternSet ps(context);
+  // ps.add<LowerCfg, LowerHugrFuncToFunc, LowerOutput, LowerCall>(context);
 
-  patterns =
-      FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
+  // patterns =
+  //     FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
   return success();
 }
 
