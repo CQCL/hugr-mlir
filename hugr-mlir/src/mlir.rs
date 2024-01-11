@@ -121,6 +121,10 @@ pub mod hugr {
         unsafe { ffi::mlirAttributeIsHugrSumAttr(x.to_raw()) }
     }
 
+    pub fn is_tuple_attr(x: melior::ir::Attribute<'_>) -> bool {
+        unsafe { ffi::mlirAttributeIsHugrTupleAttr(x.to_raw()) }
+    }
+
     pub fn is_opaque_type(x: melior::ir::Type<'_>) -> bool {
         unsafe { ffi::mlirTypeIsAHugrOpaqueType(x.to_raw()) }
     }
@@ -262,6 +266,15 @@ pub mod hugr {
     impl<'c> SumAttribute<'c> {
         pub fn new(typ: melior::ir::Type<'c>, tag: u32, value: melior::ir::Attribute<'c>) -> Self {
             unsafe { Self::from_raw(ffi::mlirHugrSumAttrGet(typ.to_raw(), tag, value.to_raw())) }
+        }
+    }
+
+    declare_attribute!(TupleAttribute, is_tuple_attr, "Tuple Attribute");
+
+    impl<'c> TupleAttribute<'c> {
+        pub fn new(context: &'c melior::Context, attrs: impl IntoIterator<Item=melior::ir::Attribute<'c>>) -> Self {
+            let raw_attrs = attrs.into_iter().map(|x| x.to_raw()).collect_vec();
+            unsafe { Self::from_raw(ffi::mlirHugrTupleAttrGet(context.to_raw(), raw_attrs.len() as isize, raw_attrs.as_ptr())) }
         }
     }
 

@@ -1,0 +1,16 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_assign.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_assign.json
+---
+module {
+  func.func private @test(%arg0: memref<!hugr.closure>, %arg1: !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
+    cf.br ^bb1(%arg1 : !hugr<opaque "qubit"["prelude"] [Linear]>)
+  ^bb1(%0: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb0
+    cf.br ^bb2(%0 : !hugr<opaque "qubit"["prelude"] [Linear]>)
+  ^bb2(%1: !hugr<opaque "qubit"["prelude"] [Linear]>):  // pred: ^bb1
+    return %1 : !hugr<opaque "qubit"["prelude"] [Linear]>
+  }
+}
+

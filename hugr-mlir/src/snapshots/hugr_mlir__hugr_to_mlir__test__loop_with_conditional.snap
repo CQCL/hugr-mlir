@@ -4,45 +4,45 @@ expression: op.as_operation().to_string()
 ---
 module {
   hugr.module {
-    func @main["prelude"](%arg0: !hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
-      %0 = dfg input extensions [] %arg0 : (!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
-      ^bb0(%arg1: !hugr<opaque "usize"["prelude"]>):
-        %1 = lift ["prelude"] %arg1 : (!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]>
-        %2 = tailloop !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>(%1 : !hugr<opaque "usize"["prelude"]>) -> (!hugr<opaque "usize"["prelude"]>) {
-        ^bb0(%arg2: !hugr<opaque "usize"["prelude"]>):
-          %3 = dfg input extensions [] %arg2 : (!hugr<opaque "usize"["prelude"]>) -> !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> {
-          ^bb0(%arg3: !hugr<opaque "usize"["prelude"]>):
-            const @const_8 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<1, []> : !hugr.sum<tuple<>, tuple<>>
+    func @main["prelude"](%arg0: index) -> index {
+      %0 = dfg input extensions [] %arg0 : (index) -> index {
+      ^bb0(%arg1: index):
+        %1 = lift ["prelude"] %arg1 : (index) -> index
+        %2 = tailloop !hugr.sum<tuple<index>, tuple<index>>(%1 : index) -> (index) {
+        ^bb0(%arg2: index):
+          %3 = dfg input extensions [] %arg2 : (index) -> !hugr.sum<tuple<index>, tuple<index>> {
+          ^bb0(%arg3: index):
+            const @const_8 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<1, #hugr.tuple : tuple<>> : !hugr.sum<tuple<>, tuple<>>
             %4 = load_constant @const_8 : !hugr.sum<tuple<>, tuple<>>
             %5 = lift ["prelude"] %4 : (!hugr.sum<tuple<>, tuple<>>) -> !hugr.sum<tuple<>, tuple<>>
-            %6 = conditional(%5, %arg3 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "usize"["prelude"]>) -> !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> {
-            ^bb0(%arg4: !hugr<opaque "usize"["prelude"]>):
-              %7 = dfg input extensions [] %arg4 : (!hugr<opaque "usize"["prelude"]>) -> !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> {
-              ^bb0(%arg5: !hugr<opaque "usize"["prelude"]>):
-                %8 = make_tuple(%arg5 : !hugr<opaque "usize"["prelude"]>)
-                %9 = tag 0 %8 : tuple<!hugr<opaque "usize"["prelude"]>> -> <tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
-                output %9 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+            %6 = conditional(%5, %arg3 : !hugr.sum<tuple<>, tuple<>>, index) -> !hugr.sum<tuple<index>, tuple<index>> {
+            ^bb0(%arg4: index):
+              %7 = dfg input extensions [] %arg4 : (index) -> !hugr.sum<tuple<index>, tuple<index>> {
+              ^bb0(%arg5: index):
+                %8 = make_tuple(%arg5 : index)
+                %9 = tag 0 %8 : tuple<index> -> <tuple<index>, tuple<index>>
+                output %9 : !hugr.sum<tuple<index>, tuple<index>>
               }
-              output %7 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+              output %7 : !hugr.sum<tuple<index>, tuple<index>>
             }, {
-            ^bb0(%arg4: !hugr<opaque "usize"["prelude"]>):
-              %7 = dfg input extensions [] %arg4 : (!hugr<opaque "usize"["prelude"]>) -> !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>> {
-              ^bb0(%arg5: !hugr<opaque "usize"["prelude"]>):
-                const @const_20 : !hugr<opaque "usize"["prelude"]> = 2 : index
-                %8 = load_constant @const_20 : !hugr<opaque "usize"["prelude"]>
-                %9 = make_tuple(%8 : !hugr<opaque "usize"["prelude"]>)
-                %10 = tag 1 %9 : tuple<!hugr<opaque "usize"["prelude"]>> -> <tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
-                output %10 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+            ^bb0(%arg4: index):
+              %7 = dfg input extensions [] %arg4 : (index) -> !hugr.sum<tuple<index>, tuple<index>> {
+              ^bb0(%arg5: index):
+                const @const_20 : index = 2 : index
+                %8 = load_constant @const_20 : index
+                %9 = make_tuple(%8 : index)
+                %10 = tag 1 %9 : tuple<index> -> <tuple<index>, tuple<index>>
+                output %10 : !hugr.sum<tuple<index>, tuple<index>>
               }
-              output %7 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+              output %7 : !hugr.sum<tuple<index>, tuple<index>>
             }
-            output %6 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+            output %6 : !hugr.sum<tuple<index>, tuple<index>>
           }
-          output %3 : !hugr.sum<tuple<!hugr<opaque "usize"["prelude"]>>, tuple<!hugr<opaque "usize"["prelude"]>>>
+          output %3 : !hugr.sum<tuple<index>, tuple<index>>
         }
-        output %2 : !hugr<opaque "usize"["prelude"]>
+        output %2 : index
       }
-      output %0 : !hugr<opaque "usize"["prelude"]>
+      output %0 : index
     }
   }
 }

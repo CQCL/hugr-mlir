@@ -33,11 +33,9 @@ void hugr_mlir::registerHugrOptPipelines() {
           module_pm.addPass(mlir::createCanonicalizerPass());
           module_pm.addPass(mlir::createCSEPass());
           module_pm.addPass(mlir::createCanonicalizerPass());
-
-          module_pm.addPass(createConvertHugrFuncPass());
         }
 
-        pm.addPass(createConvertHugrModulePass());
+        pm.addPass(createConvertHugrFuncPass());
         pm.addPass(createConvertHugrPass());
       });
 }

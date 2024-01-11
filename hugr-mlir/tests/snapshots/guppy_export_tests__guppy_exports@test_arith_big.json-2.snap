@@ -1,0 +1,274 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_arith_big.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_arith_big.json
+---
+module {
+  func.func private @arith(%arg0: memref<!hugr.closure>, %arg1: i6, %arg2: f64, %arg3: i6) -> index {
+    %0 = ub.poison : i6
+    %1 = ub.poison : f64
+    %idx1 = index.constant 1
+    %idx0 = index.constant 0
+    %2 = hugr.constant #hugr.tuple<> : tuple<>
+    cf.br ^bb1(%arg1, %arg2, %arg3 : i6, f64, i6)
+  ^bb1(%3: i6, %4: f64, %5: i6):  // pred: ^bb0
+    %6 = hugr.ext_op []"convert_s" %3 : (i6) -> f64
+    %7 = hugr.ext_op []"fdiv" %6, %4 : (f64, f64) -> f64
+    %8 = hugr.ext_op []"ffloor" %7 : (f64) -> f64
+    hugr.const @const_32 : i6 = 3 : i6
+    %9 = hugr.load_constant @const_32 : i6
+    %10 = hugr.ext_op []"imul" %9, %5 : (i6, i6) -> i6
+    %11 = hugr.ext_op []"convert_s" %10 : (i6) -> f64
+    %12 = hugr.ext_op []"fadd" %8, %11 : (f64, f64) -> f64
+    hugr.const @const_37 : i6 = 8 : i6
+    %13 = hugr.load_constant @const_37 : i6
+    %14 = hugr.ext_op []"ineg" %13 : (i6) -> i6
+    %15 = hugr.ext_op []"convert_s" %14 : (i6) -> f64
+    %16 = hugr.ext_op []"fle" %12, %15 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+    %17 = hugr.read_tag %16 : <tuple<>, tuple<>>
+    %18 = scf.index_switch %17 -> index 
+    case 1 {
+      %82 = hugr.read_variant 1 %16 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %17 : index
+    }
+    default {
+      %82 = hugr.read_variant 0 %16 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %17 : index
+    }
+    %19 = index.castu %18 : index to i32
+    cf.switch %19 : i32, [
+      default: ^bb2(%12, %3, %4 : f64, i6, f64),
+      1: ^bb3(%12, %3, %4 : f64, i6, f64)
+    ]
+  ^bb2(%20: f64, %21: i6, %22: f64):  // pred: ^bb1
+    hugr.const @const_43 : i6 = 5 : i6
+    %23 = hugr.load_constant @const_43 : i6
+    %24 = hugr.ext_op []"convert_s" %23 : (i6) -> f64
+    %25 = hugr.ext_op []"fgt" %20, %24 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+    %26 = hugr.make_tuple(%20, %21, %22 : f64, i6, f64)
+    %27 = hugr.conditional(%25, %2, %26 : !hugr.sum<tuple<>, tuple<>>, tuple<>, tuple<f64, i6, f64>) -> !hugr.sum<tuple<>, tuple<f64, i6, f64>> {
+    ^bb0(%arg4: tuple<>, %arg5: tuple<f64, i6, f64>):
+      %82 = scf.index_switch %idx0 -> !hugr.sum<tuple<>, tuple<f64, i6, f64>> 
+      case 1 {
+        %83 = hugr.make_tuple(%1, %0, %1 : f64, i6, f64)
+        %84 = hugr.tag 1 %83 : tuple<f64, i6, f64> -> <tuple<>, tuple<f64, i6, f64>>
+        scf.yield %84 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+      }
+      default {
+        %83 = hugr.constant #hugr.tuple<> : tuple<>
+        %84 = hugr.constant #hugr.sum<0, #hugr.tuple<> : tuple<>> : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+        scf.yield %84 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+      }
+      output %82 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+    }, {
+    ^bb0(%arg4: tuple<>, %arg5: tuple<f64, i6, f64>):
+      %82:3 = unpack_tuple %arg5 : tuple<f64, i6, f64>
+      %83 = scf.index_switch %idx1 -> !hugr.sum<tuple<>, tuple<f64, i6, f64>> 
+      case 1 {
+        %84 = hugr.make_tuple(%82#0, %82#1, %82#2 : f64, i6, f64)
+        %85 = hugr.tag 1 %84 : tuple<f64, i6, f64> -> <tuple<>, tuple<f64, i6, f64>>
+        scf.yield %85 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+      }
+      default {
+        %84 = hugr.constant #hugr.tuple<> : tuple<>
+        %85 = hugr.constant #hugr.sum<0, #hugr.tuple<> : tuple<>> : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+        scf.yield %85 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+      }
+      output %83 : !hugr.sum<tuple<>, tuple<f64, i6, f64>>
+    }
+    %28 = hugr.read_tag %27 : <tuple<>, tuple<f64, i6, f64>>
+    %29 = ub.poison : f64
+    %30 = ub.poison : i6
+    %31 = ub.poison : f64
+    %32:4 = scf.index_switch %28 -> index, f64, i6, f64 
+    case 1 {
+      %82 = hugr.read_variant 1 %27 : <tuple<>, tuple<f64, i6, f64>>
+      %83:3 = hugr.unpack_tuple %82 : tuple<f64, i6, f64>
+      scf.yield %28, %83#0, %83#1, %83#2 : index, f64, i6, f64
+    }
+    default {
+      %82 = hugr.read_variant 0 %27 : <tuple<>, tuple<f64, i6, f64>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %28, %29, %30, %31 : index, f64, i6, f64
+    }
+    %33 = index.castu %32#0 : index to i32
+    %34 = hugr.read_tag %27 : <tuple<>, tuple<f64, i6, f64>>
+    %35 = ub.poison : f64
+    %36 = ub.poison : i6
+    %37 = ub.poison : f64
+    %38:4 = scf.index_switch %34 -> index, f64, i6, f64 
+    case 1 {
+      %82 = hugr.read_variant 1 %27 : <tuple<>, tuple<f64, i6, f64>>
+      %83:3 = hugr.unpack_tuple %82 : tuple<f64, i6, f64>
+      scf.yield %34, %83#0, %83#1, %83#2 : index, f64, i6, f64
+    }
+    default {
+      %82 = hugr.read_variant 0 %27 : <tuple<>, tuple<f64, i6, f64>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %34, %35, %36, %37 : index, f64, i6, f64
+    }
+    cf.switch %33 : i32, [
+      default: ^bb4,
+      1: ^bb3(%38#1, %38#2, %38#3 : f64, i6, f64)
+    ]
+  ^bb3(%39: f64, %40: i6, %41: f64):  // 2 preds: ^bb1, ^bb2
+    %42 = hugr.ext_op []"convert_s" %40 : (i6) -> f64
+    %43 = hugr.ext_op []"fmul" %42, %41 : (f64, f64) -> f64
+    hugr.const @const_57 : i6 = 0 : i6
+    %44 = hugr.load_constant @const_57 : i6
+    %45 = hugr.ext_op []"convert_s" %44 : (i6) -> f64
+    %46 = hugr.ext_op []"feq" %43, %45 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+    %47 = hugr.make_tuple(%39, %40 : f64, i6)
+    %48 = hugr.conditional(%46, %47, %2 : !hugr.sum<tuple<>, tuple<>>, tuple<f64, i6>, tuple<>) -> !hugr.sum<tuple<f64, i6>, tuple<>> {
+    ^bb0(%arg4: tuple<f64, i6>, %arg5: tuple<>):
+      %82:2 = unpack_tuple %arg4 : tuple<f64, i6>
+      %83 = scf.index_switch %idx0 -> !hugr.sum<tuple<f64, i6>, tuple<>> 
+      case 1 {
+        %84 = hugr.constant #hugr.tuple<> : tuple<>
+        %85 = hugr.constant #hugr.sum<1, #hugr.tuple<> : tuple<>> : !hugr.sum<tuple<f64, i6>, tuple<>>
+        scf.yield %85 : !hugr.sum<tuple<f64, i6>, tuple<>>
+      }
+      default {
+        %84 = hugr.make_tuple(%82#0, %82#1 : f64, i6)
+        %85 = hugr.tag 0 %84 : tuple<f64, i6> -> <tuple<f64, i6>, tuple<>>
+        scf.yield %85 : !hugr.sum<tuple<f64, i6>, tuple<>>
+      }
+      output %83 : !hugr.sum<tuple<f64, i6>, tuple<>>
+    }, {
+    ^bb0(%arg4: tuple<f64, i6>, %arg5: tuple<>):
+      %82 = scf.index_switch %idx1 -> !hugr.sum<tuple<f64, i6>, tuple<>> 
+      case 1 {
+        %83 = hugr.constant #hugr.tuple<> : tuple<>
+        %84 = hugr.constant #hugr.sum<1, #hugr.tuple<> : tuple<>> : !hugr.sum<tuple<f64, i6>, tuple<>>
+        scf.yield %84 : !hugr.sum<tuple<f64, i6>, tuple<>>
+      }
+      default {
+        %83 = hugr.make_tuple(%1, %0 : f64, i6)
+        %84 = hugr.tag 0 %83 : tuple<f64, i6> -> <tuple<f64, i6>, tuple<>>
+        scf.yield %84 : !hugr.sum<tuple<f64, i6>, tuple<>>
+      }
+      output %82 : !hugr.sum<tuple<f64, i6>, tuple<>>
+    }
+    %49 = hugr.read_tag %48 : <tuple<f64, i6>, tuple<>>
+    %50 = ub.poison : f64
+    %51 = ub.poison : i6
+    %52:3 = scf.index_switch %49 -> index, f64, i6 
+    case 1 {
+      %82 = hugr.read_variant 1 %48 : <tuple<f64, i6>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %49, %50, %51 : index, f64, i6
+    }
+    default {
+      %82 = hugr.read_variant 0 %48 : <tuple<f64, i6>, tuple<>>
+      %83:2 = hugr.unpack_tuple %82 : tuple<f64, i6>
+      scf.yield %49, %83#0, %83#1 : index, f64, i6
+    }
+    %53 = index.castu %52#0 : index to i32
+    %54 = hugr.read_tag %48 : <tuple<f64, i6>, tuple<>>
+    %55 = ub.poison : f64
+    %56 = ub.poison : i6
+    %57:3 = scf.index_switch %54 -> index, f64, i6 
+    case 1 {
+      %82 = hugr.read_variant 1 %48 : <tuple<f64, i6>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %54, %55, %56 : index, f64, i6
+    }
+    default {
+      %82 = hugr.read_variant 0 %48 : <tuple<f64, i6>, tuple<>>
+      %83:2 = hugr.unpack_tuple %82 : tuple<f64, i6>
+      scf.yield %54, %83#0, %83#1 : index, f64, i6
+    }
+    cf.switch %53 : i32, [
+      default: ^bb5(%57#1, %57#2 : f64, i6),
+      1: ^bb6
+    ]
+  ^bb4:  // 2 preds: ^bb2, ^bb5
+    hugr.const @const_69 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<1, []> : !hugr.sum<tuple<>, tuple<>>
+    %58 = hugr.load_constant @const_69 : !hugr.sum<tuple<>, tuple<>>
+    %59 = hugr.read_tag %58 : <tuple<>, tuple<>>
+    %60 = scf.index_switch %59 -> index 
+    case 1 {
+      %82 = hugr.read_variant 1 %58 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %59 : index
+    }
+    default {
+      %82 = hugr.read_variant 0 %58 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %59 : index
+    }
+    %61 = scf.index_switch %60 -> index 
+    case 1 {
+      scf.yield %60 : index
+    }
+    default {
+      scf.yield %60 : index
+    }
+    cf.br ^bb7(%61 : index)
+  ^bb5(%62: f64, %63: i6):  // pred: ^bb3
+    hugr.const @const_74 : i6 = 3 : i6
+    %64 = hugr.load_constant @const_74 : i6
+    %65 = hugr.ext_op []"convert_s" %64 : (i6) -> f64
+    %66 = hugr.ext_op []"fdiv" %62, %65 : (f64, f64) -> f64
+    %67 = hugr.ext_op []"ffloor" %66 : (f64) -> f64
+    %68 = hugr.ext_op []"fmul" %67, %65 : (f64, f64) -> f64
+    %69 = hugr.ext_op []"fsub" %62, %68 : (f64, f64) -> f64
+    %70 = hugr.ext_op []"convert_s" %63 : (i6) -> f64
+    %71 = hugr.ext_op []"flt" %69, %70 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+    %72 = hugr.read_tag %71 : <tuple<>, tuple<>>
+    %73 = scf.index_switch %72 -> index 
+    case 1 {
+      %82 = hugr.read_variant 1 %71 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %72 : index
+    }
+    default {
+      %82 = hugr.read_variant 0 %71 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %72 : index
+    }
+    %74 = index.castu %73 : index to i32
+    cf.switch %74 : i32, [
+      default: ^bb4,
+      1: ^bb6
+    ]
+  ^bb6:  // 2 preds: ^bb3, ^bb5
+    hugr.const @const_84 : !hugr.sum<tuple<>, tuple<>> = #hugr.sum<0, []> : !hugr.sum<tuple<>, tuple<>>
+    %75 = hugr.load_constant @const_84 : !hugr.sum<tuple<>, tuple<>>
+    %76 = hugr.read_tag %75 : <tuple<>, tuple<>>
+    %77 = scf.index_switch %76 -> index 
+    case 1 {
+      %82 = hugr.read_variant 1 %75 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %76 : index
+    }
+    default {
+      %82 = hugr.read_variant 0 %75 : <tuple<>, tuple<>>
+      hugr.unpack_tuple %82 : tuple<>
+      scf.yield %76 : index
+    }
+    %78 = scf.index_switch %77 -> index 
+    case 1 {
+      scf.yield %77 : index
+    }
+    default {
+      scf.yield %77 : index
+    }
+    cf.br ^bb7(%78 : index)
+  ^bb7(%79: index):  // 2 preds: ^bb4, ^bb6
+    %80 = scf.index_switch %79 -> index 
+    case 1 {
+      scf.yield %79 : index
+    }
+    default {
+      scf.yield %79 : index
+    }
+    cf.br ^bb8(%80 : index)
+  ^bb8(%81: index):  // pred: ^bb7
+    return %81 : index
+  }
+}
+

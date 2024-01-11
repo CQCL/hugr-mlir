@@ -57,6 +57,11 @@ MLIR_CAPI_EXPORTED bool mlirAttributeIsHugrSumAttr(MlirAttribute);
 MLIR_CAPI_EXPORTED MlirAttribute
 mlirHugrSumAttrGet(MlirType type, uint32_t tag, MlirAttribute value);
 
+MLIR_CAPI_EXPORTED bool mlirAttributeIsHugrTupleAttr(MlirAttribute);
+
+MLIR_CAPI_EXPORTED MlirAttribute
+mlirHugrTupleAttrGet(MlirContext type, intptr_t n, MlirAttribute const* value);
+
 #ifdef __cplusplus
 }
 #endif

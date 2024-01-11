@@ -29,15 +29,12 @@ static hugr_mlir::ModuleOp getOwningModule(mlir::Operation* op) {
     if (auto r = llvm::dyn_cast<hugr_mlir::ModuleOp>(op)) {
       return r;
     }
-    if (op->hasTrait<mlir::OpTrait::IsIsolatedFromAbove>()) {
-      return nullptr;
-    }
     op = op->getParentOp();
   }
 }
 
 static bool isTopLevelFunc(hugr_mlir::FuncOp op) {
-  return llvm::isa_and_present<hugr_mlir::ModuleOp>(op);
+  return llvm::isa_and_present<hugr_mlir::ModuleOp>(op->getParentOp());
 }
 
 namespace {
@@ -48,7 +45,7 @@ struct PreConvertHugrFuncPass
     : hugr_mlir::impl::PreConvertHugrFuncPassBase<PreConvertHugrFuncPass> {
   using PreConvertHugrFuncPassBase::PreConvertHugrFuncPassBase;
   using FuncClosureMap_t =
-      llvm::DenseMap<StringAttr, TypedValue<hugr_mlir::FunctionType>>;
+      llvm::DenseMap<StringAttr, hugr_mlir::AllocFunctionOp>;
   // LogicalResult initialize(MLIRContext*) override;
   void runOnOperation() override;
 };
@@ -153,6 +150,12 @@ struct LowerAllocFunction : OpConversionPattern<hugr_mlir::AllocFunctionOp> {
       ConversionPatternRewriter&) const override;
 };
 
+struct ConstToTopLevel : OpConversionPattern<hugr_mlir::ConstOp> {
+  using OpConversionPattern::OpConversionPattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::ConstOp, OpAdaptor, ConversionPatternRewriter&) const override;
+};
+
 struct CallIndirectOpSignatureConversion
     : public OpConversionPattern<func::CallIndirectOp> {
   using OpConversionPattern::OpConversionPattern;
@@ -187,7 +190,7 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
 
   auto loc = op.getLoc();
   auto pred = op.getPredicate();
-  auto pred_ty = llvm::cast<hugr_mlir::SumType>(pred.getType());
+  auto pred_ty = pred.getType();
 
   SmallVector<int32_t> case_values;
   for (auto i = 0; i < pred_ty.numAlts(); ++i) {
@@ -204,7 +207,7 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
   for (auto [i, t] : llvm::enumerate(
            llvm::cast<hugr_mlir::SumType>(pred.getType()).getTypes())) {
     auto tt = llvm::cast<TupleType>(t);
-    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, tt, pred, i);
+    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, pred, i);
     auto& case_ops = case_operands.emplace_back();
     rw.createOrFold<hugr_mlir::UnpackTupleOp>(case_ops, loc, tt.getTypes(), v);
     llvm::copy(op.getOtherInputs(), std::back_inserter(case_ops));
@@ -243,7 +246,7 @@ LogicalResult ClosureiseConstantOp::matchAndRewrite(
     hugr_mlir::ConstantOp op, OpAdaptor adaptor,
     ConversionPatternRewriter& rw) const {
   auto a = llvm::dyn_cast<hugr_mlir::StaticEdgeAttr>(op.getValue());
-  if (!a || llvm::isa<hugr_mlir::FunctionType>(a.getType())) {
+  if (!a || !llvm::isa<hugr_mlir::FunctionType>(a.getType())) {
     return failure();
   }
   auto v = func_closure_map.lookup(a.getRef().getLeafReference());
@@ -259,15 +262,19 @@ LogicalResult ClosureiseLoadConstantOp::matchAndRewrite(
     hugr_mlir::LoadConstantOp op, OpAdaptor adaptor,
     ConversionPatternRewriter& rw) const {
   auto a = op.getConstRef();
-  if (!a || llvm::isa<hugr_mlir::FunctionType>(a.getType())) {
+  if (!a || !llvm::isa<hugr_mlir::FunctionType>(a.getType())) {
     return failure();
   }
-  auto v = func_closure_map.lookup(a.getRef().getLeafReference());
-  if (!v) {
-    return failure();
-  }
+
   rw.setInsertionPoint(op);
-  rw.replaceOp(op, rw.getRemappedValue(v));
+  if (auto v = func_closure_map.lookup(a.getRef().getLeafReference())) {
+    rw.replaceOp(op, rw.getRemappedValue(v));
+  } else {
+    auto memref_t = MemRefType::get({}, rw.getType<hugr_mlir::ClosureType>());
+    auto func = rw.createOrFold<func::ConstantOp>(op.getLoc(), getTypeConverter()->convertType(a.getType()), a.getRef().getLeafReference());
+    auto closure = rw.createOrFold<ub::PoisonOp>(op.getLoc(), memref_t, rw.getAttr<ub::PoisonAttr>());
+    rw.replaceOp(op, SmallVector{func,closure});
+  }
   return success();
 }
 
@@ -298,16 +305,10 @@ LogicalResult HugrFuncToFunc::matchAndRewrite(
   if (hugr_mlir::opHasNonLocalEdges(op)) {
     return rw.notifyMatchFailure(op, "nonlocal edges");
   }
-
   auto module = getOwningModule(op);
-  assert(module && "must have owning module");
+  if(!module) { return failure(); }
 
   auto loc = op.getLoc();
-
-  // if(failed(rw.convertNonEntryRegionTypes(&op.getBody(), *getTypeConverter(),
-  // {}))) {
-  //     return failure();
-  // }
 
   NamedAttrList list(op->getDiscardableAttrs());
   if (auto attr = op.getSymVisibilityAttr()) {
@@ -357,34 +358,38 @@ LogicalResult HugrFuncToFunc::matchAndRewrite(
         new_arg_locs.size() == converted_func_type.getNumInputs() &&
         "wrong num of locs");
 
-    rw.updateRootInPlace(func, [&] {
-      auto entry_block = rw.createBlock(
-          &func.getBody(), func.getBody().begin(),
-          converted_func_type.getInputs(), new_arg_locs);
-      rw.setInsertionPointToStart(entry_block);
-      SmallVector<Value> replacements;
-      rw.createOrFold<hugr_mlir::ReadClosureOp>(
-          replacements, loc, adaptor.getCaptures().getTypes(),
-          entry_block->getArgument(0));
-      llvm::copy(
-          entry_block->getArguments().drop_front(),
-          std::back_inserter(replacements));
-      rw.inlineRegionBefore(func.getBody(), op.getBody(), func.getBody().end());
-      rw.mergeBlocks(old_entry, entry_block, replacements);
+    auto entry_block = rw.createBlock(
+        &func.getBody(), func.getBody().begin(),
+        converted_func_type.getInputs(), new_arg_locs);
+    rw.setInsertionPointToStart(entry_block);
+    SmallVector<Value> replacements;
+    rw.createOrFold<hugr_mlir::ReadClosureOp>(
+        replacements, loc, adaptor.getCaptures().getTypes(),
+        entry_block->getArgument(0));
+    llvm::copy(
+        entry_block->getArguments().drop_front(),
+        std::back_inserter(replacements));
+    rw.inlineRegionBefore(func.getBody(), op.getBody(), func.getBody().end());
+    rw.mergeBlocks(old_entry, entry_block, replacements);
 
+    if(auto alloc_func_op = func_closure_map.lookup(op.getSymNameAttr())) {
+      SmallVector<Attribute> attrs;
+      llvm::transform(op.getCaptures().getTypes(), std::back_inserter(attrs), [](auto x) { return TypeAttr::get(x); });
+      rw.updateRootInPlace(alloc_func_op, [&] {
+        alloc_func_op.setClosureTypesAttr(rw.getArrayAttr(attrs));
+      });
       if (!op.getCaptures().empty()) {
         rw.setInsertionPoint(op);
         SmallVector<Value> unpacked;
-        rw.createOrFold<hugr_mlir::UnpackTupleOp>(
-            unpacked, loc,
-            rw.getRemappedValue(func_closure_map.lookup(op.getSymNameAttr())));
+        rw.createOrFold<hugr_mlir::UnpackTupleOp>(unpacked, loc, rw.getRemappedValue(alloc_func_op.getOutput()));
         assert(unpacked.size() == 2 && "must");
-        rw.replaceOpWithNewOp<hugr_mlir::WriteClosureOp>(
-            op, unpacked[1], adaptor.getCaptures());
+        rw.replaceOpWithNewOp<hugr_mlir::WriteClosureOp>(op, unpacked[1], adaptor.getCaptures());
       } else {
         rw.eraseOp(op);
       }
-    });
+    } else {
+      rw.eraseOp(op);
+    };
   } else {
     assert(op.getCaptures().size() == 0 && "or we would have failed on entry");
     rw.eraseOp(op);
@@ -460,6 +465,15 @@ LogicalResult HugrCallTopLevelToCall::matchAndRewrite(
   return success();
 }
 
+LogicalResult ConstToTopLevel::matchAndRewrite(hugr_mlir::ConstOp op, OpAdaptor adaptor, ConversionPatternRewriter &rw) const {
+  auto mod = getOwningModule(op);
+  if(!mod || op->getParentOp() == mod) { return failure(); }
+  rw.setInsertionPointToEnd(&mod.getBody().front());
+  rw.clone(*op);
+  rw.eraseOp(op);
+  return success();
+}
+
 void PreConvertHugrFuncPass::runOnOperation() {
   auto context = &getContext();
   // collect funcs
@@ -471,13 +485,13 @@ void PreConvertHugrFuncPass::runOnOperation() {
   FuncClosureMap_t func_closures;
   IRRewriter rw(context);
   for (auto f : hugr_funcs) {
-    if (!isTopLevelFunc(f)) {
+    if (isTopLevelFunc(f)) {
       continue;
     }
     rw.setInsertionPointToStart(&f->getParentRegion()->front());
     auto o = rw.create<hugr_mlir::AllocFunctionOp>(
         f.getLoc(), f.getStaticEdgeAttr());
-    func_closures.insert({f.getSymNameAttr(), o.getOutput()});
+    func_closures.insert({f.getSymNameAttr(), o});
   }
 
   // legalize calls to use a closure
@@ -493,10 +507,7 @@ void PreConvertHugrFuncPass::runOnOperation() {
   });
   target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>(
       [&](hugr_mlir::LoadConstantOp op) {
-        return !llvm::isa<hugr_mlir::FunctionType>(
-                   op.getConstRef().getType()) ||
-               !func_closures.contains(
-                   op.getConstRef().getRef().getLeafReference());
+        return !llvm::isa<hugr_mlir::FunctionType>(op.getConstRef().getType());
       });
   target.addDynamicallyLegalOp<hugr_mlir::ConstantOp>(
       [&](hugr_mlir::ConstantOp op) {
@@ -588,9 +599,9 @@ void ConvertHugrFuncPass::runOnOperation() {
   auto* context = &getContext();
 
   PreConvertHugrFuncPass::FuncClosureMap_t fcm;
-  getOperation()->walk<WalkOrder::PostOrder>([&fcm](hugr_mlir::AllocFunctionOp
+  getOperation()->walk([&fcm](hugr_mlir::AllocFunctionOp
                                                         op) {
-    fcm.insert({op.getFuncAttr().getRef().getLeafReference(), op.getOutput()});
+    fcm.insert({op.getFuncAttr().getRef().getLeafReference(), op});
     // todo fail if insert fails
   });
 
@@ -621,7 +632,7 @@ void ConvertHugrFuncPass::runOnOperation() {
 
   RewritePatternSet ps(context);
   ps.add<HugrFuncToFunc, HugrCallTopLevelToCall>(fcm, *type_converter, context);
-  ps.add<HugrCallToCall, LowerAllocFunction, OutputToReturn>(
+  ps.add<HugrCallToCall, LowerAllocFunction, OutputToReturn,ConstToTopLevel>(
       *type_converter, context);
   populateFunctionOpInterfaceTypeConversionPattern<func::FuncOp>(
       ps, *type_converter);
@@ -643,6 +654,10 @@ void ConvertHugrFuncPass::runOnOperation() {
   target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>(
       [](hugr_mlir::LoadConstantOp op) {
         return !llvm::isa<hugr_mlir::FunctionType>(op.getConstRef().getType());
+      });
+  target.addDynamicallyLegalOp<hugr_mlir::ConstOp>(
+      [](hugr_mlir::ConstOp op) {
+        return llvm::isa_and_present<hugr_mlir::ModuleOp>(op->getParentOp());
       });
   target.addDynamicallyLegalOp<hugr_mlir::ConstantOp>(
       [](hugr_mlir::ConstantOp op) {
@@ -677,5 +692,18 @@ void ConvertHugrFuncPass::runOnOperation() {
     emitError(getOperation()->getLoc())
         << "ConvertHugrFuncPass:Failed to applyPartialConversion";
     return signalPassFailure();
+  }
+  {
+    IRRewriter rw(&getContext());
+    SmallVector<hugr_mlir::ModuleOp> worklist{
+        getOperation().getOps<hugr_mlir::ModuleOp>()};
+    for (auto hm : worklist) {
+      if (!hm.getBody().empty()) {
+        rw.inlineBlockBefore(
+            &hm.getBody().front(), getOperation().getBody(),
+            getOperation().getBody()->end());
+      }
+      rw.eraseOp(hm);
+    }
   }
 }

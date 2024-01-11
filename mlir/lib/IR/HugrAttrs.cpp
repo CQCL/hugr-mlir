@@ -76,6 +76,20 @@ auto hugr_mlir::SumAttr::getSumType() -> SumType {
   return llvm::cast<SumType>(getType());
 }
 
+mlir::LogicalResult hugr_mlir::SumAttr::verify(::llvm::function_ref< ::mlir::InFlightDiagnostic ()> emitError, ::mlir::Type type, uint32_t tag, mlir::TypedAttr value) {
+  auto st = llvm::dyn_cast<SumType>(type);
+  if(!st) {
+    return emitError() << "sum attr must have !hugr.sum type";
+  }
+  if(tag >= st.numAlts()) {
+    return emitError() << "sum attr has tag exceeding number of variants";
+  }
+  if(value.getType() != st.getAltType(tag)) {
+    return emitError() << "sum attr of type " << st << " at tag " << tag << " has value " << value << ". Expected a value of type " << st.getAltType(tag);
+  }
+  return mlir::success();
+}
+
 mlir::IntegerAttr hugr_mlir::SumAttr::getTagAttr() {
   return mlir::IntegerAttr::get(mlir::IndexType::get(getContext()), getTag());
 }

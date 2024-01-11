@@ -1,5 +1,6 @@
 use crate::mlir::hugr::ffi::mlirHugrTranslateStringRefToMLIRFunction;
 use crate::{mlir, Error, Result};
+use hugr::hugr::IdentList;
 use melior::Context;
 use std::borrow::Borrow;
 use std::ops::Deref;
@@ -45,13 +46,58 @@ pub fn hugr_to_mlir_type<'c>(
             collect_type_row::<Vec<_>>(ctx, row)?.as_slice(),
         )
         .into()),
-        TypeEnum::Extension(ref custom_type) => Ok(crate::mlir::hugr::OpaqueType::new(
-            custom_type.name().as_ref(),
-            extension_id_to_extension_attr(ctx, custom_type.extension()),
-            collect_type_args::<Vec<_>>(ctx, custom_type.args())?,
-            mlir::hugr::TypeConstraintAttr::new(ctx, custom_type.bound()),
-        )
-        .into()),
+        TypeEnum::Extension(ref custom_type) => {
+            let mb_t = match custom_type.extension().deref() {
+                "prelude" => match custom_type.name().as_str() {
+                    "usize" => Some(unsafe {
+                        melior::ir::Type::from_raw(mlir_sys::mlirIndexTypeGet(ctx.to_raw()))
+                    }),
+                    _ => None
+                },
+                "arithmetic.int.types" => match custom_type.name().as_str() {
+                    "int" => {
+                        assert!(!custom_type.args().is_empty());
+                        if let hugr::types::type_param::TypeArg::BoundedNat { n } =
+                            custom_type.args()[0]
+                        {
+                            Some(melior::ir::r#type::IntegerType::new(ctx, n as u32).into())
+                        } else {
+                            panic!(
+                                "int type does not have a bounded nat arg: {:?}",
+                                custom_type
+                            )
+                        }
+                    }
+                    _ => None
+                },
+                "arithmetic.float.types" => match custom_type.name().as_str() {
+                    "float64" => {
+                        assert!(custom_type.args().is_empty());
+                        Some(unsafe {
+                            melior::ir::Type::from_raw(mlir_sys::mlirF64TypeGet(ctx.to_raw()))
+                        })
+                    }
+                    "float32" => {
+                        assert!(custom_type.args().is_empty());
+                        Some(unsafe {
+                            melior::ir::Type::from_raw(mlir_sys::mlirF32TypeGet(ctx.to_raw()))
+                        })
+                    }
+                    _ => None
+                },
+                _ => None
+            };
+            if let Some(t) = mb_t {
+                Ok(t)
+            } else {
+                Ok(crate::mlir::hugr::OpaqueType::new(
+                    custom_type.name().as_ref(),
+                    extension_id_to_extension_attr(ctx, custom_type.extension()),
+                    collect_type_args::<Vec<_>>(ctx, custom_type.args())?,
+                    mlir::hugr::TypeConstraintAttr::new(ctx, custom_type.bound()),
+                    ).into())
+            }
+        },
         TypeEnum::Alias(ref alias_decl) => Ok(mlir::hugr::AliasRefType::new(
             mlir::hugr::ExtensionSetAttr::new(ctx, []),
             melior::ir::attribute::FlatSymbolRefAttribute::new(ctx, alias_decl.name.as_ref())

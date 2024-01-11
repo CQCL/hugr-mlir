@@ -101,7 +101,7 @@ def Hugr_SumType : Hugr_Type<"Sum", "sum",[]> {
 def PredicateType : Type<
     CPred<"llvm::isa<SumType>($_self) && llvm::all_of(llvm::cast<SumType>($_self).getTypes(), [](auto x) { return llvm::isa<mlir::TupleType>(x); })">,
     "A hugr predicate type",
-    "SumType">;
+    "::hugr_mlir::SumType">;
 
 
 def Hugr_ExtendedType : Hugr_Type<"Extended", "ext"> {

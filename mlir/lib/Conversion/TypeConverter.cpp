@@ -71,8 +71,9 @@ mlir::FailureOr<mlir::OneToNTypeMapping> HugrTypeConverter::partitionTupleType(
 
 mlir::FailureOr<mlir::SmallVector<mlir::Value>>
 HugrTypeConverter::materializeTargetSum(
-    OpBuilder& rw, TypeRange ts, Value src, Location loc) const {
-  auto st = llvm::dyn_cast<hugr_mlir::SumType>(src.getType());
+    OpBuilder& rw, TypeRange ts, Value src0, Location loc) const {
+  auto src = llvm::dyn_cast<TypedValue<hugr_mlir::SumType>>(src0);
+  auto st = src.getType();
   if (!st) {
     return failure();
   }
@@ -120,7 +121,7 @@ HugrTypeConverter::materializeTargetSum(
         llvm::copy(undef_vs[i], std::back_inserter(rs));
       } else {
         auto variant_v =
-            rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, src_t, src, n);
+            rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, src, n);
         auto mb_converted_variant_v = this->materializeTargetConversion(
             rw, loc, mb_partition->getConvertedTypes(i), variant_v);
         assert(mb_converted_variant_v && "already checked this will work");
@@ -253,7 +254,7 @@ HugrTypeConverter::HugrTypeConverter() : OneToNTypeConverter() {
           llvm::SmallVectorImpl<Type>& result) -> std::optional<LogicalResult> {
         SmallVector<Type> ts;
         if (failed(this->convertTypes(tt.getTypes(), result))) {
-          return std::nullopt;
+          return failure();
         }
         return success();
       });
@@ -264,7 +265,7 @@ HugrTypeConverter::HugrTypeConverter() : OneToNTypeConverter() {
         result.push_back(IndexType::get(st.getContext()));
         if (failed(this->convertTypes(st.getTypes(), result))) {
           result.clear();
-          return std::nullopt;
+          return failure();
         }
         return success();
       });
@@ -533,7 +534,7 @@ SimpleHugrTypeConverter::SimpleHugrTypeConverter() {
         return *p;
       });
 }
-std::unique_ptr<mlir::TypeConverter> hugr_mlir::createTypeConverter() {
+std::unique_ptr<mlir::OneToNTypeConverter> hugr_mlir::createTypeConverter() {
   return std::make_unique<HugrTypeConverter>();
 }
 

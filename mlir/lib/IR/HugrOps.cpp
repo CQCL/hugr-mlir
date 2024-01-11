@@ -461,6 +461,33 @@ mlir::LogicalResult hugr_mlir::LoadConstantOp::inferReturnTypes(
   return mlir::success();
 }
 
+// mlir::OpFoldResult hugr_mlir::LoadConstantOp::fold(FoldAdaptor adaptor) {
+//   return failure();
+// }
+
+mlir::LogicalResult hugr_mlir::LoadConstantOp::verifyHugrSymbolUses(HugrSymbolMap const& map) {
+  auto referee_attr = getConstRefAttr();
+
+  auto referee_op = map.lookup(referee_attr.getRef());
+  if (!referee_op) {
+    return emitOpError("Unknown symbol: ") << referee_attr.getRef();
+  }
+
+  auto referee_const = llvm::dyn_cast<ConstOp>(referee_op);
+  if (!referee_const) {
+    return emitOpError("Symbol References op of type: ")
+           << referee_const->getName() << ", expected "
+           << ConstOp::getOperationName();
+  }
+
+  if (referee_const.getType() != referee_attr.getType()) {
+    return emitOpError("referree Const has type: ")
+           << referee_const.getType()
+           << ", expected: " << referee_attr.getType();
+  }
+
+  return mlir::success();
+}
 /////////////////////////////////////////////////////////////////////////////
 //  TailLoopOp
 /////////////////////////////////////////////////////////////////////////////
@@ -837,30 +864,9 @@ mlir::OpFoldResult hugr_mlir::ConstantOp::fold(FoldAdaptor adaptor) {
   return adaptor.getValue();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnpackFunctionOp
-/////////////////////////////////////////////////////////////////////////////
-mlir::LogicalResult hugr_mlir::UnpackFunctionOp::inferReturnTypes(
-    ::mlir::MLIRContext* context, ::std::optional<::mlir::Location> location,
-    ::mlir::ValueRange operands, ::mlir::DictionaryAttr attributes,
-    ::mlir::OpaqueProperties properties, ::mlir::RegionRange regions,
-    ::llvm::SmallVectorImpl<::mlir::Type>& inferredReturnTypes) {
-  mlir::OpBuilder builder(context);
-  UnpackFunctionOpAdaptor adaptor(operands, attributes, properties, regions);
-  auto old_ft = llvm::dyn_cast<FunctionType>(adaptor.getInput().getType());
-  if (!old_ft) {
-    return mlir::emitOptionalError(location, "Input not a function type:");
-  }
-  mlir::SmallVector<mlir::Type> new_arg_tys{builder.getType<ClosureType>()};
-  llvm::copy(old_ft.getArgumentTypes(), std::back_inserter(new_arg_tys));
-  inferredReturnTypes.push_back(
-      builder.getFunctionType(new_arg_tys, old_ft.getResultTypes()));
-  inferredReturnTypes.push_back(new_arg_tys[0]);
-  return mlir::success();
-}
 
 /////////////////////////////////////////////////////////////////////////////
-// UnpackFunctionOp
+// AllocFunctionOp
 /////////////////////////////////////////////////////////////////////////////
 mlir::LogicalResult hugr_mlir::AllocFunctionOp::inferReturnTypes(
     ::mlir::MLIRContext* context, ::std::optional<::mlir::Location> location,
@@ -936,10 +942,15 @@ bool hugr_mlir::isControlFlowGraphRegion(mlir::Region& region) {
 /////////////////////////////////////////////////////////////////////////////
 mlir::LogicalResult hugr_mlir::verifyHugrSymbolUses(
     mlir::Operation* op, HugrSymbolMap const& stc) {
-  if (auto co = llvm::dyn_cast<CallOp>(op)) {
-    if (mlir::failed(co.verifyHugrSymbolUses(stc))) {
-      return mlir::failure();
-    }
+  {
+    mlir::LogicalResult r = mlir::success();
+    llvm::TypeSwitch<mlir::Operation*>(op)
+      .Case([&](CallOp op) {
+        r = op.verifyHugrSymbolUses(stc);
+      }).Case([&](LoadConstantOp op) {
+        r = op.verifyHugrSymbolUses(stc);
+    });
+    if(mlir::failed(r)) { return r; }
   }
 
   mlir::OpBuilder builder(op->getContext());

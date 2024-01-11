@@ -465,8 +465,7 @@ def Hugr_ConstOp : Hugr_Op<"const",
 }
 
 def Hugr_LoadConstantOp : Hugr_Op<"load_constant",
-    [ ConstantLike
-    , DeclareOpInterfaceMethods<InferTypeOpInterface>
+    [ DeclareOpInterfaceMethods<InferTypeOpInterface>
     ]> {
     let summary = "A Hugr LoadConstant node";
     let assemblyFormat = "custom<StaticEdge>($const_ref) attr-dict";
@@ -486,6 +485,11 @@ def Hugr_LoadConstantOp : Hugr_Op<"load_constant",
     let results = (outs
         HugrTypeInterface:$result
     );
+
+    // let hasFolder = 1;
+    let extraClassDeclaration = [{
+        mlir::LogicalResult verifyHugrSymbolUses(HugrSymbolMap const&);
+    }];
 }
 
 def ConstantAttr : AnyAttrOf<[Hugr_SumAttr,Hugr_TupleAttr],"argument of hugr.constant", "::mlir::TypedAttr", "llvm::cast<::mlir::TypedAttr>($_self)"> {
@@ -493,7 +497,7 @@ def ConstantAttr : AnyAttrOf<[Hugr_SumAttr,Hugr_TupleAttr],"argument of hugr.con
 }
 
 def Hugr_ConstantOp : Hugr_Op<"constant",
-    [ ConstantLike, DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
+    [ ConstantLike, Pure, DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
     let summary = "TODO";
     let description = "TODO";
     let assemblyFormat = "$value attr-dict";
@@ -622,8 +626,8 @@ def Hugr_ReadVariantOp : Hugr_Op<"read_variant",
     );
 
     let builders = [
-        OpBuilder<(ins "mlir::Type":$type, "::mlir::Value":$input, "unsigned":$tag), [{
-          $_state.addTypes(type);
+        OpBuilder<(ins "::mlir::TypedValue<hugr_mlir::SumType>":$input, "unsigned":$tag), [{
+          $_state.addTypes(input.getType().getAltType(tag));
           $_state.addOperands(input);
           $_state.getOrAddProperties<Properties>().tag = $_builder.getIndexAttr(tag);
         }]>
@@ -661,9 +665,16 @@ def Hugr_AllocFunctionOp : Hugr_Op<"alloc_function",
   let summary = "Allocate a FunctionType";
   // TODO alloc effect
   let arguments = (ins
-      FuncStaticEdgeAttr:$func
+      FuncStaticEdgeAttr:$func,
+      OptionalAttr<TypeArrayAttr>:$closure_types
   );
   let results = (outs Hugr_FunctionType:$output);
+  let builders = [
+    OpBuilder<(ins "hugr_mlir::StaticEdgeAttr":$edge), [{
+      $_state.addAttribute(getFuncAttrName($_state.name), edge);
+      $_state.addTypes(edge.getType());
+    }]>
+  ];
 }
 
 def Hugr_WriteClosureOp : Hugr_Op<"write_closure", []> {
@@ -685,16 +696,16 @@ def Hugr_ReadClosureOp : Hugr_Op<"read_closure", []> {
   );
 }
 
-def Hugr_UnpackFunctionOp : Hugr_Op<"unpack_function", [DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
-  let summary = "Unpack a !hugr.function into a TypedValue<FunctionType> and a !hugr.closure";
-  let arguments = (ins
-      Hugr_FunctionType:$input
-  );
-  let results = (outs
-      FunctionType:$func,
-      MemRefOf<[Hugr_ClosureType]>:$closure
-  );
-}
+// def Hugr_UnpackFunctionOp : Hugr_Op<"unpack_function", [DeclareOpInterfaceMethods<InferTypeOpInterface>]> {
+//   let summary = "Unpack a !hugr.function into a TypedValue<FunctionType> and a !hugr.closure";
+//   let arguments = (ins
+//       Hugr_FunctionType:$input
+//   );
+//   let results = (outs
+//       FunctionType:$func,
+//       MemRefOf<[Hugr_ClosureType]>:$closure
+//   );
+// }
 
 
 

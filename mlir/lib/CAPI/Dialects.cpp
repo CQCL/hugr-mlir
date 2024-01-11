@@ -109,5 +109,16 @@ bool mlirAttributeIsHugrSumAttr(MlirAttribute x) {
 MlirAttribute mlirHugrSumAttrGet(
     MlirType type, uint32_t tag, MlirAttribute value) {
   auto t = llvm::cast<hugr_mlir::SumType>(unwrap(type));
-  return wrap(hugr_mlir::SumAttr::get(t, tag, unwrap(value)));
+  return wrap(hugr_mlir::SumAttr::get(t, tag, llvm::cast<TypedAttr>(unwrap(value))));
+}
+
+MlirAttribute
+mlirHugrTupleAttrGet(MlirContext context, intptr_t n, MlirAttribute const* value) {
+  SmallVector<TypedAttr> attrs;
+  for(auto i = 0u; i < n; ++i) { attrs.push_back(cast<TypedAttr>(unwrap(value[i]))); }
+  return wrap(hugr_mlir::TupleAttr::get(unwrap(context), attrs));
+}
+
+bool mlirAttributeIsHugrTupleAttr(MlirAttribute a) {
+  return mlir::isa<hugr_mlir::TupleAttr>(unwrap(a));
 }

@@ -17,19 +17,40 @@ pub fn test_context() -> melior::Context {
 #[rstest]
 fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
     use hugr_mlir::hugr_to_mlir::hugr_to_mlir;
-    // unsafe { mlir_sys::mlirEnableGlobalDebug(true); }
-    insta::glob!("guppy-exports", "*.json", |path| {
-        let bytes = fs::read(path).unwrap();
-        let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);
-        let hugr = serde_json::from_slice::<hugr::Hugr>(&bytes).unwrap();
-        let mlir_mod = hugr_to_mlir(ul, &hugr).unwrap();
-        // println!("{:?}:{}", path, mlir_mod.as_operation());
-        assert!(mlir_mod.as_operation().verify());
-        insta::assert_display_snapshot!(mlir_mod.as_operation());
+    unsafe {
+        hugr_mlir::mlir::hugr::ffi::mlirHugrRegisterOptPipelines();
+    }
 
-        // let hugr2 = mlir_to_hugr(&mlir_mod.as_operation()).unwrap();
-        // let mlir_mod2 = hugr_to_mlir(ul, &hugr2).unwrap();
-        // assert_eq!(mlir_mod2.as_operation(), mlir_mod.as_operation());
+    unsafe { mlir_sys::mlirEnableGlobalDebug(true); }
+    insta::glob!("guppy-exports", "*.json", |path| {
+        let mut settings = insta::Settings::clone_current();
+        settings.set_description(path.to_string_lossy());
+        settings.bind(|| {
+            println!("{:?}", path);
+
+            let bytes = fs::read(path).unwrap();
+            let ul = melior::ir::Location::new(&test_context, path.to_str().unwrap(), 0, 0);
+            let hugr = serde_json::from_slice::<hugr::Hugr>(&bytes).unwrap();
+            let mut mlir_mod = hugr_to_mlir(ul, &hugr).unwrap();
+            assert!(mlir_mod.as_operation().verify());
+            insta::assert_display_snapshot!(mlir_mod.as_operation());
+
+            let pm = melior::pass::PassManager::new(&test_context);
+            melior::utility::parse_pass_pipeline(
+                pm.as_operation_pass_manager(),
+                "builtin.module(lower-hugr)",
+            )
+            .unwrap();
+            pm.enable_verifier(true);
+            match pm.run(&mut mlir_mod) {
+                Err(_) => {
+                    println!("{}", mlir_mod.as_operation());
+                    assert!(false);
+                }
+                _ => (),
+            }
+            insta::assert_display_snapshot!(mlir_mod.as_operation());
+        });
     });
     Ok(())
 }

@@ -1,29 +1,30 @@
 ---
 source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_arith_basic.json
 expression: mlir_mod.as_operation()
 input_file: hugr-mlir/tests/guppy-exports/test_arith_basic.json
 ---
 module {
   hugr.module {
-    func @add[](%arg0: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg1: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
-      %0 = dfg input extensions [] %arg0, %arg1 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
-      ^bb0(%arg2: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-        %1 = cfg %arg2, %arg3 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> {
-        ^bb0(%arg4: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg5: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-          %2:2 = dfg input extensions [] %arg4, %arg5 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) {
-          ^bb0(%arg6: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, %arg7: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):
-            %4 = ext_op []"iadd" %arg6, %arg7 : (!hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>) -> !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+    func @add[](%arg0: i6, %arg1: i6) -> i6 {
+      %0 = dfg input extensions [] %arg0, %arg1 : (i6, i6) -> i6 {
+      ^bb0(%arg2: i6, %arg3: i6):
+        %1 = cfg %arg2, %arg3 : (i6, i6) -> i6 {
+        ^bb0(%arg4: i6, %arg5: i6):
+          %2:2 = dfg input extensions [] %arg4, %arg5 : (i6, i6) -> (!hugr.sum<tuple<>>, i6) {
+          ^bb0(%arg6: i6, %arg7: i6):
+            %4 = ext_op []"iadd" %arg6, %arg7 : (i6, i6) -> i6
             %5 = make_tuple()
             %6 = tag 0 %5 : tuple<> -> <tuple<>>
-            output %6, %4 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+            output %6, %4 : !hugr.sum<tuple<>>, i6
           }
-          switch %2#0, %2#1 : !hugr.sum<tuple<>>, !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>> ^bb1
-        ^bb1(%3: !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>):  // pred: ^bb0
-          output %3 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+          switch %2#0, %2#1 : !hugr.sum<tuple<>>, i6 ^bb1
+        ^bb1(%3: i6):  // pred: ^bb0
+          output %3 : i6
         }
-        output %1 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+        output %1 : i6
       }
-      output %0 : !hugr<opaque "int"["arithmetic.int.types"] <6 : i64>>
+      output %0 : i6
     }
   }
 }

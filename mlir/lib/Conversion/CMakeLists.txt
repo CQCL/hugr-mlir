@@ -18,4 +18,5 @@ add_mlir_library(HugrMLIRConversion
   MLIRControlFlowDialect
   # MLIRLLVMDialect
   MLIRMemRefDialect
+  MLIRArithDialect
 )

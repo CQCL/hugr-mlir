@@ -1,0 +1,17 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_arith_basic.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_arith_basic.json
+---
+module {
+  func.func private @add(%arg0: memref<!hugr.closure>, %arg1: i6, %arg2: i6) -> i6 {
+    cf.br ^bb1(%arg1, %arg2 : i6, i6)
+  ^bb1(%0: i6, %1: i6):  // pred: ^bb0
+    %2 = hugr.ext_op []"iadd" %0, %1 : (i6, i6) -> i6
+    cf.br ^bb2(%2 : i6)
+  ^bb2(%3: i6):  // pred: ^bb1
+    return %3 : i6
+  }
+}
+

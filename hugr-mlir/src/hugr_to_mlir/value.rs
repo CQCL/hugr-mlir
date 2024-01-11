@@ -19,14 +19,7 @@ pub fn hugr_to_mlir_value<'c>(
             let TypeEnum::Tuple(ref typerow) = typ.as_type_enum() else {
                 Err(anyhow!("not a tuple type"))?
             };
-            Ok(melior::ir::attribute::ArrayAttribute::new(
-                context,
-                zip_eq(typerow.iter(), vs.iter())
-                    .map(|(ty, x)| hugr_to_mlir_value(context, ty, x))
-                    .collect::<Result<Vec<_>>>()?
-                    .as_slice(),
-            )
-            .into())
+            Ok(mlir::hugr::TupleAttribute::new(context, zip_eq(typerow.iter(), vs.iter()).map(|(ty, x)| hugr_to_mlir_value(context, ty, x)).collect::<Result<Vec<_>>>()?).into())
         }
         &Value::Sum { tag, ref value } => {
             let TypeEnum::Sum(ref sum_type) = typ.as_type_enum() else {

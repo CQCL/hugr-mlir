@@ -4,17 +4,17 @@
 include "mlir/Pass/PassBase.td"
 include "mlir/Rewrite/PassUtil.td"
 
-def ConvertHugrModulePass : Pass<"convert-hugr-modules", "mlir::ModuleOp"> {
-  let summary = "Lowers hugr.modules into their containing builtin.modules";
-  let description = [{
-  TODO
-  }];
-  let options = RewritePassUtils.options # [
-  ];
-  let dependentDialects = [
-    "::hugr_mlir::HugrDialect",
-  ];
-}
+// def ConvertHugrModulePass : Pass<"convert-hugr-modules", "mlir::ModuleOp"> {
+//   let summary = "Lowers hugr.modules into their containing builtin.modules";
+//   let description = [{
+//   TODO
+//   }];
+//   let options = RewritePassUtils.options # [
+//   ];
+//   let dependentDialects = [
+//     "::hugr_mlir::HugrDialect",
+//   ];
+// }
 
 def PreConvertHugrFuncPass : Pass<"pre-convert-hugr-func","hugr_mlir::ModuleOp"> {
   let summary = "Ensures all functions have no non-local edges";
@@ -39,7 +39,7 @@ def PreConvertHugrFuncPass : Pass<"pre-convert-hugr-func","hugr_mlir::ModuleOp">
   ];
 }
 
-def ConvertHugrFuncPass : Pass<"convert-hugr-func","hugr_mlir::ModuleOp"> {
+def ConvertHugrFuncPass : Pass<"convert-hugr-func","mlir::ModuleOp"> {
   let summary = "Convert all hugr.func to func.func";
   let description = [{
       Moves all funcs to the top level, and convert to func.func
@@ -80,6 +80,7 @@ def ConvertHugrPass : Pass<"convert-hugr"> {
     "::mlir::ub::UBDialect",
     "::mlir::index::IndexDialect",
     "::mlir::memref::MemRefDialect",
+    "::mlir::arith::ArithDialect",
   ];
 }
 

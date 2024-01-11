@@ -119,10 +119,10 @@ def Hugr_SumAttr : Hugr_Attr<"Sum", "sum",
     let parameters = (ins
         AttributeSelfTypeParameter<"type">:$type,
         AttrParameter<"uint32_t", "tag">:$tag,
-        AttrParameter<"mlir::Attribute","value">:$value
+        AttrParameter<"mlir::TypedAttr","value">:$value
     );
     let builders = [
-        AttrBuilderWithInferredContext<(ins "hugr_mlir::SumType":$type, "uint32_t":$tag, "mlir::Attribute":$value), [{
+        AttrBuilderWithInferredContext<(ins "hugr_mlir::SumType":$type, "uint32_t":$tag, "mlir::TypedAttr":$value), [{
           return $_get(type.getContext(), type, tag, value);
         }]>
 
@@ -131,6 +131,7 @@ def Hugr_SumAttr : Hugr_Attr<"Sum", "sum",
         hugr_mlir::SumType getSumType();
         mlir::IntegerAttr getTagAttr();
     }];
+    let genVerifyDecl = 1;
 }
 
 def Hugr_TypeConstraintAttr : Hugr_EnumAttr<Hugr_TypeConstraintEnum, "constraint", []> {
@@ -148,7 +149,7 @@ def Hugr_TypeConstraintAttr : Hugr_EnumAttr<Hugr_TypeConstraintEnum, "constraint
 def Hugr_TupleAttr : Hugr_Attr<"Tuple", "tuple", [TypedAttrInterface]> {
   let summary = "A constant value for a tuple";
   let description = "TODO";
-  let assemblyFormat = "`<`$values`>`";
+  let assemblyFormat = "(`<`$values^`>`)?";
   let parameters = (ins
       OptionalArrayRefParameter<"mlir::TypedAttr","values">:$values
   );

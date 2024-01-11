@@ -1,0 +1,30 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_assign_expr.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_assign_expr.json
+---
+module {
+  func.func private @foo(%arg0: memref<!hugr.closure>, %arg1: index) -> index {
+    %0 = scf.index_switch %arg1 -> index 
+    case 1 {
+      scf.yield %arg1 : index
+    }
+    default {
+      scf.yield %arg1 : index
+    }
+    cf.br ^bb1(%0 : index)
+  ^bb1(%1: index):  // pred: ^bb0
+    %2 = scf.index_switch %1 -> index 
+    case 1 {
+      scf.yield %1 : index
+    }
+    default {
+      scf.yield %1 : index
+    }
+    cf.br ^bb2(%2 : index)
+  ^bb2(%3: index):  // pred: ^bb1
+    return %3 : index
+  }
+}
+

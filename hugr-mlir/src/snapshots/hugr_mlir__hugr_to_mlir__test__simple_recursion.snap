@@ -4,13 +4,13 @@ expression: op.as_operation().to_string()
 ---
 module {
   hugr.module {
-    func @main[](%arg0: !hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
-      %0 = dfg input extensions [] %arg0 : (!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> {
-      ^bb0(%arg1: !hugr<opaque "usize"["prelude"]>):
-        %1 = call @main  [](!hugr<opaque "usize"["prelude"]>) -> !hugr<opaque "usize"["prelude"]> %arg1
-        output %1 : !hugr<opaque "usize"["prelude"]>
+    func @main[](%arg0: index) -> index {
+      %0 = dfg input extensions [] %arg0 : (index) -> index {
+      ^bb0(%arg1: index):
+        %1 = call @main  [](index) -> index %arg1
+        output %1 : index
       }
-      output %0 : !hugr<opaque "usize"["prelude"]>
+      output %0 : index
     }
   }
 }
