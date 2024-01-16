@@ -6,25 +6,8 @@ input_file: hugr-mlir/tests/guppy-exports/test_assign_expr.json
 ---
 module {
   func.func private @foo(%arg0: memref<!hugr.closure>, %arg1: index) -> index {
-    %0 = scf.index_switch %arg1 -> index 
-    case 1 {
-      scf.yield %arg1 : index
-    }
-    default {
-      scf.yield %arg1 : index
-    }
-    cf.br ^bb1(%0 : index)
-  ^bb1(%1: index):  // pred: ^bb0
-    %2 = scf.index_switch %1 -> index 
-    case 1 {
-      scf.yield %1 : index
-    }
-    default {
-      scf.yield %1 : index
-    }
-    cf.br ^bb2(%2 : index)
-  ^bb2(%3: index):  // pred: ^bb1
-    return %3 : index
+    %0 = builtin.unrealized_conversion_cast %arg1 : index to i64
+    llvm.return %0 : i64
   }
 }
 

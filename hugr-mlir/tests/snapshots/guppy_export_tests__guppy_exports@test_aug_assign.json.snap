@@ -15,7 +15,7 @@ module {
           ^bb0(%arg3: i6):
             const @const_9 : i6 = 1 : i6
             %4 = load_constant @const_9 : i6
-            %5 = ext_op []"iadd" %arg3, %4 : (i6, i6) -> i6
+            %5 = ext_op["arithmetic.int"] "iadd" %arg3, %4 : [](i6, i6) -> i6
             %6 = make_tuple()
             %7 = tag 0 %6 : tuple<> -> <tuple<>>
             output %7, %5 : !hugr.sum<tuple<>>, i6

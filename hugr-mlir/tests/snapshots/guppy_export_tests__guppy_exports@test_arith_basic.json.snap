@@ -13,7 +13,7 @@ module {
         ^bb0(%arg4: i6, %arg5: i6):
           %2:2 = dfg input extensions [] %arg4, %arg5 : (i6, i6) -> (!hugr.sum<tuple<>>, i6) {
           ^bb0(%arg6: i6, %arg7: i6):
-            %4 = ext_op []"iadd" %arg6, %arg7 : (i6, i6) -> i6
+            %4 = ext_op["arithmetic.int"] "iadd" %arg6, %arg7 : [](i6, i6) -> i6
             %5 = make_tuple()
             %6 = tag 0 %5 : tuple<> -> <tuple<>>
             output %6, %4 : !hugr.sum<tuple<>>, i6

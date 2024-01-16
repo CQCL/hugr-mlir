@@ -6,6 +6,7 @@
 #include "hugr-mlir/IR/HugrAttrs.h"
 #include "hugr-mlir/IR/HugrTypes.h"
 #include "hugr-mlir/IR/HugrDialect.h"
+#include "mlir/Dialect/MemRef/IR/MemRef.h"
 
 namespace {
 using namespace hugr_mlir;
@@ -154,6 +155,18 @@ struct ExternalFunctionHugrTypeInterfaceModel
   }
 };
 
+struct ExternalMemRefHugrTypeInterfaceModule
+    : public HugrTypeInterface::ExternalModel<
+          ExternalMemRefHugrTypeInterfaceModule, mlir::MemRefType> {
+  ExtensionSetAttr getExtensions(mlir::Type t) const {
+    return ExtensionSetAttr::get(t.getContext());
+  }
+  TypeConstraint getConstraint(mlir::Type t) const {
+    return TypeConstraint::Equatable;
+  }
+};
+
+
 }  // namespace
 
 void hugr_mlir::HugrDialect::registerTypeInterfaces() {
@@ -175,4 +188,6 @@ void hugr_mlir::HugrDialect::registerTypeInterfaces() {
   mlir::IntegerType::attachInterface<ExternalIntegerHugrTypeInterfaceModel>(
       context);
   mlir::FunctionType::attachInterface<ExternalFunctionHugrTypeInterfaceModel>(context);
+
+  mlir::MemRefType::attachInterface<ExternalMemRefHugrTypeInterfaceModule>(context);
 }

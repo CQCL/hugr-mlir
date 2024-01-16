@@ -1,7 +1,9 @@
 add_mlir_library(HugrMLIRConversion
   TypeConverter.cpp
+  PreConvertHugrFuncPass.cpp
   ConvertHugrPass.cpp
   ConvertHugrFuncPass.cpp
+  ConvertHugrExtArithPass.cpp
 
   DEPENDS
   HugrMLIRConversionPassIncGen
@@ -19,4 +21,5 @@ add_mlir_library(HugrMLIRConversion
   # MLIRLLVMDialect
   MLIRMemRefDialect
   MLIRArithDialect
+  MLIRMathDialect
 )

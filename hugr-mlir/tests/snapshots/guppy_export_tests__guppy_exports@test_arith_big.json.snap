@@ -13,19 +13,19 @@ module {
         ^bb0(%arg6: i6, %arg7: f64, %arg8: i6):
           %2:4 = dfg input extensions [] %arg6, %arg7, %arg8 : (i6, f64, i6) -> (!hugr.sum<tuple<>, tuple<>>, f64, i6, f64) {
           ^bb0(%arg9: i6, %arg10: f64, %arg11: i6):
-            %19 = ext_op []"convert_s" %arg9 : (i6) -> f64
-            %20 = ext_op []"fdiv" %19, %arg10 : (f64, f64) -> f64
-            %21 = ext_op []"ffloor" %20 : (f64) -> f64
+            %19 = ext_op["arithmetic.conversions"] "convert_s" %arg9 : [](i6) -> f64
+            %20 = ext_op["arithmetic.float"] "fdiv" %19, %arg10 : [](f64, f64) -> f64
+            %21 = ext_op["arithmetic.float"] "ffloor" %20 : [](f64) -> f64
             const @const_32 : i6 = 3 : i6
             %22 = load_constant @const_32 : i6
-            %23 = ext_op []"imul" %22, %arg11 : (i6, i6) -> i6
-            %24 = ext_op []"convert_s" %23 : (i6) -> f64
-            %25 = ext_op []"fadd" %21, %24 : (f64, f64) -> f64
+            %23 = ext_op["arithmetic.int"] "imul" %22, %arg11 : [](i6, i6) -> i6
+            %24 = ext_op["arithmetic.conversions"] "convert_s" %23 : [](i6) -> f64
+            %25 = ext_op["arithmetic.float"] "fadd" %21, %24 : [](f64, f64) -> f64
             const @const_37 : i6 = 8 : i6
             %26 = load_constant @const_37 : i6
-            %27 = ext_op []"ineg" %26 : (i6) -> i6
-            %28 = ext_op []"convert_s" %27 : (i6) -> f64
-            %29 = ext_op []"fle" %25, %28 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+            %27 = ext_op["arithmetic.int"] "ineg" %26 : [](i6) -> i6
+            %28 = ext_op["arithmetic.conversions"] "convert_s" %27 : [](i6) -> f64
+            %29 = ext_op["arithmetic.float"] "fle" %25, %28 : [](f64, f64) -> !hugr.sum<tuple<>, tuple<>>
             output %29, %25, %arg9, %arg10 : !hugr.sum<tuple<>, tuple<>>, f64, i6, f64
           }
           switch %2#0, %2#1, %2#2, %2#3 : !hugr.sum<tuple<>, tuple<>>, f64, i6, f64 ^bb2, ^bb3
@@ -36,8 +36,8 @@ module {
           ^bb0(%arg9: f64, %arg10: i6, %arg11: f64):
             const @const_43 : i6 = 5 : i6
             %19 = load_constant @const_43 : i6
-            %20 = ext_op []"convert_s" %19 : (i6) -> f64
-            %21 = ext_op []"fgt" %arg9, %20 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+            %20 = ext_op["arithmetic.conversions"] "convert_s" %19 : [](i6) -> f64
+            %21 = ext_op["arithmetic.float"] "fgt" %arg9, %20 : [](f64, f64) -> !hugr.sum<tuple<>, tuple<>>
             %22 = make_tuple()
             %23 = make_tuple(%arg9, %arg10, %arg11 : f64, i6, f64)
             %24 = conditional(%21, %22, %23 : !hugr.sum<tuple<>, tuple<>>, tuple<>, tuple<f64, i6, f64>) -> !hugr.sum<tuple<>, tuple<f64, i6, f64>> {
@@ -63,12 +63,12 @@ module {
         ^bb3(%8: f64, %9: i6, %10: f64):  // 2 preds: ^bb0, ^bb2
           %11 = dfg input extensions [] %8, %9, %10 : (f64, i6, f64) -> !hugr.sum<tuple<f64, i6>, tuple<>> {
           ^bb0(%arg9: f64, %arg10: i6, %arg11: f64):
-            %19 = ext_op []"convert_s" %arg10 : (i6) -> f64
-            %20 = ext_op []"fmul" %19, %arg11 : (f64, f64) -> f64
+            %19 = ext_op["arithmetic.conversions"] "convert_s" %arg10 : [](i6) -> f64
+            %20 = ext_op["arithmetic.float"] "fmul" %19, %arg11 : [](f64, f64) -> f64
             const @const_57 : i6 = 0 : i6
             %21 = load_constant @const_57 : i6
-            %22 = ext_op []"convert_s" %21 : (i6) -> f64
-            %23 = ext_op []"feq" %20, %22 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+            %22 = ext_op["arithmetic.conversions"] "convert_s" %21 : [](i6) -> f64
+            %23 = ext_op["arithmetic.float"] "feq" %20, %22 : [](f64, f64) -> !hugr.sum<tuple<>, tuple<>>
             %24 = make_tuple(%arg9, %arg10 : f64, i6)
             %25 = make_tuple()
             %26 = conditional(%23, %24, %25 : !hugr.sum<tuple<>, tuple<>>, tuple<f64, i6>, tuple<>) -> !hugr.sum<tuple<f64, i6>, tuple<>> {
@@ -105,13 +105,13 @@ module {
           ^bb0(%arg9: f64, %arg10: i6):
             const @const_74 : i6 = 3 : i6
             %19 = load_constant @const_74 : i6
-            %20 = ext_op []"convert_s" %19 : (i6) -> f64
-            %21 = ext_op []"fdiv" %arg9, %20 : (f64, f64) -> f64
-            %22 = ext_op []"ffloor" %21 : (f64) -> f64
-            %23 = ext_op []"fmul" %22, %20 : (f64, f64) -> f64
-            %24 = ext_op []"fsub" %arg9, %23 : (f64, f64) -> f64
-            %25 = ext_op []"convert_s" %arg10 : (i6) -> f64
-            %26 = ext_op []"flt" %24, %25 : (f64, f64) -> !hugr.sum<tuple<>, tuple<>>
+            %20 = ext_op["arithmetic.conversions"] "convert_s" %19 : [](i6) -> f64
+            %21 = ext_op["arithmetic.float"] "fdiv" %arg9, %20 : [](f64, f64) -> f64
+            %22 = ext_op["arithmetic.float"] "ffloor" %21 : [](f64) -> f64
+            %23 = ext_op["arithmetic.float"] "fmul" %22, %20 : [](f64, f64) -> f64
+            %24 = ext_op["arithmetic.float"] "fsub" %arg9, %23 : [](f64, f64) -> f64
+            %25 = ext_op["arithmetic.conversions"] "convert_s" %arg10 : [](i6) -> f64
+            %26 = ext_op["arithmetic.float"] "flt" %24, %25 : [](f64, f64) -> !hugr.sum<tuple<>, tuple<>>
             output %26 : !hugr.sum<tuple<>, tuple<>>
           }
           switch %15 : !hugr.sum<tuple<>, tuple<>> ^bb4, ^bb6

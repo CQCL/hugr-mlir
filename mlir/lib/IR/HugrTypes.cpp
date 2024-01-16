@@ -53,6 +53,27 @@ bool hugr_mlir::areTypesCompatible(mlir::TypeRange lhs, mlir::TypeRange rhs) {
          });
 }
 
+mlir::MemRefType hugr_mlir::ClosureType::getMemRefType() {
+  return mlir::MemRefType::get({}, *this);
+}
+
+// mlir::LogicalResult hugr_mlir::ClosureType::verify(::llvm::function_ref< ::mlir::InFlightDiagnostic ()> emitError, ::mlir::ArrayAttr closure_types) {
+//   if(closure_types) {
+//     for(auto a: closure_types) {
+//       if(!a) {
+//         return emitError() << "Null attribute in closure_types";
+//       }
+//       if(auto ta = llvm::dyn_cast<mlir::TypeAttr>(a)) {
+
+//       } else {
+//         return emitError() << "Invalid attr in closure_types. Must be a TypeAttr: " << a;
+//       }
+//     }
+
+//   }
+//   return mlir::success();
+// }
+
 void hugr_mlir::HugrDialect::registerTypes() {
   addTypes<
 #define GET_TYPEDEF_LIST

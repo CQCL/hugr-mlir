@@ -42,6 +42,12 @@ struct ConvertHugrPass : hugr_mlir::impl::ConvertHugrPassBase<ConvertHugrPass> {
   std::shared_ptr<OneToNTypeConverter> type_converter;
 };
 
+struct ConvertArithSelect : OneToNOpConversionPattern<arith::SelectOp> {
+  using OneToNOpConversionPattern::OneToNOpConversionPattern;
+  LogicalResult matchAndRewrite(
+      arith::SelectOp, OpAdaptor, OneToNPatternRewriter&) const override;
+};
+
 struct ConvertMakeTuple : OneToNOpConversionPattern<hugr_mlir::MakeTupleOp> {
   using OneToNOpConversionPattern::OneToNOpConversionPattern;
   LogicalResult matchAndRewrite(
@@ -135,7 +141,18 @@ struct ConvertLoadConstant : OneToNOpConversionPattern<hugr_mlir::LoadConstantOp
 
 }  // namespace
 
-mlir::LogicalResult ConvertMakeTuple::matchAndRewrite(
+LogicalResult ConvertArithSelect::matchAndRewrite(
+  arith::SelectOp op, OpAdaptor adaptor, OneToNPatternRewriter& rw) const {
+  if(getTypeConverter()->isLegal(op.getType())) { return failure(); }
+  SmallVector<Value> replacements;
+  for(auto [t,f]: llvm::zip_equal(adaptor.getTrueValue(), adaptor.getFalseValue())) {
+    replacements.push_back(rw.createOrFold<arith::SelectOp>(op.getLoc(), op.getCondition(), t, f));
+  }
+  rw.replaceOp(op, replacements);
+  return success();
+}
+
+LogicalResult ConvertMakeTuple::matchAndRewrite(
     hugr_mlir::MakeTupleOp op, OpAdaptor adaptor,
     OneToNPatternRewriter& rw) const {
   rw.replaceOp(op, adaptor.getFlatOperands(), adaptor.getResultMapping());
@@ -559,7 +576,7 @@ mlir::LogicalResult ConvertHugrPass::initialize(MLIRContext* context) {
     // ps.add<ConvertHugrFuncToFuncConversionPattern>(*type_converter, context);
     ps.add<
         ConvertConstant, ConvertMakeTuple, ConvertUnpackTuple, ConvertTag,
-        ConvertReadTag, ConvertReadVariant, ConvertLoadConstant>(*type_converter, context);
+        ConvertReadTag, ConvertReadVariant, ConvertLoadConstant, ConvertArithSelect>(*type_converter, context);
     ps.add<ConvertFuncBlockArgs>(*type_converter, context);
     populateFuncTypeConversionPatterns(*type_converter, ps);
     scf::populateSCFStructuralOneToNTypeConversions(*type_converter, ps);

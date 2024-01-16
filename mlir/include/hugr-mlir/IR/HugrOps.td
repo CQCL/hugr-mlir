@@ -406,7 +406,7 @@ def Hugr_DfgOp : Hugr_Op<"dfg",
 def Hugr_ExtensionOp : Hugr_Op<"ext_op",
     [HugrMemoryOp]> {
     let summary = "A node representing an arbitrary extension op node in Hugr.";
-    let assemblyFormat = "$extensions``$hugr_opname $args `:` functional-type($args,$results) attr-dict";
+    let assemblyFormat = "`[`$extension`]`$hugr_opname $args `:` $required_extensions``functional-type($args,$results) attr-dict";
     let description = [{
         An arbtrary extension op node in Hugr.
 
@@ -424,7 +424,8 @@ def Hugr_ExtensionOp : Hugr_Op<"ext_op",
     let arguments = (ins
         Variadic<HugrTypeInterface>:$args,
         StrAttr:$hugr_opname,
-        Hugr_ExtensionSetAttr:$extensions,
+        Hugr_ExtensionAttr:$extension,
+        Hugr_ExtensionSetAttr:$required_extensions,
         OptionalAttr<DictionaryAttr>:$node_weight
     );
 
@@ -675,6 +676,9 @@ def Hugr_AllocFunctionOp : Hugr_Op<"alloc_function",
       $_state.addTypes(edge.getType());
     }]>
   ];
+  let extraClassDeclaration = [{
+    hugr_mlir::ClosureType getClosureType();
+  }];
 }
 
 def Hugr_WriteClosureOp : Hugr_Op<"write_closure", []> {

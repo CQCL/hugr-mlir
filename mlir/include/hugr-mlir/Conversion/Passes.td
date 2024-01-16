@@ -4,17 +4,23 @@
 include "mlir/Pass/PassBase.td"
 include "mlir/Rewrite/PassUtil.td"
 
-// def ConvertHugrModulePass : Pass<"convert-hugr-modules", "mlir::ModuleOp"> {
-//   let summary = "Lowers hugr.modules into their containing builtin.modules";
-//   let description = [{
-//   TODO
-//   }];
-//   let options = RewritePassUtils.options # [
-//   ];
-//   let dependentDialects = [
-//     "::hugr_mlir::HugrDialect",
-//   ];
-// }
+def hugrVerifyOption : Option<"hugrVerify", "hugr-verify", "bool", "true", "Do additional, potentially expensive, verification">;
+
+def ConvertHugrExtArithPass : Pass<"convert-hugr-ext-arith"> {
+  let summary = "Lower hugr arithmetic extension to arith dialect";
+  let description = [{
+    TODO
+  }];
+  let options = RewritePassUtils.options # [
+    hugrVerifyOption
+  ];
+  let dependentDialects = [
+    "::hugr_mlir::HugrDialect",
+    "::mlir::arith::ArithDialect",
+    "::mlir::math::MathDialect",
+    "::mlir::index::IndexDialect",
+  ];
+ }
 
 def PreConvertHugrFuncPass : Pass<"pre-convert-hugr-func","hugr_mlir::ModuleOp"> {
   let summary = "Ensures all functions have no non-local edges";
@@ -69,7 +75,7 @@ def ConvertHugrPass : Pass<"convert-hugr"> {
   }];
 
   let options = RewritePassUtils.options # [
-      Option<"hugrVerify", "hugr-verify", "bool", "true", "Do additional, potentially expensive, verification">
+    hugrVerifyOption
   ];
 
   let dependentDialects = [

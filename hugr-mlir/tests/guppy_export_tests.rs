@@ -21,7 +21,7 @@ fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
         hugr_mlir::mlir::hugr::ffi::mlirHugrRegisterOptPipelines();
     }
 
-    unsafe { mlir_sys::mlirEnableGlobalDebug(true); }
+    // unsafe { mlir_sys::mlirEnableGlobalDebug(true); }
     insta::glob!("guppy-exports", "*.json", |path| {
         let mut settings = insta::Settings::clone_current();
         settings.set_description(path.to_string_lossy());

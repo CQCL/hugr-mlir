@@ -589,7 +589,8 @@ pub mod hugr {
         pub fn new(
             result_types: &[melior::ir::Type<'c>],
             name: impl AsRef<str>,
-            extension_set: ExtensionSetAttr<'c>,
+            extension: ExtensionAttr<'c>,
+            required_extensions: ExtensionSetAttr<'c>,
             args: &[melior::ir::Value<'c, '_>],
             loc: melior::ir::Location<'c>,
         ) -> Self {
@@ -599,8 +600,12 @@ pub mod hugr {
                 Self::builder(loc)
                     .add_attributes(&[
                         (
-                            melior::ir::Identifier::new(context, "extensions"),
-                            extension_set.into(),
+                            melior::ir::Identifier::new(context, "extension"),
+                            extension.into(),
+                        ),
+                        (
+                            melior::ir::Identifier::new(context, "required_extensions"),
+                            required_extensions.into(),
                         ),
                         (
                             melior::ir::Identifier::new(context, "hugr_opname"),

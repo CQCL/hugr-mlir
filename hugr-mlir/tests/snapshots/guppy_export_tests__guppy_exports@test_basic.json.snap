@@ -35,7 +35,7 @@ module {
             %4 = load_constant @bar : !hugr<function [](i6) -> i6>
             const @const_20 : i6 = 1 : i6
             %5 = load_constant @const_20 : i6
-            %6 = ext_op []"iadd" %arg3, %5 : (i6, i6) -> i6
+            %6 = ext_op["arithmetic.int"] "iadd" %arg3, %5 : [](i6, i6) -> i6
             %7 = call %4  [](i6) -> i6 %6
             %8 = make_tuple()
             %9 = tag 0 %8 : tuple<> -> <tuple<>>

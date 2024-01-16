@@ -7,11 +7,30 @@ include "hugr-mlir/IR/HugrDialect.td"
 include "hugr-mlir/IR/HugrAttrs.td"
 include "mlir/IR/BuiltinTypeInterfaces.td"
 
+// def ClosureTypesParameter : OptionalParameter<"::std::optional<::llvm::ArrayRef<::mlir::Type>>", "closure types"> {
+  // let allocator = [{ ([&] {
+      // if($_self) {
+        // $_dst = {$_allocator.copyInto(*$_self)};
+      // } else {
+        // $_dst = std::nullopt;
+      // }
+    // }()); }];
+  // let cppStorageType = "::std::optional<::llvm::SmallVector<::mlir::Type>>";
+  // let comparator = cppType # "($_lhs) == " # cppType # "($_rhs)";
+  // let parser = [{
+//
+//
+  // }]
+// }
+
 def Hugr_ClosureType : Hugr_Type<"Closure","closure",[MemRefElementTypeInterface]> {
     let summary = "A Hugr Closure Type";
     let description = [{ TODO }];
-
     let assemblyFormat = "";
+
+    let extraClassDeclaration = [{
+       mlir::MemRefType getMemRefType();
+    }];
 }
 
 def Hugr_FunctionType : Hugr_Type<"Function", "function"> {
@@ -21,6 +40,7 @@ def Hugr_FunctionType : Hugr_Type<"Function", "function"> {
 
         We do not verify that all input and output types implement
         `HugrTypeInterface` because external passes may modify them.
+
         Instead, another pass (unimplemented) should be used to either error or
         clean up the types.
 

@@ -469,18 +469,19 @@ impl EmitMlir for hugr::ops::custom::ExternalOp {
         data: MlirData<'a, 'b>,
     ) -> Result<Self::Op<'a>> {
         use hugr::ops::custom::ExternalOp;
-        let name = match self {
-            ExternalOp::Extension(ref e) => e.def().name(),
-            ExternalOp::Opaque(ref o) => o.name(),
+        let (name, ext) = match self {
+            ExternalOp::Extension(ref e) => (e.def().name(), e.def().extension()),
+            ExternalOp::Opaque(ref o) => (o.name(), o.extension())
         };
-        let extensions = extension_set_to_extension_set_attr(
+        let required_extensions = extension_set_to_extension_set_attr(
             state.context,
             &self.dataflow_signature().unwrap().extension_reqs,
         );
         Ok(mlir::hugr::ExtensionOp::new(
             &data.result_types,
             name,
-            extensions,
+            extension_id_to_extension_attr(state.context, ext),
+            required_extensions,
             &data.inputs,
             data.loc,
         ))

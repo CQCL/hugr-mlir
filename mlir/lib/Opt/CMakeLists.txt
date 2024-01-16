@@ -11,6 +11,14 @@ add_mlir_library(HugrMLIROpt
     MLIRLLVMDialect
     MLIRFuncDialect
     MLIROptLib
+    MLIRSCFToControlFlow
+    MLIRControlFlowToLLVM
+    MLIRMathToLLVM
+    MLIRIndexToLLVM
+    MLIRArithToLLVM
+    MLIRFuncToLLVM
+    MLIRUBToLLVM
+    MLIRMemRefToLLVM
 )
 
 mlir_check_all_link_libraries(HugrMLIROpt)
