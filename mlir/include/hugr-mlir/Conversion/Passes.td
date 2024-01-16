@@ -90,4 +90,15 @@ def ConvertHugrPass : Pass<"convert-hugr"> {
   ];
 }
 
+def FinalizeHugrToLLVMPass : Pass<"finalize-hugr-to-llvm", "mlir::ModuleOp"> {
+  let summary = "TODO";
+  let description = "TODO";
+  let options = RewritePassUtils.options # [
+    hugrVerifyOption
+  ];
+  let dependentDialects = [
+    "::mlir::LLVM::LLVMDialect"
+  ];
+}
+
 #endif

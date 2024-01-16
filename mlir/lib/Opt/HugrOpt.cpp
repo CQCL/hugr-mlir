@@ -34,8 +34,6 @@ void hugr_mlir::registerHugrOptPipelines() {
           pm.addPass(createConvertHugrFuncPass());
           pm.addPass(createConvertHugrPass());
         }
-
-
         {
           auto& pm = module_pm.nest<mlir::func::FuncOp>();
           pm.addPass(mlir::createCanonicalizerPass());
@@ -50,34 +48,11 @@ void hugr_mlir::registerHugrOptPipelines() {
           pm.addPass(mlir::createCSEPass());
           pm.addPass(mlir::createCanonicalizerPass());
           pm.addPass(mlir::createConvertSCFToCFPass());
-          pm.addPass(mlir::createConvertMathToLLVMPass());
-          pm.addPass(mlir::createConvertIndexToLLVMPass());
-          pm.addPass(mlir::createUBToLLVMConversionPass());
-          pm.addPass(mlir::createArithToLLVMConversionPass());
-          pm.addPass(mlir::createCanonicalizerPass());
         }
         {
           auto& pm = module_pm;
-          pm.addPass(mlir::createConvertControlFlowToLLVMPass());
-          pm.addPass(mlir::createFinalizeMemRefToLLVMConversionPass());
-        }
-        {
-          auto& pm = module_pm.nest<mlir::func::FuncOp>();
-          pm.addPass(mlir::createCanonicalizerPass());
-        }
-        {
-          auto& pm = module_pm;
-          pm.addPass(mlir::createSCCPPass());
-        }
-        {
-          auto& pm = module_pm.nest<mlir::func::FuncOp>();
-          pm.addPass(mlir::createCanonicalizerPass());
-          pm.addPass(mlir::createCSEPass());
-          pm.addPass(mlir::createCanonicalizerPass());
-        }
-        {
-          auto& pm = module_pm;
-          pm.addPass(mlir::createConvertFuncToLLVMPass());
+          pm.addPass(mlir::createSymbolDCEPass());
+          pm.addPass(hugr_mlir::createFinalizeHugrToLLVMPass());
         }
         {
           auto& pm = module_pm.nest<mlir::LLVM::LLVMFuncOp>();

@@ -4,6 +4,7 @@ add_mlir_library(HugrMLIRConversion
   ConvertHugrPass.cpp
   ConvertHugrFuncPass.cpp
   ConvertHugrExtArithPass.cpp
+  FinalizeHugrToLLVMPass.cpp
 
   DEPENDS
   HugrMLIRConversionPassIncGen
