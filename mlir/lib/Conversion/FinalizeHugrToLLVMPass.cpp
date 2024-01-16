@@ -7,6 +7,7 @@
 #include "mlir/Conversion/MemRefToLLVM/MemRefToLLVM.h"
 #include "mlir/Conversion/FuncToLLVM/ConvertFuncToLLVM.h"
 #include "mlir/Conversion/IndexToLLVM/IndexToLLVM.h"
+#include "mlir/Conversion/SCFToControlFlow/SCFToControlFlow.h"
 #include "mlir/Conversion/UBToLLVM/UBToLLVM.h"
 #include "mlir/Conversion/ControlFlowToLLVM/ControlFlowToLLVM.h"
 #include "mlir/Dialect/Arith/IR/Arith.h"
@@ -63,6 +64,7 @@ LogicalResult FinalizeHugrToLLVMPass::initialize(MLIRContext * context) {
   ub::populateUBToLLVMConversionPatterns(*type_converter, ps);
   cf::populateControlFlowToLLVMConversionPatterns(*type_converter, ps);
   populateFuncToLLVMConversionPatterns(*type_converter, ps);
+  populateSCFToControlFlowConversionPatterns(ps);
 
   patterns = FrozenRewritePatternSet(std::move(ps), disabledPatterns, enabledPatterns);
 

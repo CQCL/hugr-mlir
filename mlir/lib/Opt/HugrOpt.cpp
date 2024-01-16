@@ -47,7 +47,6 @@ void hugr_mlir::registerHugrOptPipelines() {
           pm.addPass(mlir::createCanonicalizerPass());
           pm.addPass(mlir::createCSEPass());
           pm.addPass(mlir::createCanonicalizerPass());
-          pm.addPass(mlir::createConvertSCFToCFPass());
         }
         {
           auto& pm = module_pm;

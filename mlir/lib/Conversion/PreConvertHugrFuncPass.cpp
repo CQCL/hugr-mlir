@@ -65,21 +65,23 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
     case_values.push_back(i);
   }
 
-  SmallVector<Block*> case_destinations{op.getDestinations()};
-  SmallVector<SmallVector<Value>> case_operands;
+  SmallVector<Block*> case_destinations;
+  SmallVector<SmallVector<Value>> case_operands(pred_ty.numAlts());
+
+  for(auto [i, d]: llvm::enumerate(op.getDestinations())) {
+    auto b = rw.createBlock(d);
+    rw.setInsertionPointToStart(b);
+    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, pred, i);
+    SmallVector<Value> vs;
+    rw.createOrFold<hugr_mlir::UnpackTupleOp>(vs, loc, llvm::cast<TupleType>(pred.getType().getAltType(i)).getTypes(), v);
+    llvm::copy(op.getOtherInputs(), std::back_inserter(vs));
+    rw.create<cf::BranchOp>(loc, d, vs);
+    case_destinations.push_back(b);
+  }
 
   rw.setInsertionPoint(op);
   auto tag = rw.createOrFold<index::CastUOp>(
       loc, rw.getI32Type(), rw.createOrFold<hugr_mlir::ReadTagOp>(loc, pred));
-
-  for (auto [i, t] : llvm::enumerate(
-           llvm::cast<hugr_mlir::SumType>(pred.getType()).getTypes())) {
-    auto tt = llvm::cast<TupleType>(t);
-    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, pred, i);
-    auto& case_ops = case_operands.emplace_back();
-    rw.createOrFold<hugr_mlir::UnpackTupleOp>(case_ops, loc, tt.getTypes(), v);
-    llvm::copy(op.getOtherInputs(), std::back_inserter(case_ops));
-  }
 
   assert(
       case_values.size() == case_destinations.size() &&
@@ -91,10 +93,11 @@ mlir::LogicalResult LowerSwitch::matchAndRewrite(
       case_operands, std::back_inserter(case_operands_vrs),
       [](SmallVectorImpl<Value>& x) { return ValueRange(x); });
   rw.replaceOpWithNewOp<cf::SwitchOp>(
-      op, tag, case_destinations[0], case_operands_vrs[0],
+      op, tag, case_destinations[0], case_operands[0],
       ArrayRef(case_values).drop_front(),
       ArrayRef(case_destinations).drop_front(),
       ArrayRef(case_operands_vrs).drop_front());
+
   return success();
 }
 

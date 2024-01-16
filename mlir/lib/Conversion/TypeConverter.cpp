@@ -109,6 +109,7 @@ HugrTypeConverter::materializeTargetSum(
 
   auto switch_op =
       rw.create<scf::IndexSwitchOp>(loc, ts, tag, cases, cases.size());
+  assert(switch_op.getNumRegions() == st.numAlts() && "must do");
   for (auto r : switch_op.getRegions()) {
     assert(r->empty() && "Region should not have been constructed with block");
     auto n = r->getRegionNumber();
@@ -190,6 +191,7 @@ mlir::FailureOr<mlir::Value> HugrTypeConverter::materializeSourceSum(
   }
   auto switch_op =
       rw.create<scf::IndexSwitchOp>(loc, st, tag, cases, cases.size());
+  assert(switch_op.getNumRegions() == st.numAlts() && "must do");
   OpBuilder::InsertionGuard _g(rw);
 
   for (auto [r, src_t] :

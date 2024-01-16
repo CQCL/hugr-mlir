@@ -517,7 +517,10 @@ mlir::LogicalResult LowerConditional::matchAndRewrite(
   rw.setInsertionPointToEnd(orig_block);
   auto tag = rw.createOrFold<index::CastUOp>(
       loc, rw.getI32Type(), rw.createOrFold<hugr_mlir::ReadTagOp>(loc, pred));
-  rw.create<cf::SwitchOp>(loc, tag, case_destinations[0], ValueRange{}, ArrayRef(case_values).drop_front(), BlockRange{case_destinations}.drop_front(), SmallVector(pred_ty.numAlts() - 1, ValueRange{}));
+  rw.create<cf::SwitchOp>(loc, tag, case_destinations[0], ValueRange{},
+                          ArrayRef(case_values).drop_front(),
+                          BlockRange{case_destinations}.drop_front(),
+                          SmallVector(pred_ty.numAlts() - 1, ValueRange{}));
 
   rw.replaceOp(op, exit_block->getArguments());
   return success();
