@@ -165,14 +165,18 @@ void PreConvertHugrFuncPass::runOnOperation() {
   IRRewriter rw(context);
   for (auto f : hugr_funcs) {
     if (isTopLevelFunc(f)) {
-      continue;
-    }
-    rw.setInsertionPointToStart(&f->getParentRegion()->front());
-    auto o = rw.create<hugr_mlir::AllocFunctionOp>(
-        f.getLoc(), f.getStaticEdgeAttr());
-    if(failed(func_closures.insert(f, o))) {
-      emitError(f.getLoc()) << "PreConvertHugrPass:Failed to collect func";
-      return signalPassFailure();
+      if(failed(func_closures.insert(f))) {
+        emitError(f.getLoc()) << "PreConvertHugrPass:Failed to collect top level func";
+        return signalPassFailure();
+      }
+    } else {
+      rw.setInsertionPointToStart(&f->getParentRegion()->front());
+      auto o = rw.create<hugr_mlir::AllocFunctionOp>(
+          f.getLoc(), f.getStaticEdgeAttr());
+      if(failed(func_closures.insert(o))) {
+        emitError(f.getLoc()) << "PreConvertHugrPass:Failed to collect func";
+        return signalPassFailure();
+      }
     }
   }
 
@@ -183,8 +187,10 @@ void PreConvertHugrFuncPass::runOnOperation() {
       func::FuncDialect>();
   target.addIllegalOp<hugr_mlir::SwitchOp>();
   target.addDynamicallyLegalOp<hugr_mlir::CallOp>([&](hugr_mlir::CallOp op) {
-    return !!op.getCalleeValue() ||
-           !!func_closures.lookupTopLevelFunc(op.getCalleeAttrAttr().getRef().getLeafReference().getValue());
+
+    return op.getCalleeValue() ||
+           func_closures.lookupTopLevelFunc(op.getCalleeAttrAttr().getRef());
+
   });
   target.addDynamicallyLegalOp<hugr_mlir::LoadConstantOp>(
       [&](hugr_mlir::LoadConstantOp op) {
@@ -207,7 +213,7 @@ void PreConvertHugrFuncPass::runOnOperation() {
     FrozenRewritePatternSet patterns(
         std::move(ps), disabledPatterns, enabledPatterns);
     if (failed(applyPartialConversion(getOperation(), target, patterns))) {
-      emitError(getOperation()->getLoc()) << "Failed to closureize call ops";
+      emitError(getOperation()->getLoc()) << "PreConvertHugrPass: Failed to closureize call ops";
       return signalPassFailure();
     }
   }

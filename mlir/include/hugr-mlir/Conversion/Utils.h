@@ -36,12 +36,15 @@ struct FuncClosureMap {
     return nullptr;
   }
 
-  mlir::LogicalResult insert(hugr_mlir::FuncOp func_op, hugr_mlir::AllocFunctionOp alloc_op) {
-    if(isTopLevelFunc(func_op)) {
-      return mlir::success(func_map.try_emplace(func_op.getSymName(), func_op).second);
-    } else {
-      return mlir::success(alloc_map.try_emplace(func_op.getSymName(), alloc_op).second);
-    }
+  mlir::LogicalResult insert(hugr_mlir::FuncOp func_op) {
+    assert(isTopLevelFunc(func_op) && "Precondition");
+    return mlir::success(func_map.try_emplace(func_op.getSymName(), func_op).second);
+  }
+
+  mlir::LogicalResult insert(hugr_mlir::AllocFunctionOp alloc_op) {
+      auto sym = alloc_op.getFunc().getRef();
+      if(sym.getNestedReferences().size()) { return mlir::failure(); }
+      return mlir::success(alloc_map.try_emplace(sym.getLeafReference().getValue(), alloc_op).second);
   }
 
 private:

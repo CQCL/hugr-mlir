@@ -363,19 +363,17 @@ pub mod hugr {
             loc: melior::ir::Location<'c>,
         ) -> Self {
             let context = unsafe { loc.context().to_ref() };
+            let mut attrs = Vec::<(melior::ir::Identifier, melior::ir::Attribute)>::new();
+            attrs.push((melior::ir::Identifier::new(context, "sym_name"), name.into()));
+            attrs.push((melior::ir::Identifier::new(context, "function_type"), melior::ir::attribute::TypeAttribute::new(type_.into()).into()));
+            if name.to_string() == "main" {
+                // TODO this is a hack we should look at metadata
+                attrs.push((melior::ir::Identifier::new(context, "sym_visibility"), melior::ir::attribute::StringAttribute::new(context, "public").into()));
+            }
             FuncOp(
                 Self::builder(loc)
                     .add_regions(vec![body])
-                    .add_attributes(&[
-                        (
-                            melior::ir::Identifier::new(context, "sym_name"),
-                            name.into(),
-                        ),
-                        (
-                            melior::ir::Identifier::new(context, "function_type"),
-                            melior::ir::attribute::TypeAttribute::new(type_.into()).into(),
-                        ),
-                    ])
+                    .add_attributes(&attrs)
                     .build(),
             )
         }

@@ -376,7 +376,7 @@ void ConvertHugrFuncPass::runOnOperation() {
       emitError(alloc->getLoc()) << "Unknown symbol: " << alloc.getFunc().getRef();
       return signalPassFailure();
     }
-    if(mlir::failed(fcm.insert(func_op, alloc))) {
+    if(mlir::failed(fcm.insert(alloc))) {
       auto ifd = emitError(alloc->getLoc()) << "Failed to ingress hugr.alloc_function op";
       ifd.attachNote(func_op.getLoc());
       return signalPassFailure();
@@ -386,6 +386,13 @@ void ConvertHugrFuncPass::runOnOperation() {
       llvm::transform(func_op.getCaptures().getTypes(), std::back_inserter(attrs), [](auto x) { return TypeAttr::get(x); });
       alloc.setClosureTypesAttr(rw.getArrayAttr(attrs));
     });
+  }
+  for(auto [_, func]: funcs) {
+    if(hugr_mlir::isTopLevelFunc(func)
+       && failed(fcm.insert(func))) {
+      emitError(func->getLoc()) << "Failed to ingress hugr.func op";
+      return signalPassFailure();
+    }
   }
 
   auto type_converter = hugr_mlir::createSimpleTypeConverter();
