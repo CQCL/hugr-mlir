@@ -28,6 +28,7 @@ namespace {
 
 
 namespace {
+struct QuantumTypeConverter;
 using namespace mlir;
 
 struct QIR_FuncData {
@@ -38,7 +39,7 @@ struct QIR_FuncData {
 };
 
 enum class QIR_FuncIndex : unsigned {
-  H,
+  H, X, Z,
   Measure,
   QAlloc,
   QFree,
@@ -54,6 +55,8 @@ struct QIR_FuncDataFactory {
 
     QIR_FuncData get(QIR_FuncIndex) const;
     SmallVector<QIR_FuncData> all() const;
+    // template<QIR_FuncIndex>
+    // LogicalResult build(QuantumTypeConverter const&, ConversionPatternRewriter& rw, Location loc, hugr_mlir::ExtensionOp, hugr_mlir::ExtensionOp::Adaptor) const;
 protected:
     LLVM::LLVMPointerType getPointerType() const { return LLVM::LLVMPointerType::get(context); };
     MLIRContext * const context;
@@ -85,14 +88,14 @@ struct QuantumTypeConverter : TypeConverter {
             return c_op.getResult(0);
         });
     }
-private:
+
+    static hugr_mlir::OpaqueType getQubitType(OpBuilder& rw) {
+        return rw.getType<hugr_mlir::OpaqueType>("qubit", rw.getAttr<hugr_mlir::ExtensionAttr>("prelude"), ArrayRef<Attribute>{}, hugr_mlir::TypeConstraint::Linear);
+
+    }
     static bool is_qubit(Type t)  {
-        if(auto o = llvm::dyn_cast<hugr_mlir::OpaqueType>(t)) {
-            if(o.getExtension().getName() == "prelude" && o.getTypeArgs().empty() && o.getName() == "qubit") {
-                return true;
-            }
-        }
-        return false;
+        OpBuilder rw(t.getContext());
+        return t == getQubitType(rw);
     };
 
 
@@ -129,6 +132,18 @@ struct Measure_Pattern : QuantumPatternBase {
     LogicalResult replace(hugr_mlir::ExtensionOp, OpAdaptor, mlir::ConversionPatternRewriter &) const override;
 };
 
+struct X_Pattern : QuantumPatternBase {
+    template<typename ...Args>
+    X_Pattern(Args&& ...args) : QuantumPatternBase("Measure", 1, 2, std::forward<Args>(args)...) {}
+    LogicalResult replace(hugr_mlir::ExtensionOp, OpAdaptor, mlir::ConversionPatternRewriter &) const override;
+};
+
+struct Z_Pattern : QuantumPatternBase {
+    template<typename ...Args>
+    Z_Pattern(Args&& ...args) : QuantumPatternBase("Measure", 1, 2, std::forward<Args>(args)...) {}
+    LogicalResult replace(hugr_mlir::ExtensionOp, OpAdaptor, mlir::ConversionPatternRewriter &) const override;
+};
+
 struct QAlloc_Pattern : QuantumPatternBase {
     template<typename ...Args>
     QAlloc_Pattern(Args&& ...args) : QuantumPatternBase("QAlloc", 0, 1, std::forward<Args>(args)...) {}
@@ -143,6 +158,45 @@ struct QFree_Pattern : QuantumPatternBase {
 
 }
 
+// template<QIR_FuncIndex func_index>
+// LogicalResult QIR_FuncDataFactory::build(QuantumTypeConverter const& tc, ConversionPatternRewriter& rw, Location loc, hugr_mlir::ExtensionOp op, hugr_mlir::ExtensionOp::Adaptor adaptor) const {
+//     auto func_data = get(func_index);
+//     if(adaptor.getArgs().getTypes() != func_data.type.getInputs()) {
+//         return rw.notifyMatchFailure(op, [&](Diagnostic& d) {
+//             d << "Type mismatch in args of quantum extension op. Expected(" << func_data.type.getInputs() << "), Found (" << adaptor.getArgs().getTypes();
+//         });
+//     }
+//     SmallVector<Type> converted_res_tys;
+//     if(failed(tc.convertTypes(op.getResultTypes(), converted_res_tys))) {
+//         return rw.notifyMatchFailure(op, [&](Diagnostic& d) {
+//             d << "Failed to convert result types:" << op.getResultTypes();
+//         });
+//     }
+//     if(converted_res_tys != func_data.type.getResults()) {
+//         return rw.notifyMatchFailure(op, [&](Diagnostic& d) {
+//             d << "Type mismatch in results of quantum extension op. Expected(" << func_data.type.getResults() << "), Found (" << converted_res_tys;
+//         });
+//     }
+//     SmallVector<Value> qubit_args;
+//     SmallVector<Value> qubit_results;
+//     llvm::copy_if(op.getArgs(), std::back_inserter(qubit_args), [](auto x) { return QuantumTypeConverter::is_qubit(x.getType()); });
+//     llvm::copy_if(op.getResults(), std::back_inserter(qubit_results), [](auto x) { return QuantumTypeConverter::is_qubit(x.getType()); });
+//     if(qubit_args.size() != qubit_results.size()) {
+//         return rw.notifyMatchFailure(op, [&](Diagnostic& d) {
+//             d << "Mismatch in qubit args and results: " << qubit_args.size() << " != " << qubit_results.size();
+//         });
+//     }
+//     SmallVector<Value> ptr_args;
+//     llvm::transform(qubit_args, std::back_inserter(ptr_args), [&](auto x) {return rw.getRemappedValue(x);});
+//     rw.replaceAllUsesWith(qubit_results, ptr_args);
+
+
+
+
+
+//     return success();
+// }
+
 SmallVector<QIR_FuncData> QIR_FuncDataFactory::all() const {
     SmallVector<QIR_FuncData> r;
     for(auto i = 0u; i < static_cast<unsigned>(QIR_FuncIndex::_END); ++i) {
@@ -155,6 +209,8 @@ QIR_FuncData QIR_FuncDataFactory::get(QIR_FuncIndex i) const {
     OpBuilder rw(context);
     switch(i) {
        case QIR_FuncIndex::H: return QIR_FuncData{"__quantum__qis__h__body", rw.getFunctionType(getPointerType(), {})};
+       case QIR_FuncIndex::X: return QIR_FuncData{"__quantum__qis__x__body", rw.getFunctionType(getPointerType(), {})};
+       case QIR_FuncIndex::Z: return QIR_FuncData{"__quantum__qis__z__body", rw.getFunctionType(getPointerType(), {})};
        case QIR_FuncIndex::Measure: return QIR_FuncData{"__quantum__qis__m__body", rw.getFunctionType(getPointerType(), getPointerType())};
        case QIR_FuncIndex::QAlloc: return QIR_FuncData{"__quantum__rt__qubit__allocate", rw.getFunctionType({}, getPointerType())};
        case QIR_FuncIndex::QFree: return QIR_FuncData{"__quantum__rt__qubit__release", rw.getFunctionType(getPointerType(), {})};
@@ -168,6 +224,22 @@ QIR_FuncData QIR_FuncDataFactory::get(QIR_FuncIndex i) const {
 LogicalResult H_Pattern::replace(hugr_mlir::ExtensionOp op, OpAdaptor adaptor, mlir::ConversionPatternRewriter &rw) const {
     auto arg1 = adaptor.getArgs()[0];
     auto fd = funcdata.get(QIR_FuncIndex::H);
+    rw.replaceAllUsesWith(op.getResult(0), arg1);
+    rw.replaceOpWithNewOp<func::CallOp>(op, fd.symbol, fd.type.getResults(), arg1);
+    return success();
+}
+
+LogicalResult Z_Pattern::replace(hugr_mlir::ExtensionOp op, OpAdaptor adaptor, mlir::ConversionPatternRewriter &rw) const {
+    auto arg1 = adaptor.getArgs()[0];
+    auto fd = funcdata.get(QIR_FuncIndex::Z);
+    rw.replaceAllUsesWith(op.getResult(0), arg1);
+    rw.replaceOpWithNewOp<func::CallOp>(op, fd.symbol, fd.type.getResults(), arg1);
+    return success();
+}
+
+LogicalResult X_Pattern::replace(hugr_mlir::ExtensionOp op, OpAdaptor adaptor, mlir::ConversionPatternRewriter &rw) const {
+    auto arg1 = adaptor.getArgs()[0];
+    auto fd = funcdata.get(QIR_FuncIndex::X);
     rw.replaceAllUsesWith(op.getResult(0), arg1);
     rw.replaceOpWithNewOp<func::CallOp>(op, fd.symbol, fd.type.getResults(), arg1);
     return success();
