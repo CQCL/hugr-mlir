@@ -163,13 +163,13 @@
   ],
   "nodes": [
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Module",
       "parent": 0
     },
     {
       "extension_delta": [],
-      "input_extensions": [],
+      "input_extensions": null,
       "inputs": [
         {
           "args": [
@@ -206,7 +206,7 @@
     },
     {
       "extension_delta": [],
-      "input_extensions": [],
+      "input_extensions": null,
       "inputs": [
         {
           "args": [
@@ -256,7 +256,7 @@
           "t": "Opaque"
         }
       ],
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "ExitBlock",
       "parent": 15
     },
@@ -275,12 +275,12 @@
           "t": "Opaque"
         }
       ],
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "ExitBlock",
       "parent": 19
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 13,
       "types": [
@@ -299,7 +299,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 1,
       "types": [
@@ -318,7 +318,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 14,
       "types": [
@@ -337,7 +337,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 2,
       "types": [
@@ -356,7 +356,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 1,
       "types": [
@@ -380,7 +380,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 13,
       "types": [
@@ -399,7 +399,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 2,
       "types": [
@@ -423,7 +423,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 14,
       "types": [
@@ -442,7 +442,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "name": "foo",
       "op": "FuncDefn",
       "parent": 0,
@@ -483,7 +483,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "name": "bar",
       "op": "FuncDefn",
       "parent": 0,
@@ -524,7 +524,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "CFG",
       "parent": 13,
       "signature": {
@@ -560,7 +560,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Call",
       "parent": 1,
       "signature": {
@@ -596,14 +596,14 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "MakeTuple",
       "op": "LeafOp",
       "parent": 1,
       "tys": []
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "Tag",
       "op": "LeafOp",
       "parent": 1,
@@ -616,7 +616,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "CFG",
       "parent": 14,
       "signature": {
@@ -652,14 +652,14 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "MakeTuple",
       "op": "LeafOp",
       "parent": 2,
       "tys": []
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "Tag",
       "op": "LeafOp",
       "parent": 2,

@@ -1,0 +1,3286 @@
+{
+  "edges": [
+    [
+      [
+        3,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        18,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        22,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        0
+      ],
+      [
+        10,
+        1
+      ]
+    ],
+    [
+      [
+        19,
+        0
+      ],
+      [
+        10,
+        2
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        21,
+        0
+      ]
+    ],
+    [
+      [
+        21,
+        0
+      ],
+      [
+        10,
+        0
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        25,
+        null
+      ]
+    ],
+    [
+      [
+        22,
+        1
+      ],
+      [
+        29,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        11,
+        1
+      ]
+    ],
+    [
+      [
+        5,
+        1
+      ],
+      [
+        11,
+        2
+      ]
+    ],
+    [
+      [
+        23,
+        0
+      ],
+      [
+        24,
+        0
+      ]
+    ],
+    [
+      [
+        24,
+        0
+      ],
+      [
+        11,
+        0
+      ]
+    ],
+    [
+      [
+        25,
+        0
+      ],
+      [
+        34,
+        null
+      ]
+    ],
+    [
+      [
+        25,
+        1
+      ],
+      [
+        46,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        26,
+        0
+      ]
+    ],
+    [
+      [
+        6,
+        1
+      ],
+      [
+        12,
+        2
+      ]
+    ],
+    [
+      [
+        26,
+        0
+      ],
+      [
+        27,
+        0
+      ]
+    ],
+    [
+      [
+        26,
+        1
+      ],
+      [
+        27,
+        1
+      ]
+    ],
+    [
+      [
+        27,
+        0
+      ],
+      [
+        28,
+        0
+      ]
+    ],
+    [
+      [
+        28,
+        0
+      ],
+      [
+        12,
+        0
+      ]
+    ],
+    [
+      [
+        28,
+        1
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    [
+      [
+        29,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        0
+      ],
+      [
+        30,
+        0
+      ]
+    ],
+    [
+      [
+        7,
+        1
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    [
+      [
+        32,
+        0
+      ],
+      [
+        33,
+        0
+      ]
+    ],
+    [
+      [
+        33,
+        0
+      ],
+      [
+        13,
+        0
+      ]
+    ],
+    [
+      [
+        34,
+        0
+      ],
+      [
+        22,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        0
+      ],
+      [
+        35,
+        0
+      ]
+    ],
+    [
+      [
+        8,
+        1
+      ],
+      [
+        43,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        0
+      ],
+      [
+        36,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        1
+      ],
+      [
+        36,
+        1
+      ]
+    ],
+    [
+      [
+        36,
+        0
+      ],
+      [
+        37,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        0
+      ],
+      [
+        38,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        1
+      ],
+      [
+        14,
+        1
+      ]
+    ],
+    [
+      [
+        38,
+        0
+      ],
+      [
+        39,
+        0
+      ]
+    ],
+    [
+      [
+        38,
+        1
+      ],
+      [
+        39,
+        1
+      ]
+    ],
+    [
+      [
+        39,
+        0
+      ],
+      [
+        40,
+        0
+      ]
+    ],
+    [
+      [
+        39,
+        1
+      ],
+      [
+        40,
+        1
+      ]
+    ],
+    [
+      [
+        40,
+        0
+      ],
+      [
+        41,
+        0
+      ]
+    ],
+    [
+      [
+        41,
+        0
+      ],
+      [
+        42,
+        0
+      ]
+    ],
+    [
+      [
+        41,
+        1
+      ],
+      [
+        42,
+        1
+      ]
+    ],
+    [
+      [
+        42,
+        0
+      ],
+      [
+        43,
+        1
+      ]
+    ],
+    [
+      [
+        43,
+        0
+      ],
+      [
+        14,
+        2
+      ]
+    ],
+    [
+      [
+        44,
+        0
+      ],
+      [
+        45,
+        0
+      ]
+    ],
+    [
+      [
+        45,
+        0
+      ],
+      [
+        14,
+        0
+      ]
+    ],
+    [
+      [
+        46,
+        0
+      ],
+      [
+        29,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        0
+      ],
+      [
+        15,
+        1
+      ]
+    ],
+    [
+      [
+        9,
+        1
+      ],
+      [
+        15,
+        2
+      ]
+    ],
+    [
+      [
+        47,
+        0
+      ],
+      [
+        48,
+        0
+      ]
+    ],
+    [
+      [
+        48,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        49,
+        0
+      ],
+      [
+        19,
+        0
+      ]
+    ],
+    [
+      [
+        50,
+        0
+      ],
+      [
+        26,
+        1
+      ]
+    ],
+    [
+      [
+        51,
+        0
+      ],
+      [
+        30,
+        1
+      ]
+    ],
+    [
+      [
+        52,
+        0
+      ],
+      [
+        35,
+        1
+      ]
+    ],
+    [
+      [
+        53,
+        0
+      ],
+      [
+        42,
+        2
+      ]
+    ],
+    [
+      [
+        54,
+        0
+      ],
+      [
+        43,
+        2
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        19,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        20,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        24,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        31,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        32,
+        null
+      ]
+    ],
+    [
+      [
+        30,
+        null
+      ],
+      [
+        13,
+        null
+      ]
+    ],
+    [
+      [
+        31,
+        null
+      ],
+      [
+        13,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        null
+      ],
+      [
+        44,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        null
+      ],
+      [
+        47,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": null,
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "cfg_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "input_extensions": null,
+      "op": "ExitBlock",
+      "parent": 18
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 17,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 1,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 22,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 25,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 29,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 34,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 46,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 22,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 25,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 29,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 34,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 46,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 17,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "name": "test",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "CFG",
+      "parent": 17,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 1,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 1,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Const",
+      "parent": 22,
+      "typ": {
+        "s": "Unit",
+        "size": 2,
+        "t": "Sum"
+      },
+      "value": {
+        "tag": 1,
+        "v": "Sum",
+        "value": {
+          "v": "Tuple",
+          "vs": []
+        }
+      }
+    },
+    {
+      "datatype": {
+        "s": "Unit",
+        "size": 2,
+        "t": "Sum"
+      },
+      "input_extensions": null,
+      "op": "LoadConstant",
+      "parent": 22
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 25,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "s": "Unit",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 25,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 25,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 29,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": []
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 29,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 29,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 29,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 34,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "inner": [
+              {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              }
+            ],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "inner": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "inner": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "args": [],
+      "description": "",
+      "extension": "quantum.tket2",
+      "input_extensions": null,
+      "lop": "CustomOp",
+      "op": "LeafOp",
+      "op_name": "CX",
+      "parent": 34,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 34,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 34,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 34,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 18,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 46,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 46,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "name": "MakeList",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "IsNonempty",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "AssertEmpty",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "Pop",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "inner": [
+                {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                },
+                {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                }
+              ],
+              "t": "Tuple"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MakeList$1",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "Append",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    }
+  ],
+  "version": "v0"
+}

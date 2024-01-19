@@ -169,6 +169,8 @@ def Hugr_TailLoopOp : Hugr_Op<"tailloop",
     );
     let regions = (region DataflowGraphRegion:$body);
 
+    let hasRegionVerifier = 1;
+
     let extraClassDeclaration = [{
         static mlir::StringRef getDefaultDialect() { return "hugr"; }
     }];

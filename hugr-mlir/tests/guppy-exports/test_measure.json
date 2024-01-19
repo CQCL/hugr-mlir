@@ -113,13 +113,13 @@
   ],
   "nodes": [
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Module",
       "parent": 0
     },
     {
       "extension_delta": [],
-      "input_extensions": [],
+      "input_extensions": null,
       "inputs": [
         {
           "args": [
@@ -176,12 +176,12 @@
           "t": "Opaque"
         }
       ],
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "ExitBlock",
       "parent": 9
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 8,
       "types": [
@@ -207,7 +207,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Input",
       "parent": 1,
       "types": [
@@ -233,7 +233,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 1,
       "types": [
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Output",
       "parent": 8,
       "types": [
@@ -276,7 +276,7 @@
       ]
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "name": "measure",
       "op": "FuncDecl",
       "parent": 0,
@@ -305,7 +305,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "name": "test",
       "op": "FuncDefn",
       "parent": 0,
@@ -353,7 +353,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "CFG",
       "parent": 8,
       "signature": {
@@ -396,7 +396,7 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "op": "Call",
       "parent": 1,
       "signature": {
@@ -420,14 +420,14 @@
       }
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "MakeTuple",
       "op": "LeafOp",
       "parent": 1,
       "tys": []
     },
     {
-      "input_extensions": [],
+      "input_extensions": null,
       "lop": "Tag",
       "op": "LeafOp",
       "parent": 1,

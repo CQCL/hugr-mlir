@@ -1,5 +1,6 @@
 #include "hugr-mlir/Conversion/ConvertHugrExtArithPass.h"
 
+#include "hugr-mlir/Conversion/Utils.h"
 #include "hugr-mlir/IR/HugrDialect.h"
 #include "hugr-mlir/IR/HugrOps.h"
 
@@ -61,57 +62,29 @@ private:
 };
 
 
-template<char* name>
-void replace_extension(hugr_mlir::ExtensionOp op, PatternRewriter& rw);
-
-struct HugrExtensionOpPattern : OpRewritePattern<hugr_mlir::ExtensionOp> {
+struct HugrExtensionOpPattern_float : hugr_mlir::HugrExtensionOpRewritePattern {
   template<typename ...Args>
-  HugrExtensionOpPattern(StringRef extname_, StringRef opname_, int num_args_, int num_results_, Args&& ...args) :
-    opname(opname_), extname(extname_), num_args(num_args_), num_results(num_results_),
-    OpRewritePattern(std::forward<Args>(args)...) {
-  }
-
-  LogicalResult matchAndRewrite(hugr_mlir::ExtensionOp op, PatternRewriter& rw) const override {
-    if(!op.getExtension().getName().equals(extname) || !op.getHugrOpname().equals(opname) || op.getNumOperands() != num_args || op.getNumResults() != num_results) {
-      return rw.notifyMatchFailure(op, [&](auto& d) {
-        d << "Expected (" << opname << "," << extname << "," << num_args << "," << num_results << ")\n";
-        d << "Found (" << op.getHugrOpname() << "," << op.getExtension().getName() << "," << op.getNumOperands() << "," << op.getNumResults() << ")\n";
-      });
-    }
-    replace(op, rw);
-    return success();
-  }
-  virtual void replace(hugr_mlir::ExtensionOp op, PatternRewriter& rw) const = 0;
-protected:
-  StringRef const opname;
-  StringRef const extname;
-  int const num_args;
-  int const num_results;
-};
-
-struct HugrExtensionOpPattern_float : HugrExtensionOpPattern {
-  template<typename ...Args>
-  HugrExtensionOpPattern_float(Args&& ...args) : HugrExtensionOpPattern("arithmetic.float", std::forward<Args>(args)...) {
-    if(getFloatOpsUnimplementedOps().contains(opname)) {
-      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_float:opname is recorded as unimplemented but this is the implementation:" << opname;
+  HugrExtensionOpPattern_float(Args&& ...args) : HugrExtensionOpRewritePattern("arithmetic.float", std::forward<Args>(args)...) {
+    if(getFloatOpsUnimplementedOps().contains(matcher.opname)) {
+      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_float:opname is recorded as unimplemented but this is the implementation:" << matcher.opname;
     }
   }
 };
 
-struct HugrExtensionOpPattern_int : HugrExtensionOpPattern {
+struct HugrExtensionOpPattern_int : hugr_mlir::HugrExtensionOpRewritePattern {
   template<typename ...Args>
-  HugrExtensionOpPattern_int(Args&& ...args) : HugrExtensionOpPattern("arithmetic.int", std::forward<Args>(args)...) {
-    if(getIntOpsUnimplementedOps().contains(opname)) {
-      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_int:opname is recorded as unimplemented but this is the implementation:" << opname;
+  HugrExtensionOpPattern_int(Args&& ...args) : HugrExtensionOpRewritePattern("arithmetic.int", std::forward<Args>(args)...) {
+    if(getIntOpsUnimplementedOps().contains(matcher.opname)) {
+      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_int:opname is recorded as unimplemented but this is the implementation:" << matcher.opname;
     }
   }
 };
 
-struct HugrExtensionOpPattern_conversion : HugrExtensionOpPattern {
+struct HugrExtensionOpPattern_conversion : hugr_mlir::HugrExtensionOpRewritePattern {
   template<typename ...Args>
-  HugrExtensionOpPattern_conversion(Args&& ...args) : HugrExtensionOpPattern("arithmetic.conversions", std::forward<Args>(args)...) {
-    if(getConversionOpsUnimplementedOps().contains(opname)) {
-      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_conversion:opname is recorded as unimplemented but this is the implementation:" << opname;
+  HugrExtensionOpPattern_conversion(Args&& ...args) : HugrExtensionOpRewritePattern("arithmetic.conversions", std::forward<Args>(args)...) {
+    if(getConversionOpsUnimplementedOps().contains(matcher.opname)) {
+      emitWarning(UnknownLoc::get(getContext())) << "HugrExtensionOpPattern_conversion:opname is recorded as unimplemented but this is the implementation:" << matcher.opname;
     }
   }
 };

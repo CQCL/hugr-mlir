@@ -1,0 +1,46 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_arith.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_arith.json
+---
+module {
+  hugr.module {
+    func @test[](%arg0: !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> {
+      %0 = dfg input extensions [] %arg0 : (!hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> {
+      ^bb0(%arg1: !hugr<opaque "List"["Collections"] <i6>>):
+        %1 = cfg %arg1 : (!hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> {
+        ^bb0(%arg2: !hugr<opaque "List"["Collections"] <i6>>):
+          %2:2 = dfg input extensions [] %arg2 : (!hugr<opaque "List"["Collections"] <i6>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] <i6>>) {
+          ^bb0(%arg3: !hugr<opaque "List"["Collections"] <i6>>):
+            const @const_9 : i6 = -22 : i6
+            %4 = load_constant @const_9 : i6
+            %5 = call @MakeList  [](i6) -> !hugr<opaque "List"["Collections"] <i6>> %4
+            %6 = call @Concat  [](!hugr<opaque "List"["Collections"] <i6>>, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> %arg3, %5
+            %7 = call @Concat$1  [](!hugr<opaque "List"["Collections"] <i6>>, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> %arg3, %6
+            const @const_14 : i6 = 3 : i6
+            %8 = load_constant @const_14 : i6
+            %9 = call @Repeat  [](i6, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>> %8, %7
+            const @const_17 : i6 = 4 : i6
+            %10 = load_constant @const_17 : i6
+            %11 = call @Repeat$1  [](!hugr<opaque "List"["Collections"] <i6>>, i6) -> !hugr<opaque "List"["Collections"] <i6>> %9, %10
+            %12 = make_tuple()
+            %13 = tag 0 %12 : tuple<> -> <tuple<>>
+            output %13, %11 : !hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] <i6>>
+          }
+          switch %2#0, %2#1 : !hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] <i6>> ^bb1
+        ^bb1(%3: !hugr<opaque "List"["Collections"] <i6>>):  // pred: ^bb0
+          output %3 : !hugr<opaque "List"["Collections"] <i6>>
+        }
+        output %1 : !hugr<opaque "List"["Collections"] <i6>>
+      }
+      output %0 : !hugr<opaque "List"["Collections"] <i6>>
+    }
+    func @MakeList[](i6) -> !hugr<opaque "List"["Collections"] <i6>>
+    func @Concat[](!hugr<opaque "List"["Collections"] <i6>>, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>>
+    func @Concat$1[](!hugr<opaque "List"["Collections"] <i6>>, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>>
+    func @Repeat[](i6, !hugr<opaque "List"["Collections"] <i6>>) -> !hugr<opaque "List"["Collections"] <i6>>
+    func @Repeat$1[](!hugr<opaque "List"["Collections"] <i6>>, i6) -> !hugr<opaque "List"["Collections"] <i6>>
+  }
+}
+

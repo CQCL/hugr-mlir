@@ -76,6 +76,41 @@ protected:
 private:
   hugr_mlir::FuncClosureMap const& func_closure_map;
 };
+
+struct ExtensionOpMatcher {
+  ExtensionOpMatcher(mlir::StringRef extname_, mlir::StringRef opname_, int num_args_, int num_results_)
+      : opname(opname_), extname(extname_), num_args(num_args_), num_results(num_results_) {}
+
+  mlir::LogicalResult match(mlir::RewriterBase&, hugr_mlir::ExtensionOp) const;
+  mlir::StringRef const opname;
+  mlir::StringRef const extname;
+  int const num_args;
+  int const num_results;
+};
+
+struct HugrExtensionOpRewritePattern : mlir::OpRewritePattern<hugr_mlir::ExtensionOp> {
+  template<typename ...Args>
+  HugrExtensionOpRewritePattern(mlir::StringRef extname, mlir::StringRef opname, int num_args, int num_results, Args&& ...args) :
+    matcher(extname, opname, num_args, num_results), OpRewritePattern(std::forward<Args>(args)...) {}
+
+  mlir::LogicalResult matchAndRewrite(hugr_mlir::ExtensionOp, mlir::PatternRewriter&) const override;
+  virtual void replace(hugr_mlir::ExtensionOp, mlir::PatternRewriter&) const = 0;
+protected:
+  ExtensionOpMatcher matcher;
+};
+
+struct HugrExtensionOpConversionPattern : mlir::OpConversionPattern<hugr_mlir::ExtensionOp> {
+  template<typename ...Args>
+  HugrExtensionOpConversionPattern(mlir::StringRef extname, mlir::StringRef opname, int num_args, int num_results, Args&& ...args) :
+    matcher(extname, opname, num_args, num_results), OpConversionPattern(std::forward<Args>(args)...) {}
+
+  mlir::LogicalResult matchAndRewrite(hugr_mlir::ExtensionOp, OpAdaptor, mlir::ConversionPatternRewriter&) const override;
+  virtual mlir::LogicalResult replace(hugr_mlir::ExtensionOp, OpAdaptor, mlir::ConversionPatternRewriter&) const = 0;
+protected:
+  ExtensionOpMatcher matcher;
+};
+
+
 }
 
 

@@ -6,6 +6,7 @@
 #include "hugr-mlir/Conversion/ConvertHugrFuncPass.h"
 #include "hugr-mlir/Conversion/ConvertHugrPass.h"
 #include "hugr-mlir/Conversion/ConvertHugrExtArithPass.h"
+#include "hugr-mlir/Conversion/ConvertHugrExtQuantumPass.h"
 #include "mlir/Pass/Pass.h"
 
 namespace hugr_mlir {

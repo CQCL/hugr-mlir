@@ -5,9 +5,5 @@ expression: mlir_mod.as_operation()
 input_file: hugr-mlir/tests/guppy-exports/test_arith_basic.json
 ---
 module {
-  func.func private @add(%arg0: memref<!hugr.closure>, %arg1: i6, %arg2: i6) -> i6 {
-    %0 = llvm.add %arg1, %arg1  : i6
-    llvm.return %0 : i6
-  }
 }
 

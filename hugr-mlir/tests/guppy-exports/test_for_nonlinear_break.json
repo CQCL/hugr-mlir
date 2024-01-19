@@ -1,0 +1,1627 @@
+{
+  "edges": [
+    [
+      [
+        21,
+        0
+      ],
+      [
+        35,
+        1
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        44,
+        1
+      ]
+    ],
+    [
+      [
+        23,
+        0
+      ],
+      [
+        39,
+        1
+      ]
+    ],
+    [
+      [
+        24,
+        0
+      ],
+      [
+        28,
+        1
+      ]
+    ],
+    [
+      [
+        25,
+        0
+      ],
+      [
+        47,
+        1
+      ]
+    ],
+    [
+      [
+        3,
+        0
+      ],
+      [
+        27,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        1
+      ],
+      [
+        27,
+        1
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        31,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        0
+      ],
+      [
+        28,
+        0
+      ]
+    ],
+    [
+      [
+        28,
+        0
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    [
+      [
+        29,
+        0
+      ],
+      [
+        30,
+        0
+      ]
+    ],
+    [
+      [
+        30,
+        0
+      ],
+      [
+        12,
+        0
+      ]
+    ],
+    [
+      [
+        31,
+        0
+      ],
+      [
+        34,
+        null
+      ]
+    ],
+    [
+      [
+        31,
+        1
+      ],
+      [
+        38,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    [
+      [
+        32,
+        0
+      ],
+      [
+        33,
+        0
+      ]
+    ],
+    [
+      [
+        33,
+        0
+      ],
+      [
+        13,
+        0
+      ]
+    ],
+    [
+      [
+        34,
+        0
+      ],
+      [
+        43,
+        null
+      ]
+    ],
+    [
+      [
+        34,
+        1
+      ],
+      [
+        48,
+        null
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        35,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        0
+      ],
+      [
+        36,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        1
+      ],
+      [
+        36,
+        1
+      ]
+    ],
+    [
+      [
+        36,
+        0
+      ],
+      [
+        37,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        0
+      ],
+      [
+        14,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        1
+      ],
+      [
+        14,
+        1
+      ]
+    ],
+    [
+      [
+        38,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        0
+      ],
+      [
+        39,
+        0
+      ]
+    ],
+    [
+      [
+        41,
+        0
+      ],
+      [
+        42,
+        0
+      ]
+    ],
+    [
+      [
+        42,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        43,
+        0
+      ],
+      [
+        51,
+        null
+      ]
+    ],
+    [
+      [
+        43,
+        1
+      ],
+      [
+        54,
+        null
+      ]
+    ],
+    [
+      [
+        8,
+        0
+      ],
+      [
+        44,
+        0
+      ]
+    ],
+    [
+      [
+        44,
+        0
+      ],
+      [
+        45,
+        0
+      ]
+    ],
+    [
+      [
+        44,
+        1
+      ],
+      [
+        45,
+        1
+      ]
+    ],
+    [
+      [
+        45,
+        0
+      ],
+      [
+        46,
+        0
+      ]
+    ],
+    [
+      [
+        46,
+        0
+      ],
+      [
+        47,
+        0
+      ]
+    ],
+    [
+      [
+        46,
+        1
+      ],
+      [
+        16,
+        1
+      ]
+    ],
+    [
+      [
+        47,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        48,
+        0
+      ],
+      [
+        38,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        0
+      ],
+      [
+        17,
+        1
+      ]
+    ],
+    [
+      [
+        49,
+        0
+      ],
+      [
+        50,
+        0
+      ]
+    ],
+    [
+      [
+        50,
+        0
+      ],
+      [
+        17,
+        0
+      ]
+    ],
+    [
+      [
+        51,
+        0
+      ],
+      [
+        38,
+        null
+      ]
+    ],
+    [
+      [
+        10,
+        0
+      ],
+      [
+        18,
+        1
+      ]
+    ],
+    [
+      [
+        52,
+        0
+      ],
+      [
+        53,
+        0
+      ]
+    ],
+    [
+      [
+        53,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        54,
+        0
+      ],
+      [
+        31,
+        null
+      ]
+    ],
+    [
+      [
+        11,
+        0
+      ],
+      [
+        19,
+        1
+      ]
+    ],
+    [
+      [
+        55,
+        0
+      ],
+      [
+        56,
+        0
+      ]
+    ],
+    [
+      [
+        56,
+        0
+      ],
+      [
+        19,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        null
+      ],
+      [
+        20,
+        null
+      ]
+    ],
+    [
+      [
+        27,
+        null
+      ],
+      [
+        20,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        29,
+        null
+      ]
+    ],
+    [
+      [
+        5,
+        null
+      ],
+      [
+        33,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        40,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        41,
+        null
+      ]
+    ],
+    [
+      [
+        39,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        40,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        9,
+        null
+      ],
+      [
+        49,
+        null
+      ]
+    ],
+    [
+      [
+        10,
+        null
+      ],
+      [
+        52,
+        null
+      ]
+    ],
+    [
+      [
+        11,
+        null
+      ],
+      [
+        55,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": null,
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "cfg_outputs": [],
+      "input_extensions": null,
+      "op": "ExitBlock",
+      "parent": 27
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 26,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 1,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 31,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 34,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 38,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 43,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 48,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 51,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 54,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 31,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 34,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 38,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 43,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 48,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 51,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 54,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 26,
+      "types": []
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__hasnext__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            },
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__next__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__end__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyType.__iter__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "measure",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "test",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "CFG",
+      "parent": 26,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": []
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 1,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 1,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Const",
+      "parent": 31,
+      "typ": {
+        "s": "Unit",
+        "size": 2,
+        "t": "Sum"
+      },
+      "value": {
+        "tag": 1,
+        "v": "Sum",
+        "value": {
+          "v": "Tuple",
+          "vs": []
+        }
+      }
+    },
+    {
+      "datatype": {
+        "s": "Unit",
+        "size": 2,
+        "t": "Sum"
+      },
+      "input_extensions": null,
+      "op": "LoadConstant",
+      "parent": 31
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 34,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "s": "Unit",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 34,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [],
+      "parent": 27,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 38,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": []
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 38,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 38,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 38,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 43,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 43,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 43,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 43,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "s": "Unit",
+            "size": 2,
+            "t": "Sum"
+          }
+        ]
+      }
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 48,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 48,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 51,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 51,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ],
+      "parent": 27,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 54,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 54,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    }
+  ],
+  "version": "v0"
+}

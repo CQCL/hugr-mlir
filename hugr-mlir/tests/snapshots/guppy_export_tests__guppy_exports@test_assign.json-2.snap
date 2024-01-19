@@ -5,8 +5,5 @@ expression: mlir_mod.as_operation()
 input_file: hugr-mlir/tests/guppy-exports/test_assign.json
 ---
 module {
-  func.func private @test(%arg0: memref<!hugr.closure>, %arg1: !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]> {
-    return %arg1 : !hugr<opaque "qubit"["prelude"] [Linear]>
-  }
 }
 

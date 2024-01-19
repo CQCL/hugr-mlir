@@ -6,6 +6,21 @@ include "mlir/Rewrite/PassUtil.td"
 
 def hugrVerifyOption : Option<"hugrVerify", "hugr-verify", "bool", "true", "Do additional, potentially expensive, verification">;
 
+def ConvertHugrExtQuantumPass : Pass<"convert-hugr-ext-quantum", "mlir::ModuleOp"> {
+  let summary = "Lower hugr quantum extension to function qir function calls";
+  let description = [{
+    TODO
+  }];
+  let options = RewritePassUtils.options # [
+    hugrVerifyOption
+  ];
+  let dependentDialects = [
+    "::hugr_mlir::HugrDialect",
+    "::mlir::func::FuncDialect",
+    "::mlir::LLVM::LLVMDialect",
+  ];
+ }
+
 def ConvertHugrExtArithPass : Pass<"convert-hugr-ext-arith"> {
   let summary = "Lower hugr arithmetic extension to arith dialect";
   let description = [{

@@ -21,9 +21,17 @@
 #include "mlir/Transforms/Passes.h"
 #include "mlir/Conversion/Passes.h"
 
+namespace {
+
+struct LowerHugrPipelineOptions : mlir::PassPipelineOptions<LowerHugrPipelineOptions> {
+  Option<bool> symbolDCE{*this, "symbolDCE", llvm::cl::desc("Remove unused private symbol operations"), llvm::cl::init(true)};
+};
+
+}
+
 void hugr_mlir::registerHugrOptPipelines() {
-  mlir::PassPipelineRegistration<>(
-      "lower-hugr", "pipeline to lower hugr", [](mlir::OpPassManager& module_pm) {
+  mlir::PassPipelineRegistration<LowerHugrPipelineOptions>(
+      "lower-hugr", "pipeline to lower hugr", [](mlir::OpPassManager& module_pm, LowerHugrPipelineOptions const& pipelineOptions) {
         {
           auto& pm = module_pm.nest<hugr_mlir::ModuleOp>();
           pm.addPass(createPreConvertHugrFuncPass());
@@ -32,6 +40,7 @@ void hugr_mlir::registerHugrOptPipelines() {
         {
           auto& pm = module_pm;
           pm.addPass(createConvertHugrFuncPass());
+          pm.addPass(createConvertHugrExtQuantumPass());
           pm.addPass(createConvertHugrPass());
         }
         {
@@ -50,7 +59,9 @@ void hugr_mlir::registerHugrOptPipelines() {
         }
         {
           auto& pm = module_pm;
-          pm.addPass(mlir::createSymbolDCEPass());
+          if(pipelineOptions.symbolDCE) {
+            pm.addPass(mlir::createSymbolDCEPass());
+          }
           pm.addPass(hugr_mlir::createFinalizeHugrToLLVMPass());
         }
         {

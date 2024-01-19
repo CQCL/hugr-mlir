@@ -5,9 +5,5 @@ expression: mlir_mod.as_operation()
 input_file: hugr-mlir/tests/guppy-exports/test_assign_expr.json
 ---
 module {
-  func.func private @foo(%arg0: memref<!hugr.closure>, %arg1: index) -> index {
-    %0 = builtin.unrealized_conversion_cast %arg1 : index to i64
-    llvm.return %0 : i64
-  }
 }
 

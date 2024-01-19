@@ -38,7 +38,7 @@ fn test_guppy_exports(test_context: melior::Context) -> Result<()> {
             let pm = melior::pass::PassManager::new(&test_context);
             melior::utility::parse_pass_pipeline(
                 pm.as_operation_pass_manager(),
-                "builtin.module(lower-hugr)",
+                "builtin.module(lower-hugr{symbolDCE=false})",
             )
             .unwrap();
             pm.enable_verifier(true);

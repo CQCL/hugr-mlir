@@ -118,6 +118,7 @@
                       '';
                     })
                     pkgs.rq
+                    pkgs.just
                     (inputs.nixpkgs-master.legacyPackages.${pkgs.system}.rr.overrideAttrs
                       (_: { src = inputs.rr; }))
                   ] ++ pkgs.lib.optionals (shell-mlir != null) [ shell-mlir ];

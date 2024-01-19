@@ -7,12 +7,15 @@
 #include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/IR/SCF.h"
+#include "mlir/IR/IRMapping.h"
 #include "mlir/Transforms/DialectConversion.h"
 #include "mlir/Transforms/GreedyPatternRewriteDriver.h"
 #include "mlir/Transforms/OneToNTypeConversion.h"
 // #include "mlir/Dialect/Arith/IR/Arith.h"
 #include "llvm/ADT/TypeSwitch.h"
 #include "llvm/Support/Debug.h"
+#include "llvm/Support/raw_ostream.h"
+
 #include "mlir/Dialect/Func/Transforms/OneToNFuncConversions.h"
 #include "mlir/Dialect/Index/IR/IndexDialect.h"
 #include "mlir/Dialect/Index/IR/IndexOps.h"
@@ -98,6 +101,12 @@ struct LowerConditional : OpRewritePattern<hugr_mlir::ConditionalOp> {
   using OpRewritePattern::OpRewritePattern;
   LogicalResult matchAndRewrite(
       hugr_mlir::ConditionalOp, PatternRewriter&) const override;
+};
+
+struct LowerTailLoop : OpRewritePattern<hugr_mlir::TailLoopOp> {
+  using OpRewritePattern::OpRewritePattern;
+  LogicalResult matchAndRewrite(
+      hugr_mlir::TailLoopOp, PatternRewriter&) const override;
 };
 
 struct LowerEmptyReadClosure : OpRewritePattern<hugr_mlir::ReadClosureOp> {
@@ -305,18 +314,27 @@ mlir::LogicalResult ConvertFuncBlockArgs::matchAndRewrite(
       SmallVector<Value> new_forwarded_operands;
       rw.setInsertionPoint(boi);
       for (auto [i, fo] : llvm::enumerate(succ_ops.getForwardedOperands())) {
-        if (auto new_vals = tc->materializeTargetConversion(
-                rw, pred->getTerminator()->getLoc(),
-                wi.mapping.getConvertedTypes(i), fo)) {
-          llvm::copy(*new_vals, std::back_inserter(new_forwarded_operands));
+        if(!tc->isLegal(fo.getType())) {
+          TypeRange converted_types = wi.mapping.getConvertedTypes(i);
+          if (auto new_vals = tc->materializeTargetConversion(
+                  rw, pred->getTerminator()->getLoc(),
+                  converted_types, fo)) {
+            llvm::copy(*new_vals, std::back_inserter(new_forwarded_operands));
+          } else {
+            LLVM_DEBUG( {
+              llvm::dbgs() << "ConvertFuncBlockArgs: failed materializeTargetConversion "  << fo.getType() << "->";
+              for(auto t: converted_types) { llvm::dbgs() << t << ","; }
+            });
+            assert(false && "failed materialization");
+          }
         } else {
-          assert(false && "failed materialization");
+          new_forwarded_operands.push_back(fo);
         }
       }
-      assert(
-          TypeRange(new_forwarded_operands) !=
-              succ_ops.getForwardedOperands().getTypes() &&
-          "non identity");
+      // assert(
+      //     TypeRange(new_forwarded_operands) !=
+      //         succ_ops.getForwardedOperands().getTypes() &&
+      //     "non identity");
       rw.startRootUpdate(boi);
       succ_ops.getMutableForwardedOperands().assign(new_forwarded_operands);
       rw.finalizeRootUpdate(boi);
@@ -526,6 +544,46 @@ mlir::LogicalResult LowerConditional::matchAndRewrite(
   return success();
 }
 
+mlir::LogicalResult LowerTailLoop::matchAndRewrite(
+    hugr_mlir::TailLoopOp op, PatternRewriter& rw) const {
+  if(op.getBody().empty()) { return failure(); }
+
+  auto sum_type = op.getPredicateType();
+  SmallVector<Type> ret_tys{sum_type};
+  llvm::copy(op.getPassthroughInputs().getTypes(), std::back_inserter(ret_tys));
+
+  rw.setInsertionPoint(op);
+  auto before_builder = [op0=op](OpBuilder& rw, Location loc, ValueRange args) {
+    hugr_mlir::TailLoopOp op = op0;
+    IRMapping mapping;
+    for(auto [o,n]: llvm::zip_equal(op.getBody().getArguments(), args)) {
+      mapping.map(o,n);
+    }
+    for(auto& o: op.getBody().front()) {
+      if(auto output = llvm::dyn_cast<hugr_mlir::OutputOp>(o)) {
+        auto tag = rw.createOrFold<index::CastUOp>(loc, rw.getI1Type(), rw.createOrFold<hugr_mlir::ReadTagOp>(loc, output.getOutputs().front()));
+        rw.create<scf::ConditionOp>(loc, tag, output.getOutputs());
+      } else {
+        rw.clone(o, mapping);
+      }
+    }
+  };
+  auto after_builder = [](OpBuilder& rw, Location loc, ValueRange args) {
+    auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(loc, llvm::cast<TypedValue<hugr_mlir::SumType>>(args[0]), 0);
+    SmallVector<Value> yield_args;
+    rw.createOrFold<hugr_mlir::UnpackTupleOp>(yield_args, loc, v);
+    rw.create<scf::YieldOp>(loc, args);
+  };
+  auto whileop = rw.create<scf::WhileOp>(op.getLoc(), sum_type, op.getOperands(), before_builder, after_builder);
+  SmallVector<Value> replacements;
+  auto v = rw.createOrFold<hugr_mlir::ReadVariantOp>(op.getLoc(), llvm::cast<TypedValue<hugr_mlir::SumType>>(whileop.getResults()[0]), 1);
+  rw.createOrFold<hugr_mlir::UnpackTupleOp>(replacements, op.getLoc(), v);
+  llvm::copy(whileop.getResults().drop_front(), std::back_inserter(replacements));
+  rw.replaceOp(op, replacements);
+
+  return failure();
+}
+
 mlir::LogicalResult LowerEmptyReadClosure::matchAndRewrite(
     hugr_mlir::ReadClosureOp op, PatternRewriter& rw) const {
   // TODO this should be done by canonicalisation
@@ -567,8 +625,7 @@ mlir::LogicalResult ConvertHugrPass::initialize(MLIRContext* context) {
   type_converter = hugr_mlir::createTypeConverter();
   {
     RewritePatternSet ps(context);
-    // TODO lower TailLoopOp here
-    ps.add<LowerCfg, LowerDfg, LowerConditional, LowerEmptyReadClosure, LowerEmptyWriteClosure>(
+    ps.add<LowerCfg, LowerDfg, LowerConditional, LowerTailLoop, LowerEmptyReadClosure, LowerEmptyWriteClosure>(
         context);
     lowering_patterns = FrozenRewritePatternSet(
         std::move(ps), disabledPatterns, enabledPatterns);

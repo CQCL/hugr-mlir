@@ -1,0 +1,3766 @@
+{
+  "edges": [
+    [
+      [
+        19,
+        0
+      ],
+      [
+        38,
+        1
+      ]
+    ],
+    [
+      [
+        20,
+        0
+      ],
+      [
+        44,
+        1
+      ]
+    ],
+    [
+      [
+        21,
+        0
+      ],
+      [
+        49,
+        1
+      ]
+    ],
+    [
+      [
+        22,
+        0
+      ],
+      [
+        36,
+        1
+      ]
+    ],
+    [
+      [
+        3,
+        0
+      ],
+      [
+        24,
+        0
+      ]
+    ],
+    [
+      [
+        3,
+        1
+      ],
+      [
+        24,
+        1
+      ]
+    ],
+    [
+      [
+        24,
+        0
+      ],
+      [
+        18,
+        0
+      ]
+    ],
+    [
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        1
+      ],
+      [
+        26,
+        0
+      ]
+    ],
+    [
+      [
+        4,
+        0
+      ],
+      [
+        36,
+        0
+      ]
+    ],
+    [
+      [
+        25,
+        0
+      ],
+      [
+        26,
+        1
+      ]
+    ],
+    [
+      [
+        26,
+        0
+      ],
+      [
+        51,
+        0
+      ]
+    ],
+    [
+      [
+        26,
+        1
+      ],
+      [
+        17,
+        1
+      ]
+    ],
+    [
+      [
+        5,
+        0
+      ],
+      [
+        27,
+        0
+      ]
+    ],
+    [
+      [
+        5,
+        1
+      ],
+      [
+        30,
+        2
+      ]
+    ],
+    [
+      [
+        27,
+        0
+      ],
+      [
+        28,
+        0
+      ]
+    ],
+    [
+      [
+        27,
+        1
+      ],
+      [
+        28,
+        1
+      ]
+    ],
+    [
+      [
+        28,
+        0
+      ],
+      [
+        29,
+        0
+      ]
+    ],
+    [
+      [
+        29,
+        0
+      ],
+      [
+        30,
+        0
+      ]
+    ],
+    [
+      [
+        29,
+        1
+      ],
+      [
+        30,
+        1
+      ]
+    ],
+    [
+      [
+        29,
+        0
+      ],
+      [
+        16,
+        0
+      ]
+    ],
+    [
+      [
+        30,
+        0
+      ],
+      [
+        16,
+        1
+      ]
+    ],
+    [
+      [
+        30,
+        1
+      ],
+      [
+        16,
+        2
+      ]
+    ],
+    [
+      [
+        6,
+        0
+      ],
+      [
+        11,
+        0
+      ]
+    ],
+    [
+      [
+        6,
+        1
+      ],
+      [
+        11,
+        1
+      ]
+    ],
+    [
+      [
+        7,
+        0
+      ],
+      [
+        33,
+        0
+      ]
+    ],
+    [
+      [
+        7,
+        1
+      ],
+      [
+        37,
+        1
+      ]
+    ],
+    [
+      [
+        33,
+        0
+      ],
+      [
+        34,
+        0
+      ]
+    ],
+    [
+      [
+        33,
+        1
+      ],
+      [
+        34,
+        1
+      ]
+    ],
+    [
+      [
+        34,
+        0
+      ],
+      [
+        35,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        0
+      ],
+      [
+        47,
+        0
+      ]
+    ],
+    [
+      [
+        35,
+        1
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    [
+      [
+        36,
+        0
+      ],
+      [
+        37,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        0
+      ],
+      [
+        49,
+        0
+      ]
+    ],
+    [
+      [
+        37,
+        1
+      ],
+      [
+        15,
+        1
+      ]
+    ],
+    [
+      [
+        8,
+        0
+      ],
+      [
+        38,
+        0
+      ]
+    ],
+    [
+      [
+        8,
+        1
+      ],
+      [
+        41,
+        2
+      ]
+    ],
+    [
+      [
+        38,
+        0
+      ],
+      [
+        39,
+        0
+      ]
+    ],
+    [
+      [
+        38,
+        1
+      ],
+      [
+        39,
+        1
+      ]
+    ],
+    [
+      [
+        39,
+        0
+      ],
+      [
+        40,
+        0
+      ]
+    ],
+    [
+      [
+        40,
+        0
+      ],
+      [
+        41,
+        0
+      ]
+    ],
+    [
+      [
+        40,
+        1
+      ],
+      [
+        41,
+        1
+      ]
+    ],
+    [
+      [
+        40,
+        0
+      ],
+      [
+        14,
+        0
+      ]
+    ],
+    [
+      [
+        41,
+        0
+      ],
+      [
+        14,
+        1
+      ]
+    ],
+    [
+      [
+        41,
+        1
+      ],
+      [
+        14,
+        2
+      ]
+    ],
+    [
+      [
+        9,
+        0
+      ],
+      [
+        12,
+        0
+      ]
+    ],
+    [
+      [
+        9,
+        1
+      ],
+      [
+        12,
+        1
+      ]
+    ],
+    [
+      [
+        10,
+        0
+      ],
+      [
+        44,
+        0
+      ]
+    ],
+    [
+      [
+        10,
+        1
+      ],
+      [
+        48,
+        0
+      ]
+    ],
+    [
+      [
+        44,
+        0
+      ],
+      [
+        45,
+        0
+      ]
+    ],
+    [
+      [
+        44,
+        1
+      ],
+      [
+        45,
+        1
+      ]
+    ],
+    [
+      [
+        45,
+        0
+      ],
+      [
+        46,
+        0
+      ]
+    ],
+    [
+      [
+        46,
+        0
+      ],
+      [
+        47,
+        1
+      ]
+    ],
+    [
+      [
+        46,
+        1
+      ],
+      [
+        13,
+        0
+      ]
+    ],
+    [
+      [
+        47,
+        0
+      ],
+      [
+        48,
+        1
+      ]
+    ],
+    [
+      [
+        48,
+        0
+      ],
+      [
+        13,
+        1
+      ]
+    ],
+    [
+      [
+        53,
+        0
+      ],
+      [
+        54,
+        0
+      ]
+    ],
+    [
+      [
+        54,
+        0
+      ],
+      [
+        17,
+        0
+      ]
+    ],
+    [
+      [
+        55,
+        0
+      ],
+      [
+        25,
+        0
+      ]
+    ],
+    [
+      [
+        56,
+        0
+      ],
+      [
+        27,
+        1
+      ]
+    ],
+    [
+      [
+        57,
+        0
+      ],
+      [
+        33,
+        1
+      ]
+    ],
+    [
+      [
+        58,
+        0
+      ],
+      [
+        48,
+        2
+      ]
+    ],
+    [
+      [
+        59,
+        0
+      ],
+      [
+        51,
+        1
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        26,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        25,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        52,
+        null
+      ]
+    ],
+    [
+      [
+        4,
+        null
+      ],
+      [
+        53,
+        null
+      ]
+    ],
+    [
+      [
+        7,
+        null
+      ],
+      [
+        50,
+        null
+      ]
+    ],
+    [
+      [
+        35,
+        null
+      ],
+      [
+        37,
+        null
+      ]
+    ],
+    [
+      [
+        49,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        50,
+        null
+      ],
+      [
+        15,
+        null
+      ]
+    ],
+    [
+      [
+        51,
+        null
+      ],
+      [
+        17,
+        null
+      ]
+    ],
+    [
+      [
+        52,
+        null
+      ],
+      [
+        17,
+        null
+      ]
+    ]
+  ],
+  "nodes": [
+    {
+      "input_extensions": null,
+      "op": "Module",
+      "parent": 0
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "op": "DataflowBlock",
+      "other_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 24,
+      "tuple_sum_rows": [
+        []
+      ]
+    },
+    {
+      "cfg_outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "input_extensions": null,
+      "op": "ExitBlock",
+      "parent": 24
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 23,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 1,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 26,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 31,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 32,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 37,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 42,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Input",
+      "parent": 43,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 31,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 42,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 43,
+      "types": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 37,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 32,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 26,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 1,
+      "types": [
+        {
+          "s": "Unit",
+          "size": 1,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Output",
+      "parent": 23,
+      "types": [
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__hasnext__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            },
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__next__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "args": [],
+              "bound": "A",
+              "extension": "prelude",
+              "id": "qubit",
+              "t": "Opaque"
+            },
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyIter.__end__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "MyType.__iter__",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "test",
+      "op": "FuncDefn",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "inner": [],
+              "t": "Tuple"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "CFG",
+      "parent": 23,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 1,
+      "signature": {
+        "extension_reqs": [],
+        "input": [],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "just_inputs": [],
+      "just_outputs": [],
+      "op": "TailLoop",
+      "parent": 1,
+      "rest": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 26,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "s": "Unit",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 26,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 26,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "op": "Conditional",
+      "other_inputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "outputs": [
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 26,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Case",
+      "parent": 30,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Case",
+      "parent": 30,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 32,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "n": 6,
+                "tya": "BoundedNat"
+              }
+            ],
+            "bound": "E",
+            "extension": "arithmetic.int.types",
+            "id": "int",
+            "t": "Opaque"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 32,
+      "tys": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "E",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 32,
+      "tys": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "E",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "E",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 32,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "just_inputs": [],
+      "just_outputs": [],
+      "op": "TailLoop",
+      "parent": 32,
+      "rest": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 37,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "s": "Unit",
+            "size": 2,
+            "t": "Sum"
+          },
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 37,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 37,
+      "tys": [
+        {
+          "s": "Unit",
+          "size": 2,
+          "t": "Sum"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "extension_delta": [],
+      "input_extensions": null,
+      "op": "Conditional",
+      "other_inputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "outputs": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        },
+        {
+          "args": [
+            {
+              "ty": {
+                "inner": [
+                  {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  {
+                    "args": [],
+                    "bound": "A",
+                    "extension": "prelude",
+                    "id": "qubit",
+                    "t": "Opaque"
+                  }
+                ],
+                "t": "Tuple"
+              },
+              "tya": "Type"
+            }
+          ],
+          "bound": "A",
+          "extension": "Collections",
+          "id": "List",
+          "t": "Opaque"
+        }
+      ],
+      "parent": 37,
+      "tuple_sum_rows": [
+        [],
+        []
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Case",
+      "parent": 41,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Case",
+      "parent": 41,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          },
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 43,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "args": [],
+            "bound": "A",
+            "extension": "prelude",
+            "id": "qubit",
+            "t": "Opaque"
+          },
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 43,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "UnpackTuple",
+      "op": "LeafOp",
+      "parent": 43,
+      "tys": [
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        },
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 43,
+      "tys": [
+        {
+          "args": [
+            {
+              "n": 6,
+              "tya": "BoundedNat"
+            }
+          ],
+          "bound": "E",
+          "extension": "arithmetic.int.types",
+          "id": "int",
+          "t": "Opaque"
+        },
+        {
+          "args": [],
+          "bound": "A",
+          "extension": "prelude",
+          "id": "qubit",
+          "t": "Opaque"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 43,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          },
+          {
+            "inner": [
+              {
+                "args": [
+                  {
+                    "n": 6,
+                    "tya": "BoundedNat"
+                  }
+                ],
+                "bound": "E",
+                "extension": "arithmetic.int.types",
+                "id": "int",
+                "t": "Opaque"
+              },
+              {
+                "args": [],
+                "bound": "A",
+                "extension": "prelude",
+                "id": "qubit",
+                "t": "Opaque"
+              }
+            ],
+            "t": "Tuple"
+          }
+        ],
+        "output": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "inner": [
+                    {
+                      "args": [
+                        {
+                          "n": 6,
+                          "tya": "BoundedNat"
+                        }
+                      ],
+                      "bound": "E",
+                      "extension": "arithmetic.int.types",
+                      "id": "int",
+                      "t": "Opaque"
+                    },
+                    {
+                      "args": [],
+                      "bound": "A",
+                      "extension": "prelude",
+                      "id": "qubit",
+                      "t": "Opaque"
+                    }
+                  ],
+                  "t": "Tuple"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "A",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ]
+      }
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 32,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "inner": [],
+            "t": "Tuple"
+          }
+        ],
+        "output": []
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 32,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "op": "Call",
+      "parent": 1,
+      "signature": {
+        "extension_reqs": [],
+        "input": [
+          {
+            "args": [
+              {
+                "ty": {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                "tya": "Type"
+              }
+            ],
+            "bound": "E",
+            "extension": "Collections",
+            "id": "List",
+            "t": "Opaque"
+          }
+        ],
+        "output": []
+      }
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "MakeTuple",
+      "op": "LeafOp",
+      "parent": 1,
+      "tys": []
+    },
+    {
+      "input_extensions": null,
+      "lop": "Tag",
+      "op": "LeafOp",
+      "parent": 1,
+      "tag": 0,
+      "variants": [
+        {
+          "inner": [],
+          "t": "Tuple"
+        }
+      ]
+    },
+    {
+      "input_extensions": null,
+      "name": "MakeList",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "IsNonEmpty",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "s": "Unit",
+              "size": 2,
+              "t": "Sum"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "Pop",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "n": 6,
+                  "tya": "BoundedNat"
+                }
+              ],
+              "bound": "E",
+              "extension": "arithmetic.int.types",
+              "id": "int",
+              "t": "Opaque"
+            },
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "Push",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            },
+            {
+              "inner": [
+                {
+                  "args": [
+                    {
+                      "n": 6,
+                      "tya": "BoundedNat"
+                    }
+                  ],
+                  "bound": "E",
+                  "extension": "arithmetic.int.types",
+                  "id": "int",
+                  "t": "Opaque"
+                },
+                {
+                  "args": [],
+                  "bound": "A",
+                  "extension": "prelude",
+                  "id": "qubit",
+                  "t": "Opaque"
+                }
+              ],
+              "t": "Tuple"
+            }
+          ],
+          "output": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "inner": [
+                      {
+                        "args": [
+                          {
+                            "n": 6,
+                            "tya": "BoundedNat"
+                          }
+                        ],
+                        "bound": "E",
+                        "extension": "arithmetic.int.types",
+                        "id": "int",
+                        "t": "Opaque"
+                      },
+                      {
+                        "args": [],
+                        "bound": "A",
+                        "extension": "prelude",
+                        "id": "qubit",
+                        "t": "Opaque"
+                      }
+                    ],
+                    "t": "Tuple"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "A",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ]
+        },
+        "params": [],
+        "t": "G"
+      }
+    },
+    {
+      "input_extensions": null,
+      "name": "AssertEmpty",
+      "op": "FuncDecl",
+      "parent": 0,
+      "signature": {
+        "body": {
+          "extension_reqs": [],
+          "input": [
+            {
+              "args": [
+                {
+                  "ty": {
+                    "args": [
+                      {
+                        "n": 6,
+                        "tya": "BoundedNat"
+                      }
+                    ],
+                    "bound": "E",
+                    "extension": "arithmetic.int.types",
+                    "id": "int",
+                    "t": "Opaque"
+                  },
+                  "tya": "Type"
+                }
+              ],
+              "bound": "E",
+              "extension": "Collections",
+              "id": "List",
+              "t": "Opaque"
+            }
+          ],
+          "output": []
+        },
+        "params": [],
+        "t": "G"
+      }
+    }
+  ],
+  "version": "v0"
+}

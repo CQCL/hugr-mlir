@@ -6,40 +6,15 @@ input_file: hugr-mlir/tests/guppy-exports/test_basic.json
 ---
 module {
   hugr.module {
-    func @foo[](%arg0: i6) -> i6 {
-      %0 = dfg input extensions [] %arg0 : (i6) -> i6 {
-      ^bb0(%arg1: i6):
-        %1 = cfg %arg1 : (i6) -> i6 {
-        ^bb0(%arg2: i6):
-          %2:2 = dfg input extensions [] %arg2 : (i6) -> (!hugr.sum<tuple<>>, i6) {
-          ^bb0(%arg3: i6):
-            func @bar[](%arg4: i6) -> i6 {
-              %10 = dfg input extensions [] %arg4 : (i6) -> i6 {
-              ^bb0(%arg5: i6):
-                %11 = cfg %arg5 : (i6) -> i6 {
-                ^bb0(%arg6: i6):
-                  %12:2 = dfg input extensions [] %arg6 : (i6) -> (!hugr.sum<tuple<>>, i6) {
-                  ^bb0(%arg7: i6):
-                    %14 = make_tuple()
-                    %15 = tag 0 %14 : tuple<> -> <tuple<>>
-                    output %15, %arg7 : !hugr.sum<tuple<>>, i6
-                  }
-                  switch %12#0, %12#1 : !hugr.sum<tuple<>>, i6 ^bb1
-                ^bb1(%13: i6):  // pred: ^bb0
-                  output %13 : i6
-                }
-                output %11 : i6
-              }
-              output %10 : i6
-            }
-            %4 = load_constant @bar : !hugr<function [](i6) -> i6>
-            const @const_20 : i6 = 1 : i6
-            %5 = load_constant @const_20 : i6
-            %6 = ext_op["arithmetic.int"] "iadd" %arg3, %5 : [](i6, i6) -> i6
-            %7 = call %4  [](i6) -> i6 %6
-            %8 = make_tuple()
-            %9 = tag 0 %8 : tuple<> -> <tuple<>>
-            output %9, %7 : !hugr.sum<tuple<>>, i6
+    func @foo[]() -> i6 {
+      %0 = dfg input extensions []  : () -> i6 {
+        %1 = cfg : () -> i6 {
+          %2:2 = dfg input extensions []  : () -> (!hugr.sum<tuple<>>, i6) {
+            const @const_9 : i6 = -21 : i6
+            %4 = load_constant @const_9 : i6
+            %5 = make_tuple()
+            %6 = tag 0 %5 : tuple<> -> <tuple<>>
+            output %6, %4 : !hugr.sum<tuple<>>, i6
           }
           switch %2#0, %2#1 : !hugr.sum<tuple<>>, i6 ^bb1
         ^bb1(%3: i6):  // pred: ^bb0

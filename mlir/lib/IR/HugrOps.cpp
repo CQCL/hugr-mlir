@@ -510,6 +510,38 @@ void hugr_mlir::printTailLoopOpOutputTypes(
   printer << "-> (" << output_types << ")";
 }
 
+mlir::LogicalResult hugr_mlir::TailLoopOp::verifyRegions() {
+  if(getBody().empty()) { return mlir::success(); }
+
+  llvm::SmallVector<mlir::Type> expected_input_tys;
+  llvm::SmallVector<mlir::Type> expected_output_tys;
+
+  llvm::copy(getInputs().getTypes(), std::back_inserter(expected_input_tys));
+  llvm::copy(getPassthroughInputs().getTypes(), std::back_inserter(expected_input_tys));
+
+  mlir::OpBuilder rw(getContext());
+  llvm::SmallVector<mlir::Type> alts{rw.getTupleType(getInputs().getTypes()), rw.getTupleType(getOutputs().getTypes())};
+  expected_output_tys.push_back(rw.getType<hugr_mlir::SumType>(alts));
+  llvm::copy(getPassthroughInputs().getTypes(), std::back_inserter(expected_output_tys));
+
+  if(mlir::TypeRange{getBody().getArgumentTypes()} != expected_input_tys) {
+    return emitOpError("Type mismatch in body argument types. Expected: (") << expected_input_tys << "), found: ("  << getBody().getArgumentTypes() << ")";
+  }
+
+  auto term = getBody().front().getTerminator();
+  auto output = llvm::dyn_cast<OutputOp>(term);
+
+  if(!output) {
+    return emitOpError("Expected to be terminated by a hugr.output op, but found: ") << *term;
+  }
+
+  if(mlir::TypeRange{output.getOutputs().getTypes()} != expected_output_tys) {
+    return emitOpError("Type mismatch in output types. Expected: (") << expected_output_tys << "), found: ("  << output.getOutputs().getTypes() << ")";
+  }
+
+  return mlir::success();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //  ConditionalOp
 /////////////////////////////////////////////////////////////////////////////

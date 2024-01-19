@@ -1,0 +1,69 @@
+---
+source: hugr-mlir/tests/guppy_export_tests.rs
+description: /home/doug/code/hugr-mlir-develop/hugr-mlir/tests/guppy-exports/test_basic_linear.json
+expression: mlir_mod.as_operation()
+input_file: hugr-mlir/tests/guppy-exports/test_basic_linear.json
+---
+module {
+  hugr.module {
+    func @test[](%arg0: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> {
+      %0 = dfg input extensions [] %arg0 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> {
+      ^bb0(%arg1: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+        %1 = cfg %arg1 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> {
+        ^bb0(%arg2: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+          %2:2 = dfg input extensions [] %arg2 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) {
+          ^bb0(%arg3: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+            %4 = call @MakeList  []() -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> 
+            %5:2 = tailloop !hugr.sum<tuple<!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>>, tuple<>>(%arg3, %4 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) passthrough(%arg3, %4 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> () {
+            ^bb0(%arg4: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg5: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+              %9:3 = dfg input extensions [] %arg4, %arg5 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) {
+              ^bb0(%arg6: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg7: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+                %10:2 = call @IsNonempty  [](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) %arg6
+                %11 = make_tuple(%10#0, %10#1 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>)
+                %12:2 = unpack_tuple %11 : tuple<!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>>
+                %13:2 = conditional(%12#0, %12#1, %arg7 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> {
+                ^bb0(%arg8: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg9: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+                  %14:2 = dfg input extensions [] %arg8, %arg9 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) {
+                  ^bb0(%arg10: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg11: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+                    output %arg10, %arg11 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+                  }
+                  output %14#0, %14#1 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+                }, {
+                ^bb0(%arg8: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg9: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+                  %14:2 = dfg input extensions [] %arg8, %arg9 : (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) {
+                  ^bb0(%arg10: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, %arg11: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):
+                    %15:2 = call @Pop  [](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) %arg10
+                    %16 = make_tuple(%15#0, %15#1 : !hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>)
+                    %17:2 = unpack_tuple %16 : tuple<!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>>
+                    %18 = ext_op["quantum.tket2"] "H" %17#0 : [](!hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "qubit"["prelude"] [Linear]>
+                    %19 = call @Push  [](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> %arg11, %18
+                    output %17#1, %19 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+                  }
+                  output %14#0, %14#1 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+                }
+                output %12#0, %13#0, %13#1 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+              }
+              output %9#0, %9#1, %9#2 : !hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+            }
+            call @AssertEmpty  [](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> () %5#0
+            %6 = make_tuple()
+            %7 = make_tuple()
+            %8 = tag 0 %7 : tuple<> -> <tuple<>>
+            output %8, %5#1 : !hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+          }
+          switch %2#0, %2#1 : !hugr.sum<tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>> ^bb1
+        ^bb1(%3: !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>):  // pred: ^bb0
+          output %3 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+        }
+        output %1 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+      }
+      output %0 : !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+    }
+    func @MakeList[]() -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+    func @IsNonempty[](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr.sum<tuple<>, tuple<>>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>)
+    func @Pop[](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>) -> (!hugr<opaque "qubit"["prelude"] [Linear]>, !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>)
+    func @Push[](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>, !hugr<opaque "qubit"["prelude"] [Linear]>) -> !hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>
+    func @AssertEmpty[](!hugr<opaque "List"["Collections"] [Linear] <!hugr<opaque "qubit"["prelude"] [Linear]>>>)
+  }
+}
+
